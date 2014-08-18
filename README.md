@@ -38,18 +38,18 @@ yuo can show MyList list by shortcode, just create a page (es: myList) and put i
 
 ###Template customization
 
-There are different template in html, you can find it "template" folder.
+There are different template in html, you can find it "template" folder (wp-content/plugins/gd-mylist/template/...).
 There are different type:
-1. Add MyList button:
+**Add MyList button:**
 * btn-add.html
 * chunck-add.html (it appare only after first click because there is a ajax call)
-2. Remove MyList button:
+**Remove MyList button:**
 * btn-remove.html
 * chunck-remove.html (it appare only after first click because there is a ajax call)
-3. Loading status (it'll appare after firt click)
+**Loading status (it'll appare after firt click)**
 * chunck-loading.html
-4. Add MyList button if you not login
+**Add MyList button if you not login**
 * btn-login.html (there is a javascript alert)
-5. MyList list
+**MyList list**
 * box-list.html (where there are some items to show)
 * box-list-empty.html (when there list is empty)
