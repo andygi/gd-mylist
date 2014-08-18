@@ -40,16 +40,47 @@ yuo can show MyList list by shortcode, just create a page (es: myList) and put i
 
 There are different template in html, you can find it "template" folder (wp-content/plugins/gd-mylist/template/...).
 There are different type:
-**Add MyList button:**
-* btn-add.html
-* chunck-add.html (it appare only after first click because there is a ajax call)
-**Remove MyList button:**
-* btn-remove.html
-* chunck-remove.html (it appare only after first click because there is a ajax call)
-**Loading status (it'll appare after firt click)**
-* chunck-loading.html
-**Add MyList button if you not login**
-* btn-login.html (there is a javascript alert)
-**MyList list**
-* box-list.html (where there are some items to show)
-* box-list-empty.html (when there list is empty)
+
+1. Add MyList button:
+	* btn-add.html
+	* chunck-add.html (it appare only after first click because there is a ajax call)
+
+2. Remove MyList button:
+	* btn-remove.html
+	* chunck-remove.html (it appare only after first click because there is a ajax call)
+
+3. Loading status (it'll appare after firt click)
+	* chunck-loading.html
+
+4. Add MyList button if you not login
+	* btn-login.html (there is a javascript alert)
+
+5. MyList list
+	* box-list.html (where there are some items to show)
+	* box-list-empty.html (when there list is empty)
+
+####Icon customization
+
+I use **Font Awesome** as icon framework [Font Awesome](http://fortawesome.github.io/Font-Awesome/ "Font Awesome"), so can change with one of that
+
+####CSS Class
+
+I use **Bootstrap 3** html and css sintax to create html templates [Bootstrap](http://getbootstrap.com/ "Bootstrap"), but you can change with your framework
+
+####Values
+
+In every template is the simple syntax to target the variables in particular:
+
+* Button Template
+	* ##itemID##
+	* ##TARGET##
+	* ##NONCE##
+	* ##userID##
+* List Template
+	* ##postUrl##
+	* ##postImage##
+	* ##postTitle##
+	* ##postDate##
+	* ##postAuthorName##
+	* ##postContent##
+	* ##postBtn##
