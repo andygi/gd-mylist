@@ -1,13 +1,15 @@
 #GD MyList v 0.1
 
-GD MyList is a plugin to create a whistlist or bookmark pages and posts.
 You can create a favorite list of pages or posts in easy and faster way.
-GD MyList use bootstrap 3 and fortawesome as layout.
-It's work only with login users.
+This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
+It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.
+GD MyList use bootstrap 3 as grid and css class, and fontawesome as icons.
 
 ##HOW TO USE
 
-After as installed it you can call the button 
+1. Upload plugin .zip file to the `/wp-content/plugins/` directory and unzip
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Use the shortcode in your posts and pages to display your **button** or **MyList** (more info below)
 
 ###Call myList's button:
 
@@ -27,10 +29,11 @@ if you needs to put the buttom in themes code, just write
 ```php
 <?php do_action('gd_mylist_btn'); ?>
 ```
+where do you want that button will show it
 
 ###Call myList's list:
 
-yuo can show MyList list by shortcode, just create a page (es: myList) and put into the content the code
+yuo can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
 
 ```php
 [show_gd_mylist_list]
@@ -38,18 +41,19 @@ yuo can show MyList list by shortcode, just create a page (es: myList) and put i
 
 ###Template customization
 
-There are different template in html, you can find it "template" folder (wp-content/plugins/gd-mylist/template/...).
-There are different type:
+There are different templates in html format, you can find it in "template" folder `wp-content/plugins/gd-mylist/template/...`.
+If you want, you can create a new one in different directory just copy **all files** and **change the path** into `gd-mylist-code.php` file `line #21`.
+Templates files are:
 
 1. Add MyList button:
 	* btn-add.html
-	* chunck-add.html (it appare only after first click because there is a ajax call)
+	* chunck-add.html (it'll appare just after first click)
 
 2. Remove MyList button:
 	* btn-remove.html
-	* chunck-remove.html (it appare only after first click because there is a ajax call)
+	* chunck-remove.html (it'll appare just after first click)
 
-3. Loading status (it'll appare after firt click)
+3. Loading status (it'll appare just after first click)
 	* chunck-loading.html
 
 4. Add MyList button if you not login
@@ -61,21 +65,28 @@ There are different type:
 
 ####Icon customization
 
-I use **Font Awesome** as icon framework [Font Awesome](http://fortawesome.github.io/Font-Awesome/ "Font Awesome"), so can change with one of that
+I use **Font Awesome** as icon framework [Font Awesome](http://fortawesome.github.io/Font-Awesome/ "Font Awesome"), so can change with one of that, just cange call name into templets
 
 ####CSS Class
 
-I use **Bootstrap 3** html and css sintax to create html templates [Bootstrap](http://getbootstrap.com/ "Bootstrap"), but you can change with your framework
+I use **Bootstrap 3** html and css syntax to create html templates [Bootstrap](http://getbootstrap.com/ "Bootstrap"), but you can change with your framework
 
 ####Values
 
-In every template is the simple syntax to target the variables in particular:
+Every templates has simple syntax to target variables, variables list in deep:
 
-* Button Template
+* Button Template (all are required)
 	* ##itemID##
 	* ##TARGET##
 	* ##NONCE##
 	* ##userID##
+	* class="btn-gd-remove-mylist" (to remove button)
+	* class="btn-gd-add-mylist" (to add button)
+
+Minimal **button** html syntax (eg: remove button):
+
+`<a href="javascript:void();" class="btn-gd-remove-mylist" id="mylist-##itemID##" data-postid="##itemID##" data-styletarget="##TARGET##" data-userid="##userID##" data-nonce="##NONCE##">remove My List</a>`
+
 * List Template
 	* ##postUrl##
 	* ##postImage##
@@ -84,3 +95,8 @@ In every template is the simple syntax to target the variables in particular:
 	* ##postAuthorName##
 	* ##postContent##
 	* ##postBtn##
+	* class="gd-mylist-box" (required)
+
+Minial **list** html syntax:
+
+`<p class="gd-mylist-box"><a href="##postUrl##">##postTitle##</a> ##postBtn##</p>`
