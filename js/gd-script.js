@@ -6,7 +6,6 @@ var chunckLoading = "chunck-loading.html";
 var chunckBtnLogin = "btn-login.html";
 var chunckBtnAdd = "chunck-add.html";
 var chunckBtnRemove = "chunck-remove.html";
-var chunckAlertDone = "alert-done.html";    
     
 
     

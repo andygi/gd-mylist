@@ -18,7 +18,7 @@ global $wpdb, $table, $table_posts, $table_users, $template_btn_add, $template_b
     $table_users = $db_prefix."users";
 
     //template variable
-    $template_path = plugins_url().'/gd-mylist/template/'; //change this path to use a different template rember to replay all files with all require varibales and syntax
+    $template_path = plugins_url().'/gd-mylist/template/'; //change this path to use a different template remember to replay all files with all require varibales and syntax
 
     $template_btn_add = $template_path . 'btn-add.html';
     $template_btn_remove = $template_path . 'btn-remove.html';
