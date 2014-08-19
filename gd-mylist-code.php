@@ -5,15 +5,34 @@
 /* NOTE
  * $styletarget: it used to make 'remove button' different behaviours into jquery it'll is valued by code into theme
  * values: 
- *      mylist //cancel div with class: thumbnail
+ *      mylist //cancel div with class: gd-mylist-box
  */
+
+//setup general variables
+global $wpdb, $table, $table_posts, $table_users, $template_btn_add, $template_btn_remove, $template_btn_login, $template_box_list, $template_box_list_empty, $template_path;
+
+    //db variables
+    $db_prefix = $wpdb->prefix;
+    $table = $db_prefix."gd_mylist";
+    $table_posts = $db_prefix."posts";
+    $table_users = $db_prefix."users";
+
+    //template variable
+    $template_path = plugins_url().'/gd-mylist/template/'; //change this path to use a different template rember to replay all files with all require varibales and syntax
+
+    $template_btn_add = $template_path . 'btn-add.html';
+    $template_btn_remove = $template_path . 'btn-remove.html';
+    $template_btn_login = $template_path . 'btn-login.html';
+    $template_box_list = $template_path . 'box-list.html';
+    $template_box_list_empty = $template_path . 'box-list-empty.html';
 
 
 //setup assets
 add_action( 'init', 'gd_mylist_asset' );
 function gd_mylist_asset(){
+    global $template_path;
     wp_register_script( 'gd_mylist_script', plugins_url() . '/gd-mylist/js/gd-script.js', array('jquery') );
-    wp_localize_script( 'gd_mylist_script', 'myAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'uriPlugin' => plugins_url()));
+    wp_localize_script( 'gd_mylist_script', 'myAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'uriPlugin' => $template_path));
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'gd_mylist_script' );
     wp_enqueue_style( 'font-awesome.min', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' );
@@ -35,12 +54,10 @@ function gd_add_mylist() {
         exit("No naughty business please");
     }
     
-    global $wpdb;
+    global $wpdb, $table;
     $item_id = $_POST['itemId'];
     $user_id = $_POST['userId'];
-    $db_prefix = $wpdb->prefix;
     $result = array();
-    $table = $db_prefix."gd_mylist";
 
     $wpdb->query(
         $wpdb->prepare( "
@@ -74,12 +91,10 @@ function gd_remove_mylist() {
         exit("No naughty business please");
     }
     
-    global $wpdb;
+    global $wpdb, $table;
     $item_id = $_POST['itemId'];
     $user_id = $_POST['userId'];
-    $db_prefix = $wpdb->prefix;
     $result = array();
-    $table = $db_prefix."gd_mylist";
     
     $wpdb->query(
         $wpdb->prepare(
@@ -105,8 +120,7 @@ add_shortcode( 'show_gd_mylist_btn', 'gd_show_mylist_btn' ); /* eg shortcode cal
  
 function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
     
-    global $wpdb;
-    $db_prefix = $wpdb->prefix;
+    global $wpdb, $table, $template_btn_add, $template_btn_remove, $template_btn_login;
     $gd_query = null;
     $user_id = get_current_user_id();
     if ($item_id == null) {
@@ -115,12 +129,9 @@ function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
     } else {
         $havePrint = '0';
     }
-    $template_btn_add = plugins_url() . '/gd-mylist/template/btn-add.html';
-    $template_btn_remove = plugins_url() . '/gd-mylist/template/btn-remove.html';
-    $template_btn_login = plugins_url() . '/gd-mylist/template/btn-login.html';
     
     //check if item is in mylist
-    $gd_sql = "SELECT * FROM ".$db_prefix."gd_mylist 
+    $gd_sql = "SELECT * FROM ".$table." 
                 WHERE item_id = ".$item_id." AND user_id = ".$user_id."";
     
     $gd_query = $wpdb->get_results($gd_sql);
@@ -158,15 +169,9 @@ add_action('gd_mylist_list', 'gd_show_gd_mylist_list');
 add_shortcode( 'show_gd_mylist_list', 'gd_show_gd_mylist_list' ); //shortcode call [show_gd_mylist_list]
 
 function gd_show_gd_mylist_list() {
-    global $wpdb;
-    $db_prefix = $wpdb->prefix;
+    global $wpdb, $table, $table_posts, $table_users, $template_box_list, $template_box_list_empty;
     $posts = null;
     $user_id = get_current_user_id();
-    $template_box_list = plugins_url() . '/gd-mylist/template/box-list.html';
-    $template_box_list_empty = plugins_url() . '/gd-mylist/template/box-list-empty.html';
-    $table = $db_prefix."gd_mylist";
-    $table_posts = $db_prefix."posts";
-    $table_users = $db_prefix."users";
     
     $posts = $wpdb->get_results( 
         $wpdb->prepare(
@@ -209,7 +214,7 @@ function gd_show_gd_mylist_list() {
                 $html = str_replace("##postTitle##", $postTitle, $html);
                 $html = str_replace("##postDate##", $postDate, $html);
                 $html = str_replace("##postAuthorName##", $postAuthorName, $html);
-                //$html = str_replace("##postContent##", $postContent, $html);
+                $html = str_replace("##postContent##", $postContent, $html);
                 $html = str_replace("##postBtn##", gd_show_mylist_btn('mylist',$postId), $html);
                 echo($html);    
 

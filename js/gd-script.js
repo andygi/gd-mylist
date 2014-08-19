@@ -1,7 +1,7 @@
 jQuery(document).ready( function($) {
 //mylist
 //setup variable
-var uriTemplate = (myAjax.uriPlugin) + "/gd-mylist/template/";
+var uriTemplate = (myAjax.uriPlugin);
 var chunckLoading = "chunck-loading.html";
 var chunckBtnLogin = "btn-login.html";
 var chunckBtnAdd = "chunck-add.html";
@@ -51,32 +51,11 @@ var chunckAlertDone = "alert-done.html";
         }).done(function() {
             //alert('ok');
             if (styletarget == 'mylist') {
-                $("#mylist-"+postid).closest('.thumbnail').fadeOut(500);
+                $("#mylist-"+postid).closest('.gd-mylist-box').fadeOut(500);
             } else {
                 $("#mylist-"+postid).addClass('btn-gd-add-mylist').removeClass('btn-gd-remove-mylist');
                 $("#mylist-"+postid).load(uriTemplate + chunckBtnAdd);
             }
-        });
-        
-    });
-    
-    
-    //btn delete post
-    $('body').on('click', '#btn-del-post', function () {
-        var postid = $(this).attr("data-postid");
-        var nonce = $(this).attr("data-nonce");
-        
-       $("#mylist-"+postid).load(uriTemplate + chunckLoading);
-        
-        $.ajax({
-            type: "POST",
-            dataType:"json",
-            url: myAjax.ajaxurl,
-            data: { action: "gd_remove_post", itemId: postid, nonce: nonce }
-        }).done(function(msg) {
-            //alert(msg.chunck);
-            $("#sheet-content div").fadeOut(500);
-            $("#sheet-content").load(uriTemplate + chunckAlertDone);
         });
         
     });
