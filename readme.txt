@@ -1,6 +1,6 @@
 === My Wish List ===
 Contributors: AndyGi
-Donate link: http://www.gekode.co.uk/donation
+Donate link: http://www.gekode.co.uk
 Tags: item lists, wish list, wishlist, posts and pages bookmark
 Requires at least: 3.9.0
 Tested up to: 3.9
@@ -14,7 +14,7 @@ You can create a favorite list of pages or posts in easy and faster way.
 
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
 It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.
-GD MyList use bootstrap 3 as grid and css class, and fontawesome as icons.
+GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
 
 = Development =
 * [https://github.com/andygi/gd-mylist](https://github.com/andygi/gd-mylist "https://github.com/andygi/gd-mylist")
@@ -29,7 +29,7 @@ GD MyList use bootstrap 3 as grid and css class, and fontawesome as icons.
 
 = How call myList's button? =
 
-There are two ways by your needs:
+There are two ways:
 
 1. by Shortcode
 if you needs a single button in a page or post or product sheet, just write 
@@ -49,7 +49,7 @@ where do you want that button will show it
 
 = How call myList's list? =
 
-yuo can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
+you can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
 
 ```php
 [show_gd_mylist_list]
@@ -79,9 +79,9 @@ Templates files are:
 	* box-list.html (where there are some items to show)
 	* box-list-empty.html (when there list is empty)
 
-= Icon customization =
+= Icon customisation =
 
-I use **Font Awesome** as icon framework [Font Awesome](http://fortawesome.github.io/Font-Awesome/ "Font Awesome"), so can change with one of that, just cange call name into templets
+I use **Font Awesome** as icon framework [Font Awesome](http://fortawesome.github.io/Font-Awesome/ "Font Awesome"), so can change with one of that, just change class name into templets
 
 = CSS Class =
 
