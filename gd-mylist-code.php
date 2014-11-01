@@ -125,9 +125,6 @@ function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
     $user_id = get_current_user_id();
     if ($item_id == null) {
         $item_id = get_the_id();
-        $havePrint = '1';
-    } else {
-        $havePrint = '0';
     }
     
     //check if item is in mylist
@@ -155,11 +152,7 @@ function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
         $html = file_get_contents($template_btn_login);
     }
     
-    if ($havePrint == 1) {
-        echo($html);
-    } else {
-        return($html);
-    }
+    return($html);
     
 }
 
@@ -216,11 +209,10 @@ function gd_show_gd_mylist_list() {
                 $html = str_replace("##postAuthorName##", $postAuthorName, $html);
                 $html = str_replace("##postContent##", $postContent, $html);
                 $html = str_replace("##postBtn##", gd_show_mylist_btn('mylist',$postId), $html);
-                echo($html);    
-
         }
     } else {
         $html = file_get_contents($template_box_list_empty);
-        echo($html);
     }
+    
+    echo($html);
 }
