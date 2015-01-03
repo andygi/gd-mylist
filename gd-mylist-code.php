@@ -18,8 +18,7 @@ global $wpdb, $var_setting, $templates_html, $template_path;
         'table_posts' => $db_prefix."posts",
         'table_users' => $db_prefix."users",
         'login_request' => 'no',
-        'guest_user' => rand(100000000000,999999999999).'001',
-        'id_user' => get_current_user_id()
+        'guest_user' => rand(100000000000,999999999999).'001'
     );
 
     //template variable
@@ -33,12 +32,14 @@ global $wpdb, $var_setting, $templates_html, $template_path;
         'box_list_empty'    => $template_path . 'box-list-empty.html'
     );
 
-add_action( 'init', 'gd_setcookie' );
-function gd_setcookie() {
-    global $var_setting;
-    if (!isset($_COOKIE['gb_mylist_guest'])) {
-        $id_guest = $var_setting['guest_user'];
-        setcookie("gb_mylist_guest", $id_guest, time()+3600, COOKIEPATH, COOKIE_DOMAIN);
+if ($var_setting['login_request'] == 'no') {
+    add_action( 'init', 'gd_setcookie' );
+    function gd_setcookie() {
+        global $var_setting;
+        if (!isset($_COOKIE['gb_mylist_guest'])) {
+            $id_guest = $var_setting['guest_user'];
+            setcookie("gb_mylist_guest", $id_guest, time()+3600, COOKIEPATH, COOKIE_DOMAIN);
+        }
     }
 }
 
@@ -138,9 +139,13 @@ function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
     global $wpdb, $var_setting, $templates_html;
     
     $gd_query = null;
-    $user_id = $var_setting['id_user'];
+    $user_id = get_current_user_id();
     if ($user_id == 0 && $var_setting['login_request'] == 'no') {
-        $user_id = $_COOKIE['gb_mylist_guest'];
+        if (!isset($_COOKIE['gb_mylist_guest'])) {
+            $user_id = $var_setting['guest_user'];
+        } else {
+            $user_id = $_COOKIE['gb_mylist_guest'];
+        }
     }
     if ($item_id == null) {
         $item_id = get_the_id();
@@ -202,7 +207,7 @@ add_shortcode( 'show_gd_mylist_list', 'gd_show_gd_mylist_list' ); //shortcode ca
 function gd_show_gd_mylist_list() {
     global $wpdb, $var_setting, $templates_html;
     $posts = null;
-    $user_id = $var_setting['id_user'];
+    $user_id = get_current_user_id();
     
     if ($user_id == 0 && $var_setting['login_request'] == 'no') {
         $user_id = $_COOKIE['gb_mylist_guest'];
