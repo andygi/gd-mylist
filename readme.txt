@@ -35,37 +35,32 @@ There are two ways by your needs:
 1. by Shortcode
 if you needs a single button in a page or post or product sheet, just write 
 
-```php
-[show_gd_mylist_btn] 
-```
+`[show_gd_mylist_btn]`
+
 in the content
 
 2. by code into theme
 if you needs to put the buttom in themes code, just write 
 
-```php
-<?php do_action('gd_mylist_btn'); ?>
-```
+`<?php do_action('gd_mylist_btn'); ?>`
+
 where do you want that button will show it
 
 = How call myList's list? =
 
 yuo can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
 
-```php
-[show_gd_mylist_list]
-```
+`[show_gd_mylist_list]`
 
 = How change login permission? =
 
 Change the value on row #20 of file  `wp-content/plugins/gd-mylist/gd-mylist.php` the value is `no` **by default**
 
-```
-from:
+`from:
 	'login_request' => 'no',
 to:
 	'login_request' => 'yes',
-```
+`
 
 Note
 
