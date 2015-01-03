@@ -1,4 +1,4 @@
-#GD MyList v 0.1
+#GD MyList v 0.2
 
 You can create a favorite list of pages or posts in easy and faster way.
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
@@ -10,6 +10,7 @@ GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
 1. Upload plugin .zip file to the `/wp-content/plugins/` directory and unzip
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Use the shortcode in your posts and pages to display your **button** or **MyList** (more info below)
+4. You can chouse if the user have to login or not, **the plugin not request to be login by default**
 
 ###Call myList's button:
 
@@ -38,6 +39,21 @@ you can show MyList list by shortcode, just create a page (eg: myList) and put i
 ```php
 [show_gd_mylist_list]
 ```
+
+###Change login permission
+
+Change the value on row #20 of file  `wp-content/plugins/gd-mylist/gd-mylist.php` the value is `no` **by default**
+
+```
+from:
+	'login_request' => 'no',
+to:
+	'login_request' => 'yes',
+```
+####note
+In case the user has not logged, the user's id data will be storage in a cookie by GD-Mylist. 
+
+So if the same user made two different wish lists, one before and one after he has logged, the MyList List will be like as new user, because for the plugin the user appears as two different users.
 
 ###Template customisation
 
