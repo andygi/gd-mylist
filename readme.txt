@@ -3,8 +3,8 @@ Contributors: AndyGi
 Donate link: http://www.gekode.co.uk
 Tags: item lists, wish list, wishlist, posts and pages bookmark
 Requires at least: 3.9.0
-Tested up to: 3.9
-Stable tag: 0.1
+Tested up to: 4.1
+Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ You can create a favorite list of pages or posts in easy and faster way.
 
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
 It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.
-GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
+GD MyList use bootstrap 3 as grid and css class, and fontawesome as icons.
 
 = Development =
 * [https://github.com/andygi/gd-mylist](https://github.com/andygi/gd-mylist "https://github.com/andygi/gd-mylist")
@@ -24,12 +24,13 @@ GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
 1. Upload plugin .zip file to the `/wp-content/plugins/` directory and unzip
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Use the shortcode in your posts and pages to display your **button** or **MyList** (more info in FAQ) 
+4. You can chouse if the user have to login or not, **the plugin not request to be login by default**
 
 == Frequently Asked Questions ==
 
 = How call myList's button? =
 
-There are two ways:
+There are two ways by your needs:
 
 1. by Shortcode
 if you needs a single button in a page or post or product sheet, just write 
@@ -49,11 +50,28 @@ where do you want that button will show it
 
 = How call myList's list? =
 
-you can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
+yuo can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
 
 ```php
 [show_gd_mylist_list]
 ```
+
+= How change login permission? =
+
+Change the value on row #20 of file  `wp-content/plugins/gd-mylist/gd-mylist.php` the value is `no` **by default**
+
+```
+from:
+	'login_request' => 'no',
+to:
+	'login_request' => 'yes',
+```
+
+Note
+
+In case the user has not logged, the user's id data will be storage in a cookie by GD-Mylist. 
+
+So if the same user made two different wish lists, one before and one after he has logged, the MyList List will be like as new user, because for the plugin the user appears as two different users.
 
 = Can I Template customization? =
 
@@ -79,9 +97,9 @@ Templates files are:
 	* box-list.html (where there are some items to show)
 	* box-list-empty.html (when there list is empty)
 
-= Icon customisation =
+= Icon customization =
 
-I use **Font Awesome** as icon framework [Font Awesome](http://fortawesome.github.io/Font-Awesome/ "Font Awesome"), so can change with one of that, just change class name into templets
+I use **Font Awesome** as icon framework [Font Awesome](http://fortawesome.github.io/Font-Awesome/ "Font Awesome"), so can change with one of that, just cange call name into templets
 
 = CSS Class =
 
@@ -125,10 +143,17 @@ Minial **list** html syntax:
 
 == Changelog ==
 
+= 0.2 =
+* Add login/no login case
+* Now you can put the button into the content
+
 = 0.1 =
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.2 =
+first release
 
 = 0.1 =
 first release
