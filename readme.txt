@@ -4,7 +4,7 @@ Donate link: http://www.gekode.co.uk
 Tags: item lists, wish list, wishlist, posts and pages bookmark
 Requires at least: 3.9.0
 Tested up to: 4.1
-Stable tag: 0.2
+Stable tag: 0.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,9 @@ Minial **list** html syntax:
 3. Frontend - MyList show MyList
 
 == Changelog ==
+
+= 0.2.1 =
+* fix view problems on wishlist’s list page
 
 = 0.2 =
 * Add login/no login case
