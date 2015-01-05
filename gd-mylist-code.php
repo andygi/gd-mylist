@@ -256,10 +256,11 @@ function gd_show_gd_mylist_list() {
                 $html = str_replace("##postAuthorName##", $postAuthorName, $html);
                 $html = str_replace("##postContent##", $postContent, $html);
                 $html = str_replace("##postBtn##", gd_show_mylist_btn('mylist',$postId), $html);
+            
+            echo($html);
         }
     } else {
         $html = file_get_contents($templates_html['box_list_empty']);
+        echo($html);
     }
-    
-    echo($html);
 }
