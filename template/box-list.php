@@ -1,3 +1,4 @@
+<?php include('../lib/translate_tool.php'); ?>
 <div class="col-sm-12">
     <div class="thumbnail gd-mylist-box">
       <a href="##postUrl##"><img src="##postImage##" class="img-book img-responsive"></a>

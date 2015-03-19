@@ -3,19 +3,16 @@
 Plugin Name: GD Mylist
 Plugin URI: https://wordpress.org/plugins/gd-mylist/
 Description: Create mylist items of posts and pages
-Version: 0.2
+Version: 0.3.2 beta
 Author: Andy Greco
 Author URI: http://www.gekode.co.uk
 License: GPL
 */
 
+
 class gd_mylist_plugin {
 
-    public function __construct()
-    {
-        $domain = "gd-mylist";
-        $mofile   = trailingslashit(dirname(__File__)) . 'lang/' . $domain . '-' . get_locale() . '.mo';
-        load_textdomain( $domain, $mofile );
+    public function __construct() {
         
         include_once 'gd-mylist-code.php';
 
@@ -23,13 +20,11 @@ class gd_mylist_plugin {
         register_deactivation_hook( __FILE__, array($this, 'depopulate_db') );
     }
 
-    public function register_fields()
-    {
+    public function register_fields() {
         include_once 'gd-mylist-code.php';
     }
 
-    public function populate_db()
-    {
+    public function populate_db() {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
         ob_start();
@@ -38,8 +33,7 @@ class gd_mylist_plugin {
         dbDelta( $sql );
     }
 
-    public function depopulate_db()
-    {
+    public function depopulate_db() {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
         ob_start();

@@ -4,7 +4,7 @@ Donate link: http://www.gekode.co.uk
 Tags: item lists, wish list, wishlist, posts and pages bookmark
 Requires at least: 3.9.0
 Tested up to: 4.1
-Stable tag: 0.2.1
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,16 @@ You can create a favorite list of pages or posts in easy and faster way.
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
 It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.
 GD MyList use bootstrap 3 as grid and css class, and fontawesome as icons.
+
+= Features =
+
+* [new] Multilingual support (English, Italian) with template .pot file
+* [new] Support **mqtranslate** and **qtranslate-x**
+* [new] You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
+* Availability to choose if no logger user can use it or not (it is available by default), the wishlist will be expired after 30 days
+* You can customize every single buttons/lists by templates
+* You can call button and list by shortcode or by php code directly into the template
+* It's tested on posts, pages and woocommerce products's pages
 
 = Development =
 * [https://github.com/andygi/gd-mylist](https://github.com/andygi/gd-mylist "https://github.com/andygi/gd-mylist")
@@ -42,7 +52,14 @@ in the content
 2. by code into theme
 if you needs to put the buttom in themes code, just write 
 
-`<?php do_action('gd_mylist_btn'); ?>`
+`
+<?php
+$arg = array (
+	'echo' => true
+);
+do_action('gd_mylist_btn',$arg); 
+?>
+`
 
 where do you want that button will show it
 
@@ -51,6 +68,12 @@ where do you want that button will show it
 yuo can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
 
 `[show_gd_mylist_list]`
+
+if you want disable the share button
+
+`
+[show_gd_mylist_list share_list='no']
+`
 
 = How change login permission? =
 
@@ -71,26 +94,27 @@ So if the same user made two different wish lists, one before and one after he h
 = Can I Template customization? =
 
 Yes, there are different templates in html format, you can find it in "template" folder `wp-content/plugins/gd-mylist/template/...`.
-If you want, you can create a new one in different directory just copy **all files** and **change the path** into `gd-mylist-code.php` file `line #21`.
+If you want, you can create a new one in different directory just copy **all files** and **change the path** into `gd-mylist-code.php` file variable `$template_path`.
 Templates files are:
 
 1. Add MyList button:
-	* btn-add.html
-	* chunck-add.html (it'll appare just after first click)
+	* btn-add.php
+	* chunck-add.php (it'll appare just after first click)
 
 2. Remove MyList button:
-	* btn-remove.html
-	* chunck-remove.html (it'll appare just after first click)
+	* btn-remove.php
+	* chunck-remove.php (it'll appare just after first click)
 
 3. Loading status (it'll appare just after first click)
-	* chunck-loading.html
+	* chunck-loading.php
 
 4. Add MyList button if you not login
-	* btn-login.html (there is a javascript alert)
+	* btn-login.php (there is a javascript alert)
 
 5. MyList list
-	* box-list.html (where there are some items to show)
-	* box-list-empty.html (when there list is empty)
+	* box-list.php (where there are some items to show)
+	* box-list-empty.php (when there list is empty)
+	* box-list-share.php (for share button)
 
 = Icon customization =
 
@@ -124,6 +148,8 @@ Minimal **button** html syntax (eg: remove button):
 	* ##postAuthorName##
 	* ##postContent##
 	* ##postBtn##
+	* ##pageID##
+	* ##userID##
 	* class="gd-mylist-box" (required)
 
 Minial **list** html syntax:
@@ -138,8 +164,13 @@ Minial **list** html syntax:
 
 == Changelog ==
 
+= 0.3 =
+* Multilingual support (English, Italian) with template .pot file
+* Support **mqtranslate** and **qtranslate-x**
+* You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
+
 = 0.2.1 =
-* fix view problems on wishlist’s list page
+* Fix view problems on wishlist’s list page
 
 = 0.2 =
 * Add login/no login case
@@ -150,8 +181,11 @@ Minial **list** html syntax:
 
 == Upgrade Notice ==
 
+= 0.3 =
+new functions
+
 = 0.2 =
-first release
+second release
 
 = 0.1 =
 first release
