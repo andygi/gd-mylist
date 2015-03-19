@@ -1,6 +1,6 @@
 <?php
 
-##### mylist
+##### mylist 0.3
 
 /* NOTE
  * $styletarget: it used to make 'remove button' different behaviours into jquery it'll is valued by code into theme
@@ -14,22 +14,29 @@ global $wpdb, $var_setting, $templates_html, $template_path;
     //db variables and settings
     $db_prefix = $wpdb->prefix;
     $var_setting = array (
-        'table' => $db_prefix."gd_mylist",
-        'table_posts' => $db_prefix."posts",
-        'table_users' => $db_prefix."users",
-        'login_request' => 'no',
-        'guest_user' => rand(100000000000,999999999999).'001'
+        'table'         => $db_prefix."gd_mylist",
+        'table_posts'   => $db_prefix."posts",
+        'table_users'   => $db_prefix."users",
+        'login_request' => 'no', //change 'yes' if you want registration is required
+        'guest_user'    => rand(100000000000,999999999999).'001'
     );
 
     //template variable
     $template_path = plugins_url().'/gd-mylist/template/'; //change this path to use a different template remember to replay all files with all require varibales and syntax
+    $locale_chunck = '?locale=';
 
     $templates_html = array (
-        'btn_add'           => $template_path . 'btn-add.html',
-        'btn_remove'        => $template_path . 'btn-remove.html',
-        'btn_login'         => $template_path . 'btn-login.html',
-        'box_list'          => $template_path . 'box-list.html',
-        'box_list_empty'    => $template_path . 'box-list-empty.html'
+        'btn_add'               => $template_path.'btn-add.php'.$locale_chunck,
+        'btn_remove'            => $template_path.'btn-remove.php'.$locale_chunck,
+        'btn_login'             => $template_path.'btn-login.php'.$locale_chunck,
+        'box_list'              => $template_path.'box-list.php'.$locale_chunck,
+        'box_list_empty'        => $template_path.'box-list-empty.php'.$locale_chunck,
+        'box_list_share'        => $template_path.'box-list-share.php'.$locale_chunck,
+        'chunck_loading'        => $template_path.'chunck-loading.php'.$locale_chunck,
+        'chunck_add'            => $template_path.'chunck-add.php'.$locale_chunck,
+        'chunck_remove'         => $template_path.'chunck-remove.php'.$locale_chunck,
+        'btn_view_wishlist'     => $template_path.'btn-view-wishlist.php'.$locale_chunck,
+        'chunck_view_wishlist'  => $template_path.'chunck-view-wishlist.php'.$locale_chunck,
     );
 
 if ($var_setting['login_request'] == 'no') {
@@ -38,7 +45,7 @@ if ($var_setting['login_request'] == 'no') {
         global $var_setting;
         if (!isset($_COOKIE['gb_mylist_guest'])) {
             $id_guest = $var_setting['guest_user'];
-            setcookie("gb_mylist_guest", $id_guest, time()+3600, COOKIEPATH, COOKIE_DOMAIN);
+            setcookie("gb_mylist_guest", $id_guest, time()+(86400 * 30), COOKIEPATH, COOKIE_DOMAIN);
         }
     }
 }
@@ -46,9 +53,21 @@ if ($var_setting['login_request'] == 'no') {
 //setup assets
 add_action( 'init', 'gd_mylist_asset' );
 function gd_mylist_asset(){
-    global $template_path;
+    global $template_path, $templates_html;
+    $locale = get_locale();
+    
     wp_register_script( 'gd_mylist_script', plugins_url() . '/gd-mylist/js/gd-script.js', array('jquery') );
-    wp_localize_script( 'gd_mylist_script', 'myAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'uriPlugin' => $template_path));
+    wp_localize_script(
+        'gd_mylist_script',
+        'gdMyListAjax',
+        array(
+            'ajaxurl'           => admin_url( 'admin-ajax.php' ),
+            'chunckLoading'     => $templates_html['chunck_loading'].$locale,
+            'chunckBtnLogin'    => $templates_html['btn_login'].$locale,
+            'chunckBtnAdd'      => $templates_html['chunck_add'].$locale,
+            'chunckBtnRemove'   => $templates_html['chunck_remove'].$locale
+        )
+    );
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'gd_mylist_script' );
     wp_enqueue_style( 'font-awesome.min', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' );
@@ -81,16 +100,17 @@ function gd_add_mylist() {
                     (`item_id`, `user_id`) 
                 VALUES 
                     ('%d', '%d');
-                " , 
+                " ,
                 $item_id,
-                $user_id     
+                $user_id
                     )
                 );
     
     
     $result['type'] = "success";
     
-    $result = json_encode($result);
+    //$result = json_encode($result);
+    $result = 'ok';
     echo $result;
     
     die();
@@ -123,8 +143,8 @@ function gd_remove_mylist() {
     
     $result['type'] = "success";
     
-    $result = json_encode($result);
-    echo $result;
+    //$result = json_encode($result);
+    $result = 'ok';
     
     die();
 }
@@ -134,9 +154,17 @@ function gd_remove_mylist() {
 add_action('gd_mylist_btn', 'gd_show_mylist_btn', 10, 2); /* eg code call into theme: <?php do_action('gd_mylist_btn', 'mylist'); ?> */
 add_shortcode( 'show_gd_mylist_btn', 'gd_show_mylist_btn' ); /* eg shortcode call: [show_gd_mylist_btn] */
  
-function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
+//function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
+function gd_show_mylist_btn($atts) {
     
     global $wpdb, $var_setting, $templates_html;
+    $locale = get_locale();
+    
+    extract( shortcode_atts( array(
+        'styletarget' => null, //default
+        'item_id' => null,
+        'echo' => false
+    ), $atts ) );
     
     $gd_query = null;
     $user_id = get_current_user_id();
@@ -160,13 +188,13 @@ function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
     if ($user_id > 0) {
         if ($gd_query != null) {
             //in mylist
-            $html = file_get_contents($templates_html['btn_remove']);
+            $html = file_get_contents($templates_html['btn_remove'].$locale);
             $html = str_replace("##itemID##", $item_id, $html);
             $html = str_replace("##TARGET##", $styletarget, $html);
             $html = str_replace("##NONCE##", wp_create_nonce("gd_mylist"), $html);
             $html = str_replace("##userID##", $user_id, $html);
         } else {
-            $html = file_get_contents($templates_html['btn_add']);
+            $html = file_get_contents($templates_html['btn_add'].$locale);
             $html = str_replace("##itemID##", $item_id, $html);
             $html = str_replace("##TARGET##", $styletarget, $html);
             $html = str_replace("##NONCE##", wp_create_nonce("gd_mylist"), $html);
@@ -174,61 +202,59 @@ function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
         }
     } else {
         //chek if allow use in no login case
-        if ($var_setting['login_request'] == 'yes') {
-            //must to be login
-            $html = file_get_contents($templates_html['btn_login']);
-        } else {            
-            if ($gd_query != null) {
-                //in mylist
-                $html = file_get_contents($templates_html['btn_remove']);
-                $html = str_replace("##itemID##", $item_id, $html);
-                $html = str_replace("##TARGET##", $styletarget, $html);
-                $html = str_replace("##NONCE##", wp_create_nonce("gd_mylist"), $html);
-                $html = str_replace("##userID##", $user_id, $html);
-            } else {
-                $html = file_get_contents($templates_html['btn_add']);
-                $html = str_replace("##itemID##", $item_id, $html);
-                $html = str_replace("##TARGET##", $styletarget, $html);
-                $html = str_replace("##NONCE##", wp_create_nonce("gd_mylist"), $html);
-                $html = str_replace("##userID##", $user_id, $html);
-            }
-        }
+        //must to be login
+        $html = file_get_contents($templates_html['btn_login'].$locale);
     }
     
-    return($html);
+    if($echo == true) {
+        echo $html;
+    } else {
+        return $html;
+    }
     
 }
 
 //show my list in page
 
 add_action('gd_mylist_list', 'gd_show_gd_mylist_list');
-add_shortcode( 'show_gd_mylist_list', 'gd_show_gd_mylist_list' ); //shortcode call [show_gd_mylist_list]
+add_shortcode( 'show_gd_mylist_list', 'gd_show_gd_mylist_list', 10, 2); //shortcode call [show_gd_mylist_list]
 
-function gd_show_gd_mylist_list() {
+function gd_show_gd_mylist_list($atts) {
     global $wpdb, $var_setting, $templates_html;
     $posts = null;
     $user_id = get_current_user_id();
+    $locale = get_locale();
+    $lang = substr($locale, 0, 2);
+    $user_id_share = @$_GET['wish'];
     
+    extract( shortcode_atts( array(
+        'share_list' => 'yes'
+    ), $atts ) );
+
     if ($user_id == 0 && $var_setting['login_request'] == 'no') {
         $user_id = $_COOKIE['gb_mylist_guest'];
     }
     
-    $posts = $wpdb->get_results( 
+    if ($user_id_share) {
+        $user_id = $user_id_share;
+    }
+    
+    $posts = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT
                     b.ID AS posts_id,
                     b.post_title AS posts_title,
-                    b.post_content AS posts_content, 
-                    b.post_date AS posts_date, 
-                    c.ID AS authors_id, 
-                    c.display_name AS authors_name 
+                    b.post_content AS posts_content,
+                    b.post_date AS posts_date,
+                    c.ID AS authors_id,
+                    c.display_name AS authors_name
                 FROM ".$var_setting['table']." a
                 LEFT JOIN ".$var_setting['table_posts']." b
                 ON a.item_id = b.ID
-                LEFT JOIN ".$var_setting['table_users']." c 
+                LEFT JOIN ".$var_setting['table_users']." c
                 ON c.ID = b.post_author
                 WHERE 
-                    b.post_status = 'publish'  
+                    b.post_status = 'publish'
                     AND a.user_id = %d
                 ORDER BY b.post_title DESC",
                 $user_id
@@ -236,7 +262,16 @@ function gd_show_gd_mylist_list() {
     );
     
     if ($posts != null) {
-    
+        
+        if ($share_list == 'yes') {
+            $html = '';
+                $html = file_get_contents($templates_html['box_list_share'].$locale);
+                $html = str_replace("##pageID##", get_permalink(), $html);
+                $html = str_replace("##userID##", $user_id, $html);
+            
+            echo($html);
+        }
+        
         foreach ($posts as $post) {
             $postId = $post->posts_id;
             $postDate = get_the_date('F j, Y', $postId);
@@ -244,23 +279,48 @@ function gd_show_gd_mylist_list() {
             $postAuthorName = $post->authors_name;
             $postContent = $post->posts_content;
             $postImage = wp_get_attachment_url( get_post_thumbnail_id($postId));
-            $postTitle = $post->posts_title;
+                $postTitle = $post->posts_title;
+                $portTitleLang = extract_title($postTitle);
             $postUrl = get_permalink($postId);
+            $args = array(
+                'styletarget' => 'mylist',
+                'item_id' => $postId
+            );
             $html = '';
-
-                $html = file_get_contents($templates_html['box_list']);
+                $html = file_get_contents($templates_html['box_list'].$locale);
                 $html = str_replace("##postUrl##", $postUrl, $html);
                 $html = str_replace("##postImage##", $postImage, $html);
-                $html = str_replace("##postTitle##", $postTitle, $html);
+                $html = str_replace("##postTitle##", $portTitleLang[$lang], $html);
                 $html = str_replace("##postDate##", $postDate, $html);
                 $html = str_replace("##postAuthorName##", $postAuthorName, $html);
                 $html = str_replace("##postContent##", $postContent, $html);
-                $html = str_replace("##postBtn##", gd_show_mylist_btn('mylist',$postId), $html);
+                $html = str_replace("##postBtn##", gd_show_mylist_btn($args), $html);
             
             echo($html);
         }
     } else {
-        $html = file_get_contents($templates_html['box_list_empty']);
+        $html = file_get_contents($templates_html['box_list_empty'].$locale);
         echo($html);
     }
+}
+
+function extract_title($postTitle) {
+    
+    if (strpos($postTitle,'<!--:') !== false) {
+        $regexp ='/<\!--:(\w+?)-->([^<]+?)<\!--:-->/i';
+    } else {
+        $regexp ='/\:(\w{2})\]([^\[]+?)\[/';
+    }
+            
+    if(preg_match_all($regexp, $postTitle, $matches)) {
+        $titles = array();
+        $count = count($matches[0]);
+        for($i =0; $i < $count; $i++) {
+            $titles[$matches[1][$i]]= $matches[2][$i];
+        }
+        
+    }
+    
+    return $titles;
+    
 }

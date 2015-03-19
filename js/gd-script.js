@@ -1,62 +1,69 @@
-jQuery(document).ready( function($) {
-//mylist
-//setup variable
-var uriTemplate = (myAjax.uriPlugin);
-var chunckLoading = "chunck-loading.html";
-var chunckBtnLogin = "btn-login.html";
-var chunckBtnAdd = "chunck-add.html";
-var chunckBtnRemove = "chunck-remove.html";
-    
+jQuery(document).ready(function ($) {
+    //mylist
+    //setup variable
+    var uriAjax         = (gdMyListAjax.ajaxurl);
+    var chunckLoading   = (gdMyListAjax.chunckLoading);
+    var chunckBtnLogin  = (gdMyListAjax.chunckBtnLogin);
+    var chunckBtnAdd    = (gdMyListAjax.chunckBtnAdd);
+    var chunckBtnRemove = (gdMyListAjax.chunckBtnRemove);
 
-    
+    console.log(chunckBtnRemove + " " + chunckBtnAdd);
     //btn add mylist
     $('body').on('click', '.btn-gd-add-mylist', function () {
-        var postid = $(this).attr("data-postid");
-        var userid = $(this).attr("data-userid");
-        var nonce = $(this).attr("data-nonce");
+        var postid      = $(this).attr("data-postid");
+        var userid      = $(this).attr("data-userid");
+        var nonce       = $(this).attr("data-nonce");
         var styletarget = $(this).attr("data-styletarget");
 
-        console.log(uriTemplate);
-                        
-        $("#mylist-"+postid).load(uriTemplate + chunckLoading);
-        
+        $("#mylist-" + postid).load(chunckLoading);
+
         $.ajax({
             type: "POST",
-            dataType:"json",
-            url: myAjax.ajaxurl,
-            data: { action: "gd_add_mylist", itemId: postid, userId: userid, nonce: nonce }
-        }).done(function() {
-            //alert('ok');
-            $("#mylist-"+postid).addClass('btn-gd-remove-mylist').removeClass('btn-gd-add-mylist');
-            $("#mylist-"+postid).load(uriTemplate + chunckBtnRemove);
+            dataType: "html",
+            url: uriAjax,
+            data: {
+                action: "gd_add_mylist",
+                itemId: postid,
+                userId: userid,
+                nonce: nonce
+            }
+        }).done(function (result) {
+            console.log('result: ' + result);
+            $("#mylist-" + postid).addClass('btn-gd-remove-mylist').removeClass('btn-gd-add-mylist');
+            $("#mylist-" + postid).load(chunckBtnRemove);
         });
-        
+
     });
-    
+
     //btn remove mylist
     $('body').on('click', '.btn-gd-remove-mylist', function () {
-        var postid = $(this).attr("data-postid");
-        var userid = $(this).attr("data-userid");
-        var nonce = $(this).attr("data-nonce");
+        var postid      = $(this).attr("data-postid");
+        var userid      = $(this).attr("data-userid");
+        var nonce       = $(this).attr("data-nonce");
         var styletarget = $(this).attr("data-styletarget");
-        
-       $("#mylist-"+postid).load(uriTemplate + chunckLoading);
-        
+
+        $("#mylist-" + postid).load(chunckLoading);
+
         $.ajax({
             type: "POST",
-            dataType:"json",
-            url: myAjax.ajaxurl,
-            data: { action: "gd_remove_mylist", itemId: postid, userId: userid, nonce: nonce }
-        }).done(function() {
-            //alert('ok');
+            dataType: "html",
+            url: uriAjax,
+            data: {
+                action: "gd_remove_mylist",
+                itemId: postid,
+                userId: userid,
+                nonce: nonce
+            }
+        }).done(function (result) {
+            console.log('result: ' + result);
             if (styletarget == 'mylist') {
-                $("#mylist-"+postid).closest('.gd-mylist-box').fadeOut(500);
+                $("#mylist-" + postid).closest('.gd-mylist-box').fadeOut(500);
             } else {
-                $("#mylist-"+postid).addClass('btn-gd-add-mylist').removeClass('btn-gd-remove-mylist');
-                $("#mylist-"+postid).load(uriTemplate + chunckBtnAdd);
+                $("#mylist-" + postid).addClass('btn-gd-add-mylist').removeClass('btn-gd-remove-mylist');
+                $("#mylist-" + postid).load(chunckBtnAdd);
             }
         });
-        
+
     });
-    
+
 });
