@@ -3,7 +3,7 @@
 Plugin Name: GD Mylist
 Plugin URI: https://wordpress.org/plugins/gd-mylist/
 Description: Create mylist items of posts and pages
-Version: 0.3.2 beta
+Version: 0.3.3
 Author: Andy Greco
 Author URI: http://www.gekode.co.uk
 License: GPL

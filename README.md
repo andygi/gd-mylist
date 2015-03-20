@@ -1,4 +1,4 @@
-#GD MyList v 0.3
+#GD MyList v 0.3.3
 
 You can create a favorite list of pages or posts in easy and faster way.
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.

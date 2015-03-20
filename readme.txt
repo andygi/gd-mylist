@@ -4,7 +4,7 @@ Donate link: http://www.gekode.co.uk
 Tags: item lists, wish list, wishlist, posts and pages bookmark
 Requires at least: 3.9.0
 Tested up to: 4.1
-Stable tag: 0.3
+Stable tag: 0.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,7 @@ GD MyList use bootstrap 3 as grid and css class, and fontawesome as icons.
 * You can customize every single buttons/lists by templates
 * You can call button and list by shortcode or by php code directly into the template
 * It's tested on posts, pages and woocommerce products's pages
+
 
 = Development =
 * [https://github.com/andygi/gd-mylist](https://github.com/andygi/gd-mylist "https://github.com/andygi/gd-mylist")
@@ -164,10 +165,14 @@ Minial **list** html syntax:
 
 == Changelog ==
 
-= 0.3 =
+= 0.3.2 =
+* fix post title not appare on the list on not Multilingual sites (thank’s ‘svenol’)
+
+= 0.3.2 beta =
 * Multilingual support (English, Italian) with template .pot file
 * Support **mqtranslate** and **qtranslate-x**
 * You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
+* Fix call code into template (thank’s ‘nabjoern’)
 
 = 0.2.1 =
 * Fix view problems on wishlist’s list page

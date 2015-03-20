@@ -290,7 +290,11 @@ function gd_show_gd_mylist_list($atts) {
                 $html = file_get_contents($templates_html['box_list'].$locale);
                 $html = str_replace("##postUrl##", $postUrl, $html);
                 $html = str_replace("##postImage##", $postImage, $html);
-                $html = str_replace("##postTitle##", $portTitleLang[$lang], $html);
+                if (strpos($postTitle,'<!--:') !== false || strpos($postTitle,'[:') !== false) { //means use mqtranlate or qtranlate-x
+                    $html = str_replace("##postTitle##", $portTitleLang[$lang], $html);
+                } else {
+                    $html = str_replace("##postTitle##", $postTitle, $html);
+                }
                 $html = str_replace("##postDate##", $postDate, $html);
                 $html = str_replace("##postAuthorName##", $postAuthorName, $html);
                 $html = str_replace("##postContent##", $postContent, $html);
