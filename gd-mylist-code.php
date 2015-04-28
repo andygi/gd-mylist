@@ -99,7 +99,7 @@ function gd_add_mylist() {
                 INSERT INTO ".$var_setting['table']."
                     (`item_id`, `user_id`) 
                 VALUES 
-                    ('%d', '%d');
+                    ('%d', '%s');
                 " ,
                 $item_id,
                 $user_id
@@ -135,7 +135,7 @@ function gd_remove_mylist() {
     $wpdb->query(
         $wpdb->prepare(
             "DELETE FROM ".$var_setting['table']."
-                WHERE item_id = %d AND user_id = %d",
+                WHERE item_id = %d AND user_id = %s",
                 $item_id,
                 $user_id
         )
@@ -255,7 +255,7 @@ function gd_show_gd_mylist_list($atts) {
                 ON c.ID = b.post_author
                 WHERE 
                     b.post_status = 'publish'
-                    AND a.user_id = %d
+                    AND a.user_id = %s
                 ORDER BY b.post_title DESC",
                 $user_id
         )
