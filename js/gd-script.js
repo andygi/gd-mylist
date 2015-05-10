@@ -10,10 +10,10 @@ jQuery(document).ready(function ($) {
     console.log(chunckBtnRemove + " " + chunckBtnAdd);
     //btn add mylist
     $('body').on('click', '.btn-gd-add-mylist', function () {
-        var postid      = $(this).attr("data-postid");
-        var userid      = $(this).attr("data-userid");
-        var nonce       = $(this).attr("data-nonce");
-        var styletarget = $(this).attr("data-styletarget");
+        var postid      = $(this).data("postid");
+        var userid      = $(this).data("userid");
+        var nonce       = $(this).data("nonce");
+        var styletarget = $(this).data("styletarget");
 
         $("#mylist-" + postid).load(chunckLoading);
 
@@ -37,10 +37,10 @@ jQuery(document).ready(function ($) {
 
     //btn remove mylist
     $('body').on('click', '.btn-gd-remove-mylist', function () {
-        var postid      = $(this).attr("data-postid");
-        var userid      = $(this).attr("data-userid");
-        var nonce       = $(this).attr("data-nonce");
-        var styletarget = $(this).attr("data-styletarget");
+        var postid      = $(this).data("postid");
+        var userid      = $(this).data("userid");
+        var nonce       = $(this).data("nonce");
+        var styletarget = $(this).data("styletarget");
 
         $("#mylist-" + postid).load(chunckLoading);
 
