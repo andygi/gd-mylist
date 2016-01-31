@@ -7,7 +7,7 @@ GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
 
 ##FEATURES
 
-* [new] Multilingual support (English, Italian) with template .pot file
+* [new] Multilingual support (English, Italian, Nederland [thank you Nick]) with template .pot file 
 * [new] Support **mqtranslate** and **qtranslate-x**
 * [new] You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
 * Availability to choose if no logger user can use it or not (it is available by default), the wishlist will be expired after 30 days
