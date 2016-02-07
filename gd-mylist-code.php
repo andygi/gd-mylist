@@ -4,7 +4,7 @@
 
 /* NOTE
  * $styletarget: it used to make 'remove button' different behaviours into jquery it'll is valued by code into theme
- * values: 
+ * values:
  *      mylist //cancel div with class: gd-mylist-box
  */
 
@@ -55,7 +55,7 @@ add_action( 'init', 'gd_mylist_asset' );
 function gd_mylist_asset(){
     global $template_path, $templates_html;
     $locale = get_locale();
-    
+
     wp_register_script( 'gd_mylist_script', plugins_url() . '/gd-mylist/js/gd-script.js', array('jquery') );
     wp_localize_script(
         'gd_mylist_script',
@@ -84,11 +84,11 @@ function gd_mylist_login(){
 }
 
 function gd_add_mylist() {
-    
+
     if( !wp_verify_nonce( $_REQUEST['nonce'], "gd_mylist")) {!
         exit("No naughty business please");
     }
-    
+
     global $wpdb, $var_setting;
     $item_id = $_POST['itemId'];
     $user_id = $_POST['userId'];
@@ -97,22 +97,22 @@ function gd_add_mylist() {
     $wpdb->query(
         $wpdb->prepare( "
                 INSERT INTO ".$var_setting['table']."
-                    (`item_id`, `user_id`) 
-                VALUES 
+                    (`item_id`, `user_id`)
+                VALUES
                     ('%d', '%s');
                 " ,
                 $item_id,
                 $user_id
                     )
                 );
-    
-    
+
+
     $result['type'] = "success";
-    
+
     //$result = json_encode($result);
     $result = 'ok';
     echo $result;
-    
+
     die();
 }
 
@@ -122,16 +122,16 @@ add_action("wp_ajax_gd_remove_mylist", "gd_remove_mylist");
 add_action("wp_ajax_nopriv_gd_remove_mylist", "gd_remove_mylist"); //login check
 
 function gd_remove_mylist() {
-    
+
     if( !wp_verify_nonce( $_REQUEST['nonce'], "gd_mylist")) {!
         exit("No naughty business please");
     }
-    
+
     global $wpdb, $var_setting;
     $item_id = $_POST['itemId'];
     $user_id = $_POST['userId'];
     $result = array();
-    
+
     $wpdb->query(
         $wpdb->prepare(
             "DELETE FROM ".$var_setting['table']."
@@ -140,12 +140,12 @@ function gd_remove_mylist() {
                 $user_id
         )
     );
-    
+
     $result['type'] = "success";
-    
+
     //$result = json_encode($result);
     $result = 'ok';
-    
+
     die();
 }
 
@@ -153,19 +153,19 @@ function gd_remove_mylist() {
 
 add_action('gd_mylist_btn', 'gd_show_mylist_btn', 10, 2); /* eg code call into theme: <?php do_action('gd_mylist_btn', 'mylist'); ?> */
 add_shortcode( 'show_gd_mylist_btn', 'gd_show_mylist_btn' ); /* eg shortcode call: [show_gd_mylist_btn] */
- 
+
 //function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
 function gd_show_mylist_btn($atts) {
-    
+
     global $wpdb, $var_setting, $templates_html;
     $locale = get_locale();
-    
+
     extract( shortcode_atts( array(
         'styletarget' => null, //default
         'item_id' => null,
         'echo' => false
     ), $atts ) );
-    
+
     $gd_query = null;
     $user_id = get_current_user_id();
     if ($user_id == 0 && $var_setting['login_request'] == 'no') {
@@ -178,13 +178,13 @@ function gd_show_mylist_btn($atts) {
     if ($item_id == null) {
         $item_id = get_the_id();
     }
-    
+
     //check if item is in mylist
-    $gd_sql = "SELECT * FROM ".$var_setting['table']." 
+    $gd_sql = "SELECT * FROM ".$var_setting['table']."
                 WHERE item_id = ".$item_id." AND user_id = ".$user_id;
-    
+
     $gd_query = $wpdb->get_results($gd_sql);
-    
+
     if ($user_id > 0) {
         if ($gd_query != null) {
             //in mylist
@@ -205,13 +205,13 @@ function gd_show_mylist_btn($atts) {
         //must to be login
         $html = file_get_contents($templates_html['btn_login'].$locale);
     }
-    
+
     if($echo == true) {
         echo $html;
     } else {
         return $html;
     }
-    
+
 }
 
 //show my list in page
@@ -226,7 +226,7 @@ function gd_show_gd_mylist_list($atts) {
     $locale = get_locale();
     $lang = substr($locale, 0, 2);
     $user_id_share = @$_GET['wish'];
-    
+
     extract( shortcode_atts( array(
         'share_list' => 'yes'
     ), $atts ) );
@@ -234,11 +234,11 @@ function gd_show_gd_mylist_list($atts) {
     if ($user_id == 0 && $var_setting['login_request'] == 'no') {
         $user_id = $_COOKIE['gb_mylist_guest'];
     }
-    
+
     if ($user_id_share) {
         $user_id = $user_id_share;
     }
-    
+
     $posts = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT
@@ -253,25 +253,30 @@ function gd_show_gd_mylist_list($atts) {
                 ON a.item_id = b.ID
                 LEFT JOIN ".$var_setting['table_users']." c
                 ON c.ID = b.post_author
-                WHERE 
+                WHERE
                     b.post_status = 'publish'
                     AND a.user_id = %s
                 ORDER BY b.post_title DESC",
                 $user_id
         )
     );
-    
+
     if ($posts != null) {
-        
+
         if ($share_list == 'yes') {
             $html = '';
                 $html = file_get_contents($templates_html['box_list_share'].$locale);
-                $html = str_replace("##pageID##", get_permalink(), $html);
+								$permalink = get_permalink();
+								if (strpos($permalink, '?') !== FALSE) {
+									$html = str_replace("##pageID##", $permalink.'&', $html);
+								} else {
+									$html = str_replace("##pageID##", $permalink.'?', $html);
+								}
                 $html = str_replace("##userID##", $user_id, $html);
-            
+
             echo($html);
         }
-        
+
         foreach ($posts as $post) {
             $postId = $post->posts_id;
             $postDate = get_the_date('F j, Y', $postId);
@@ -299,7 +304,7 @@ function gd_show_gd_mylist_list($atts) {
                 $html = str_replace("##postAuthorName##", $postAuthorName, $html);
                 $html = str_replace("##postContent##", $postContent, $html);
                 $html = str_replace("##postBtn##", gd_show_mylist_btn($args), $html);
-            
+
             echo($html);
         }
     } else {
@@ -309,22 +314,22 @@ function gd_show_gd_mylist_list($atts) {
 }
 
 function extract_title($postTitle) {
-    
+
     if (strpos($postTitle,'<!--:') !== false) {
         $regexp ='/<\!--:(\w+?)-->([^<]+?)<\!--:-->/i';
     } else {
         $regexp ='/\:(\w{2})\]([^\[]+?)\[/';
     }
-            
+
     if(preg_match_all($regexp, $postTitle, $matches)) {
         $titles = array();
         $count = count($matches[0]);
         for($i =0; $i < $count; $i++) {
             $titles[$matches[1][$i]]= $matches[2][$i];
         }
-        
+
     }
-    
+
     return $titles;
-    
+
 }
