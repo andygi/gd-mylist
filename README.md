@@ -3,11 +3,12 @@
 You can create a favorite list of pages or posts in easy and faster way.
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
 It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.
-GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
+**GD MyList** use **bootstrap 3** as grid and css class, and **fontawesome** as icon sets.
 
 ##FEATURES
 
-* [new] active or not (active by default) **items counter**
+* [new] **items counter**, active or not (active by default)
+* [new] improve share component with: **Twitter**, **Email** and **Whatsapp** (please read note)
 * [v0.3] Multilingual support (English, Italian, Nederland [thank you Nick]) with template .pot file
 * [v0.3] Support **mqtranslate** and **qtranslate-x**
 * [v0.3] You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
@@ -81,6 +82,8 @@ to:
 In case the user has not logged, the user's id data will be storage in a cookie by GD-Mylist for 30 days.
 
 So if the same user made two different wish lists, one before and one after he has logged, the MyList List will be like as new user, because for the plugin the user appears as two different users.
+
+**For whatsapp share**: it is visible only for mobile resolution and it not works with permalink set as plain.
 
 ###Template customisation
 
