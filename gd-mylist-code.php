@@ -73,7 +73,8 @@ function gd_mylist_asset()
     );
     wp_enqueue_script('jquery');
     wp_enqueue_script('gd_mylist_script');
-    wp_enqueue_style('font-awesome.min', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+    wp_enqueue_style('font-awesome.min', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css');
+		wp_enqueue_style( 'gd_mylist_asset', plugins_url().'/gd-mylist/css/app.css' );
 }
 
 //add mylist function
@@ -229,6 +230,13 @@ function gd_show_gd_mylist_list($atts)
     $locale = get_locale();
     $lang = substr($locale, 0, 2);
     $user_id_share = @$_GET['wish'];
+
+		//whatsapp get id
+		$url = $_SERVER['REQUEST_URI'];
+		$arUrl = explode('wish_', $url);
+		if ($arUrl[1]) {
+			$user_id_share = $arUrl[1];
+		}
 
     extract(shortcode_atts(array(
         'share_list' => 'yes',
