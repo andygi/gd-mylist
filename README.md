@@ -1,4 +1,4 @@
-#GD MyList v 0.3.3
+#GD MyList v 0.4
 
 You can create a favorite list of pages or posts in easy and faster way.
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
@@ -7,9 +7,10 @@ GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
 
 ##FEATURES
 
-* [new] Multilingual support (English, Italian, Nederland [thank you Nick]) with template .pot file 
-* [new] Support **mqtranslate** and **qtranslate-x**
-* [new] You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
+* [new] active or not (active by default) **items counter**
+* [v0.3] Multilingual support (English, Italian, Nederland [thank you Nick]) with template .pot file
+* [v0.3] Support **mqtranslate** and **qtranslate-x**
+* [v0.3] You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
 * Availability to choose if no logger user can use it or not (it is available by default), the wishlist will be expired after 30 days
 * You can customize every single buttons/lists by templates
 * You can call button and list by shortcode or by php code directly into the template
@@ -28,22 +29,22 @@ GD MyList use bootstrap 3 as grid and css class, and fontawesome as icon sets.
 There are two ways:
 
 1. by Shortcode
-if you needs a single button in a page or post or product sheet, just write 
+if you needs a single button in a page or post or product sheet, just write
 
 ```
-[show_gd_mylist_btn] 
+[show_gd_mylist_btn]
 ```
 in the content
 
 2. by code into theme
-if you needs to put the buttom in themes code, just write 
+if you needs to put the buttom in themes code, just write
 
 ```
 <?php
 $arg = array (
 	'echo' => true
 );
-do_action('gd_mylist_btn',$arg); 
+do_action('gd_mylist_btn',$arg);
 ?>
 ```
 where do you want that button will show it
@@ -55,10 +56,15 @@ you can show MyList list by shortcode, just create a page (eg: myList) and put i
 ```
 [show_gd_mylist_list]
 ```
-if you want disable the share button
+to disable **share button**
 
 ```
 [show_gd_mylist_list share_list='no']
+```
+to disable **count items**
+
+```
+[show_gd_mylist_list show_count='no']
 ```
 
 ###Change login permission
@@ -72,7 +78,7 @@ to:
 	'login_request' => 'yes',
 ```
 ####note
-In case the user has not logged, the user's id data will be storage in a cookie by GD-Mylist for 30 days. 
+In case the user has not logged, the user's id data will be storage in a cookie by GD-Mylist for 30 days.
 
 So if the same user made two different wish lists, one before and one after he has logged, the MyList List will be like as new user, because for the plugin the user appears as two different users.
 

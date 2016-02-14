@@ -32,11 +32,12 @@ global $wpdb, $var_setting, $templates_html, $template_path;
         'box_list' => $template_path.'box-list.php'.$locale_chunck,
         'box_list_empty' => $template_path.'box-list-empty.php'.$locale_chunck,
         'box_list_share' => $template_path.'box-list-share.php'.$locale_chunck,
+        'box_list_count' => $template_path.'box-list-count.php'.$locale_chunck,
         'chunck_loading' => $template_path.'chunck-loading.php'.$locale_chunck,
         'chunck_add' => $template_path.'chunck-add.php'.$locale_chunck,
         'chunck_remove' => $template_path.'chunck-remove.php'.$locale_chunck,
         'btn_view_wishlist' => $template_path.'btn-view-wishlist.php'.$locale_chunck,
-        'chunck_view_wishlist' => $template_path.'chunck-view-wishlist.php'.$locale_chunck,
+        'chunck_view_wishlist' => $template_path.'chunck-view-wishlist.php'.$locale_chunck
     );
 
 if ($var_setting['login_request'] == 'no') {
@@ -231,6 +232,7 @@ function gd_show_gd_mylist_list($atts)
 
     extract(shortcode_atts(array(
         'share_list' => 'yes',
+        'show_count' => 'yes'
     ), $atts));
 
     if ($user_id == 0 && $var_setting['login_request'] == 'no') {
@@ -274,6 +276,15 @@ function gd_show_gd_mylist_list($atts)
                 $html = str_replace('##pageID##', $permalink.'?', $html);
             }
             $html = str_replace('##userID##', $user_id, $html);
+
+            echo($html);
+        }
+
+        if ($show_count == 'yes') {
+            $html = '';
+            $html = file_get_contents($templates_html['box_list_count'].$locale);
+            $count = $wpdb->num_rows;
+            $html = str_replace('##count##', $count, $html);
 
             echo($html);
         }

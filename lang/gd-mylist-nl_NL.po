@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: v0.3\n"
-"POT-Creation-Date: 2015-03-19 19:52-0000\n"
-"PO-Revision-Date: 2015-03-31 10:01+0100\n"
+"POT-Creation-Date: 2016-02-07 19:30-0000\n"
+"PO-Revision-Date: 2016-02-07 19:30-0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 1.6.10\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_e\n"
@@ -19,6 +19,10 @@ msgstr ""
 #: ../template/alert-done.php:3
 msgid "Done! Your document has been deleted."
 msgstr "Klara! Uw document is vmerwijdert."
+
+#: ../template/box-list-count.php:3
+msgid "Total items"
+msgstr ""
 
 #: ../template/box-list-empty.php:3
 msgid "Sorry! Your don't have documents."
