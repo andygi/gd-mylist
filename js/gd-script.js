@@ -7,7 +7,6 @@ jQuery(document).ready(function ($) {
     var chunckBtnAdd    = (gdMyListAjax.chunckBtnAdd);
     var chunckBtnRemove = (gdMyListAjax.chunckBtnRemove);
 
-    console.log(chunckBtnRemove + " " + chunckBtnAdd);
     //btn add mylist
     $('body').on('click', '.btn-gd-add-mylist', function () {
         var postid      = $(this).data("postid");
@@ -28,7 +27,6 @@ jQuery(document).ready(function ($) {
                 nonce: nonce
             }
         }).done(function (result) {
-            console.log('result: ' + result);
             $("#mylist-" + postid).addClass('btn-gd-remove-mylist').removeClass('btn-gd-add-mylist');
             $("#mylist-" + postid).load(chunckBtnRemove);
         });
@@ -55,7 +53,6 @@ jQuery(document).ready(function ($) {
                 nonce: nonce
             }
         }).done(function (result) {
-            console.log('result: ' + result);
             if (styletarget == 'mylist') {
                 $("#mylist-" + postid).closest('.gd-mylist-box').fadeOut(500);
             } else {
