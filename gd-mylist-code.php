@@ -220,17 +220,19 @@ function gd_show_mylist_btn($atts)
 //show my list in page
 
 add_action('gd_mylist_list', 'gd_show_gd_mylist_list');
+add_action('wp_ajax_gd_mylist_list', 'gd_show_gd_mylist_list');
 add_shortcode('show_gd_mylist_list', 'gd_show_gd_mylist_list', 10, 2); //shortcode call [show_gd_mylist_list]
 
 function gd_show_gd_mylist_list($atts)
 {
+
     global $wpdb, $var_setting, $templates_html;
     $posts = null;
     $user_id = get_current_user_id();
     $locale = get_locale();
     $lang = substr($locale, 0, 2);
     $user_id_share = @$_GET['wish'];
-
+print($user_id);
 		//whatsapp get id
 		$url = $_SERVER['REQUEST_URI'];
 		$arUrl = explode('wish_', $url);

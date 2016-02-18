@@ -63,4 +63,21 @@ jQuery(document).ready(function ($) {
 
     });
 
+		$('body').on('click', '.test-ajax', function () {
+        //var nonce       = $(this).data("nonce");
+
+        $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: uriAjax,
+            data: {
+                action: "gd_show_gd_mylist_list",
+                //nonce: nonce
+            }
+        }).done(function (result) {
+            console.log(result);
+        });
+
+    });
+
 });
