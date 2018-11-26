@@ -40,7 +40,7 @@ global $wpdb, $var_setting, $templates_html, $template_path;
         'chunck_view_wishlist' => $template_path.'chunck-view-wishlist.php'.$locale_chunck
     );
 
-if ($var_setting['login_request'] == 'no') {
+if ($var_setting['login_request'] === 'no') {
     add_action('init', 'gd_setcookie');
     function gd_setcookie()
     {
@@ -172,7 +172,7 @@ function gd_show_mylist_btn($atts)
 
     $gd_query = null;
     $user_id = get_current_user_id();
-    if ($user_id == 0 && $var_setting['login_request'] == 'no') {
+    if ($user_id === 0 && $var_setting['login_request'] === 'no') {
         if (!isset($_COOKIE['gb_mylist_guest'])) {
             $user_id = $var_setting['guest_user'];
         } else {
@@ -229,21 +229,25 @@ function gd_show_gd_mylist_list($atts)
     $user_id = get_current_user_id();
     $locale = get_locale();
     $lang = substr($locale, 0, 2);
-    $user_id_share = @$_GET['wish'];
+    if (isset($_GET['wish'])) {
+        $user_id_share = $_GET['wish'];
+    } else {
+        $user_id_share = null;
+    }
 
-		//whatsapp get id
-		$url = $_SERVER['REQUEST_URI'];
-		$arUrl = explode('wish_', $url);
-		if ($arUrl[1]) {
-			$user_id_share = $arUrl[1];
-		}
+    //whatsapp get id
+    $url = $_SERVER['REQUEST_URI'];
+    $arUrl = explode('wish_', $url);
+    if (isset($arUrl[1])) {
+        $user_id_share = $arUrl[1];
+    }
 
     extract(shortcode_atts(array(
         'share_list' => 'yes',
         'show_count' => 'yes'
     ), $atts));
 
-    if ($user_id == 0 && $var_setting['login_request'] == 'no') {
+    if ($user_id === 0 && $var_setting['login_request'] === 'no') {
         $user_id = $_COOKIE['gb_mylist_guest'];
     }
 
@@ -256,7 +260,6 @@ function gd_show_gd_mylist_list($atts)
             'SELECT
                     b.ID AS posts_id,
                     b.post_title AS posts_title,
-                    b.post_content AS posts_content,
                     b.post_date AS posts_date,
                     c.ID AS authors_id,
                     c.display_name AS authors_name
@@ -274,7 +277,7 @@ function gd_show_gd_mylist_list($atts)
     );
 
     if ($posts != null) {
-        if ($share_list == 'yes') {
+        if ($share_list === 'yes') {
             $html = '';
             $html = file_get_contents($templates_html['box_list_share'].$locale);
             $permalink = get_permalink();
@@ -288,7 +291,7 @@ function gd_show_gd_mylist_list($atts)
             echo($html);
         }
 
-        if ($show_count == 'yes') {
+        if ($show_count === 'yes') {
             $html = '';
             $html = file_get_contents($templates_html['box_list_count'].$locale);
             $count = $wpdb->num_rows;
@@ -302,7 +305,6 @@ function gd_show_gd_mylist_list($atts)
             $postDate = get_the_date('F j, Y', $postId);
             $postAuthorId = $post->authors_id;
             $postAuthorName = $post->authors_name;
-            $postContent = $post->posts_content;
             $postImage = wp_get_attachment_url(get_post_thumbnail_id($postId));
             $postTitle = $post->posts_title;
             $portTitleLang = extract_title($postTitle);
@@ -322,7 +324,6 @@ function gd_show_gd_mylist_list($atts)
             }
             $html = str_replace('##postDate##', $postDate, $html);
             $html = str_replace('##postAuthorName##', $postAuthorName, $html);
-            $html = str_replace('##postContent##', $postContent, $html);
             $html = str_replace('##postBtn##', gd_show_mylist_btn($args), $html);
 
             echo($html);
@@ -335,6 +336,8 @@ function gd_show_gd_mylist_list($atts)
 
 function extract_title($postTitle)
 {
+    $titles = null;
+
     if (strpos($postTitle, '<!--:') !== false) {
         $regexp = '/<\!--:(\w+?)-->([^<]+?)<\!--:-->/i';
     } else {
