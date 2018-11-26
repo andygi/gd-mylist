@@ -264,9 +264,9 @@ function gd_show_gd_mylist_list($atts)
                     c.ID AS authors_id,
                     c.display_name AS authors_name
                 FROM '.$var_setting['table'].' a
-                LEFT JOIN '.$var_setting['table_posts'].' b
+                INNER JOIN '.$var_setting['table_posts'].' b
                 ON a.item_id = b.ID
-                LEFT JOIN '.$var_setting['table_users']." c
+                INNER JOIN '.$var_setting['table_users']." c
                 ON c.ID = b.post_author
                 WHERE
                     b.post_status = 'publish'
