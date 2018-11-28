@@ -1,0 +1,29 @@
+{
+  "name": "gd-mylist",
+  "version": "1.0.0",
+  "description": "wishlist wordpress plugin",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^3.0.1"
+  },
+  "devDependencies": {
+    "gulp-clean-css": "^4.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://andygi@github.com/andygi/gd-mylist.git"
+  },
+  "author": "andy greco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andygi/gd-mylist/issues"
+  },
+  "homepage": "https://github.com/andygi/gd-mylist#readme"
+}
