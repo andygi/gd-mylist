@@ -69,6 +69,9 @@ function gd_mylist_asset() {
             'chunckBtnLogin' => $templates_html['btn_login'] . $locale,
             'chunckBtnAdd' => $templates_html['chunck_add'] . $locale,
             'chunckBtnRemove' => $templates_html['chunck_remove'] . $locale,
+            'BtnAdd' => $templates_html['btn_add'] . $locale,
+            'BtnRemove' => $templates_html['btn_remove'] . $locale,
+            'BtnLogin' => $templates_html['btn_login'] . $locale,
         )
     );
     wp_enqueue_script('jquery');
@@ -188,22 +191,26 @@ function gd_show_mylist_btn($atts) {
     if ($user_id > 0) {
         if ($gd_query != null) {
             //in mylist
-            $html = file_get_contents($templates_html['btn_remove'] . $locale);
-            $html = str_replace('##itemID##', $item_id, $html);
-            $html = str_replace('##TARGET##', $styletarget, $html);
-            $html = str_replace('##NONCE##', wp_create_nonce('gd_mylist'), $html);
-            $html = str_replace('##userID##', $user_id, $html);
+            $type = 'btn_remove';
         } else {
-            $html = file_get_contents($templates_html['btn_add'] . $locale);
-            $html = str_replace('##itemID##', $item_id, $html);
-            $html = str_replace('##TARGET##', $styletarget, $html);
-            $html = str_replace('##NONCE##', wp_create_nonce('gd_mylist'), $html);
-            $html = str_replace('##userID##', $user_id, $html);
+            $type = 'btn_add';
         }
+        // $html = '<div class="js-btn-mylist" data-typebtn="' 
+        //         . $type . '" data-itemid="' 
+        //         . $item_id . '" data-styletarget="' 
+        //         . $styletarget . '" data-nonce="' 
+        //         . wp_create_nonce('gd_mylist') . '" data-userid="' 
+        //         . $user_id . '"></div>';
+        $html = '<div class="js-btn-mylist" id="btn-gd-'. $item_id . '" data-typebtn="' . $type 
+                . '" data-itemurl="itemid=' . $item_id 
+                . '&styletarget=' . $styletarget 
+                . '&nonce=' . wp_create_nonce('gd_mylist') 
+                . '&userid=' . $user_id . '"></div>';
     } else {
         //chek if allow use in no login case
         //must to be login
-        $html = file_get_contents($templates_html['btn_login'] . $locale);
+        $html = '<div clas="js-btn-mylist" data-typebtn="btn_login"></div>';
+        // $html = file_get_contents($templates_html['btn_login'] . $locale);
     }
 
     if ($echo == true) {
