@@ -1,3 +1,30 @@
+{{#if share.showShare}}
+<div class="col-sm-12 ml-share-bar">
+    {{share.share_label}}
+    <a href="https://twitter.com/share?url={{share.pageid}}wish={{share.userid}}" target="_blank">
+        <i class="fab fa-twitter-square"></i>
+    </a>
+    <a href="whatsapp://send?text={{share.pageid}}wish_{{share.userid}}" data-action="share/whatsapp/share" class="ml-mobile">
+        <i class="fab fa-whatsapp-square"></i>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{share.pageid}}wish={{share.userid}}" target="_blank">
+        <i class="fab fa-facebook-square"></i>
+    </a>
+    <a href="mailto:?body={{share.pageid}}wish={{share.userid}}" target="_blank">
+        <i class="fas fa-envelope-square"></i>
+    </a>
+    <a href="{{share.pageid}}wish={{share.userid}}" target="_blank">
+        <i class="fas fa-share-square"></i>
+    </a>
+</div>
+{{/if}}
+
+{{#if count.showCount}}
+<div class="col-sm-12">
+    {{count.count_label}}: {{count.count}}
+</div>
+{{/if}}
+
 {{#each listitem}}
 <div class="col-sm-12">
     <div class="thumbnail gd-mylist-box">

@@ -59,6 +59,7 @@ function gd_mylist_asset() {
     global $template_path, $templates_html;
     $locale = get_locale();
 
+    wp_register_script('gd_mylist_handelbar', plugins_url() . '/gd-mylist/lib/handlebars.min.js', array('jquery'));
     wp_register_script('gd_mylist_script', plugins_url() . '/gd-mylist/js/gd-script.js', array('jquery'));
     wp_localize_script(
         'gd_mylist_script',
@@ -80,6 +81,7 @@ function gd_mylist_asset() {
     );
     wp_enqueue_script('jquery');
     wp_enqueue_script('gd_mylist_script');
+    wp_enqueue_script('gd_mylist_handelbar');
     wp_enqueue_style('all.min', plugins_url() . '/gd-mylist/css/all.min.css');
     wp_enqueue_style('gd_mylist_asset', plugins_url() . '/gd-mylist/css/app.css');
 }
@@ -229,6 +231,7 @@ function gd_show_gd_mylist_list($atts) {
     $locale = get_locale();
     $lang = substr($locale, 0, 2);
     $isShowListPage = true;
+    $listAr = [];
     if (isset($_GET['wish'])) {
         $user_id_share = $_GET['wish'];
     } else {
@@ -280,36 +283,31 @@ function gd_show_gd_mylist_list($atts) {
         if ($share_list === 'yes') {
             $type = 'share_list';
             $html = '';
-            // $html = file_get_contents($templates_html['box_list_share'] . $locale);
             $permalink = get_permalink();
             if (strpos($permalink, '?') !== false) {
                 $pageid = $permalink . '&';
             } else {
                 $pageid = $permalink . '?';
             }
-            $html = '<div class="js-item-mylist" id="gd-'. $type 
-                . '" data-typebtn="' . $type 
-                . '" data-itemurl="pageid=' . $pageid 
-                . '&userid=' . $user_id 
-                . '"></div>';
-
-            echo ($html);
+            $listAr['share'] = [
+                'showShare' => true,
+                'share_label' => __( 'Share your list'),
+                'pageid' => $pageid,
+                'userid' => $user_id
+            ];
         }
 
         if ($show_count === 'yes') {
             $type = 'item_count';
             $html = '';
-            // $html = file_get_contents($templates_html['box_list_count'] . $locale);
             $count = $wpdb->num_rows;
-            $html = '<div class="js-item-mylist" id="gd-'. $type 
-                . '" data-typebtn="' . $type 
-                . '" data-itemurl="count=' . $count 
-                . '"></div>';
-
-            echo ($html);
+            $listAr['count'] = [
+                'showCount' => true,
+                'count_label' => __( 'Total items'),
+                'count' => $count
+            ];
         }
 
-        $listAr = [];
         foreach ($posts as $post) {
             $type = 'post_list';
             $postId = $post->posts_id;
@@ -329,25 +327,30 @@ function gd_show_gd_mylist_list($atts) {
                 $posttitle = $postTitle;
             }
 
-            $listAr[] = [
+            $listAr['listitem'][] = [
                 'postId' => $postId,
                 'posturl' => $postUrl,
                 'postimage' => wp_get_attachment_url(get_post_thumbnail_id($postId)),
                 'posttitle' => $posttitle,
                 'postdate' => get_the_date('F j, Y', $postId),
                 'postAuthorName' => $postAuthorName,
-                'postbtn' => gd_show_mylist_btn($args)
+                'postbtn' => gd_show_mylist_btn($args),
+                'label' => __( 'Total items')
             ];
         }
 
-        echo('<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>');
+        echo('<script type="text/javascript">');
+        echo('var myListData = ');
+        echo(json_encode($listAr));
+        echo('</script>');
+        echo('<div id="myList_list"></div>');
+    } else {
         echo('<script type="text/javascript">');
         echo('var myListData = { listitem:');
         echo(json_encode($listAr));
         echo('}');
         echo('</script>');
         echo('<div id="myList_list"></div>');
-    } else {
         $html = file_get_contents($templates_html['box_list_empty'] . $locale);
         echo ($html);
     }
