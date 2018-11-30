@@ -30,7 +30,7 @@ $templates_html = array(
     'btn_add' => $template_path . 'btn-add.php' . $locale_chunck,
     'btn_remove' => $template_path . 'btn-remove.php' . $locale_chunck,
     'btn_login' => $template_path . 'btn-login.php' . $locale_chunck,
-    'box_list' => $template_path . 'box-list.php' . $locale_chunck,
+    'box_list' => $template_path . 'box-list.html',
     'box_list_empty' => $template_path . 'box-list-empty.php' . $locale_chunck,
     'box_list_share' => $template_path . 'box-list-share.php' . $locale_chunck,
     'box_list_count' => $template_path . 'box-list-count.php' . $locale_chunck,
@@ -74,7 +74,7 @@ function gd_mylist_asset() {
             'BtnLogin' => $templates_html['btn_login'] . $locale,
             'boxListShare' => $templates_html['box_list_share'] . $locale,
             'boxListCount' => $templates_html['box_list_count'] . $locale,
-            'boxList' => $templates_html['box_list'] . $locale,
+            'boxList' => $templates_html['box_list'],
             'nonce' => wp_create_nonce('gd_mylist'),
         )
     );
@@ -313,10 +313,8 @@ function gd_show_gd_mylist_list($atts) {
         foreach ($posts as $post) {
             $type = 'post_list';
             $postId = $post->posts_id;
-            $postDate = get_the_date('F j, Y', $postId);
             $postAuthorId = $post->authors_id;
             $postAuthorName = $post->authors_name;
-            $postImage = wp_get_attachment_url(get_post_thumbnail_id($postId));
             $postTitle = $post->posts_title;
             $portTitleLang = extract_title($postTitle);
             $postUrl = get_permalink($postId);
@@ -325,33 +323,30 @@ function gd_show_gd_mylist_list($atts) {
                 'item_id' => $postId,
             );
 
-            $html = '';
-            // $html = file_get_contents($templates_html['box_list'] . $locale);
-            // $html = str_replace('##postUrl##', $postUrl, $html);
-            // $html = str_replace('##postImage##', $postImage, $html);
             if (strpos($postTitle, '<!--:') !== false || strpos($postTitle, '[:') !== false) { //means use mqtranlate or qtranlate-x
                 $posttitle = $portTitleLang[$lang];
             } else {
                 $posttitle = $postTitle;
             }
-            // $html = str_replace('##postDate##', $postDate, $html);
-            // $html = str_replace('##postAuthorName##', $postAuthorName, $html);
-            // $html = str_replace('##postBtn##', gd_show_mylist_btn($args), $html);
 
             $listAr[] = [
+                'postId' => $postId,
                 'posturl' => $postUrl,
-                'postimage' => $postimage,
+                'postimage' => wp_get_attachment_url(get_post_thumbnail_id($postId)),
                 'posttitle' => $posttitle,
-                'postdate' => $postdate,
+                'postdate' => get_the_date('F j, Y', $postId),
                 'postAuthorName' => $postAuthorName,
                 'postbtn' => gd_show_mylist_btn($args)
             ];
-            echo ($html);
         }
+
+        echo('<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>');
         echo('<script type="text/javascript">');
-        echo('var myList = ');
+        echo('var myListData = { listitem:');
         echo(json_encode($listAr));
+        echo('}');
         echo('</script>');
+        echo('<div id="myList_list"></div>');
     } else {
         $html = file_get_contents($templates_html['box_list_empty'] . $locale);
         echo ($html);

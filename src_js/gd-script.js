@@ -13,37 +13,20 @@ jQuery(document).ready(function ($) {
     var boxListCount = (gdMyListAjax.boxListCount);
     var boxList = (gdMyListAjax.boxList);
     var nonce = (gdMyListAjax.nonce);
-    console.log('nonce', nonce);
+    // var myListData;
 
-    if ($('.js-item-mylist').length > 0) {
-        $('.js-item-mylist').each(function () {
-            var btnId = '#' + $(this).attr('id');
-            var typebtn = $(this).data('typebtn');
-            var itemurl = $(this).data('itemurl');
-            console.log(typebtn);
-            console.log(itemurl);
-            switch (typebtn) {
-                case 'btn_remove':
-                    $(btnId).load(BtnRemove + '&' + itemurl);
-                    break;
-                case 'btn_add':
-                    $(btnId).load(BtnAdd + '&' + itemurl);
-                    break;
-                case 'share_list':
-                    $(btnId).load(boxListShare + '&' + itemurl, { "test": "ecco il test", "secondo": "c'è" });
-                    break;
-                case 'item_count':
-                    $(btnId).load(boxListCount + '&' + itemurl);
-                    break;
-                case 'post_list':
-                    $(btnId).load(boxList, itemurl);
-                    break;
-                case 'btn_login':
-                    $(btnId).load(BtnLogin);
-                    break;
-            }
+    if (typeof myListData !== "undefined") {
+        $.get(boxList, function(source){
+            var template = Handlebars.compile(source);
+            var theCompiledHtml = template(myListData);
+            $('#myList_list').html(theCompiledHtml);
+            setTimeout(function(){
+                createBtn();
+            },0);
         });
     }
+
+    createBtn();
 
     //btn add mylist
     $('body').on('click', '.js-gd-add-mylist', function () {
@@ -98,5 +81,38 @@ jQuery(document).ready(function ($) {
         });
 
     });
+
+
+    function createBtn() {
+        if ($('.js-item-mylist').length > 0) {
+            $('.js-item-mylist').each(function () {
+                var btnId = '#' + $(this).attr('id');
+                var typebtn = $(this).data('typebtn');
+                var itemurl = $(this).data('itemurl');
+                // console.log(typebtn);
+                // console.log(itemurl);
+                switch (typebtn) {
+                    case 'btn_remove':
+                        $(btnId).load(BtnRemove + '&' + itemurl);
+                        break;
+                    case 'btn_add':
+                        $(btnId).load(BtnAdd + '&' + itemurl);
+                        break;
+                    case 'share_list':
+                        $(btnId).load(boxListShare + '&' + itemurl, { "test": "ecco il test", "secondo": "c'è" });
+                        break;
+                    case 'item_count':
+                        $(btnId).load(boxListCount + '&' + itemurl);
+                        break;
+                    case 'post_list':
+                        $(btnId).load(boxList, itemurl);
+                        break;
+                    case 'btn_login':
+                        $(btnId).load(BtnLogin);
+                        break;
+                }
+            });
+        }
+    }
 
 });
