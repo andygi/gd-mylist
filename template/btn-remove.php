@@ -4,7 +4,6 @@
         id="mylist-<?php echo $_GET['itemid']; ?>" 
         data-postid="<?php echo $_GET['itemid']; ?>" 
         data-styletarget="<?php echo $_GET['styletarget']; ?>" 
-        data-userid="<?php echo $_GET['userid']; ?>" 
-        data-nonce="<?php echo $_GET['nonce']; ?>">
+        data-userid="<?php echo $_GET['userid']; ?>" >
         <i class="fas fa-heart"></i> <?php echo (__('remove My List')); ?>
 </a>

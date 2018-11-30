@@ -9,12 +9,19 @@ jQuery(document).ready(function ($) {
     var BtnAdd = (gdMyListAjax.BtnAdd);
     var BtnRemove = (gdMyListAjax.BtnRemove);
     var BtnLogin = (gdMyListAjax.BtnLogin);
+    var boxListShare = (gdMyListAjax.boxListShare);
+    var boxListCount = (gdMyListAjax.boxListCount);
+    var boxList = (gdMyListAjax.boxList);
+    var nonce = (gdMyListAjax.nonce);
+    console.log('nonce', nonce);
 
-    if ($('.js-btn-mylist').length > 0) {
-        $('.js-btn-mylist').each(function () {
+    if ($('.js-item-mylist').length > 0) {
+        $('.js-item-mylist').each(function () {
             var btnId = '#' + $(this).attr('id');
             var typebtn = $(this).data('typebtn');
             var itemurl = $(this).data('itemurl');
+            console.log(typebtn);
+            console.log(itemurl);
             switch (typebtn) {
                 case 'btn_remove':
                     $(btnId).load(BtnRemove + '&' + itemurl);
@@ -22,17 +29,26 @@ jQuery(document).ready(function ($) {
                 case 'btn_add':
                     $(btnId).load(BtnAdd + '&' + itemurl);
                     break;
+                case 'share_list':
+                    $(btnId).load(boxListShare + '&' + itemurl, { "test": "ecco il test", "secondo": "c'è" });
+                    break;
+                case 'item_count':
+                    $(btnId).load(boxListCount + '&' + itemurl);
+                    break;
+                case 'post_list':
+                    $(btnId).load(boxList, itemurl);
+                    break;
                 case 'btn_login':
                     $(btnId).load(BtnLogin);
                     break;
             }
         });
     }
+
     //btn add mylist
     $('body').on('click', '.js-gd-add-mylist', function () {
         var postid = $(this).data("postid");
         var userid = $(this).data("userid");
-        var nonce = $(this).data("nonce");
         var styletarget = $(this).data("styletarget");
 
         $("#mylist-" + postid).load(chunckLoading);
@@ -58,7 +74,6 @@ jQuery(document).ready(function ($) {
     $('body').on('click', '.js-gd-remove-mylist', function () {
         var postid = $(this).data("postid");
         var userid = $(this).data("userid");
-        var nonce = $(this).data("nonce");
         var styletarget = $(this).data("styletarget");
 
         $("#mylist-" + postid).load(chunckLoading);

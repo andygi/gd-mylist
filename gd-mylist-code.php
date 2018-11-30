@@ -1,6 +1,6 @@
 <?php
 
-##### mylist 0.3
+##### mylist 1.0
 
 /* NOTE
  * $styletarget: it used to make 'remove button' different behaviours into jquery it'll is valued by code into theme
@@ -72,6 +72,10 @@ function gd_mylist_asset() {
             'BtnAdd' => $templates_html['btn_add'] . $locale,
             'BtnRemove' => $templates_html['btn_remove'] . $locale,
             'BtnLogin' => $templates_html['btn_login'] . $locale,
+            'boxListShare' => $templates_html['box_list_share'] . $locale,
+            'boxListCount' => $templates_html['box_list_count'] . $locale,
+            'boxList' => $templates_html['box_list'] . $locale,
+            'nonce' => wp_create_nonce('gd_mylist'),
         )
     );
     wp_enqueue_script('jquery');
@@ -158,7 +162,6 @@ function gd_remove_mylist() {
 add_action('gd_mylist_btn', 'gd_show_mylist_btn', 10, 2); /* eg code call into theme: <?php do_action('gd_mylist_btn', 'mylist'); ?> */
 add_shortcode('show_gd_mylist_btn', 'gd_show_mylist_btn'); /* eg shortcode call: [show_gd_mylist_btn] */
 
-//function gd_show_mylist_btn($styletarget = null, $item_id = null ) {
 function gd_show_mylist_btn($atts) {
     global $wpdb, $var_setting, $templates_html;
     $locale = get_locale();
@@ -195,22 +198,16 @@ function gd_show_mylist_btn($atts) {
         } else {
             $type = 'btn_add';
         }
-        // $html = '<div class="js-btn-mylist" data-typebtn="' 
-        //         . $type . '" data-itemid="' 
-        //         . $item_id . '" data-styletarget="' 
-        //         . $styletarget . '" data-nonce="' 
-        //         . wp_create_nonce('gd_mylist') . '" data-userid="' 
-        //         . $user_id . '"></div>';
-        $html = '<div class="js-btn-mylist" id="btn-gd-'. $item_id . '" data-typebtn="' . $type 
+        $html = '<div class="js-item-mylist" id="btn-gd-'. $item_id 
+                . '" data-typebtn="' . $type 
                 . '" data-itemurl="itemid=' . $item_id 
                 . '&styletarget=' . $styletarget 
-                . '&nonce=' . wp_create_nonce('gd_mylist') 
-                . '&userid=' . $user_id . '"></div>';
+                . '&userid=' . $user_id 
+                . '"></div>';
     } else {
         //chek if allow use in no login case
         //must to be login
-        $html = '<div clas="js-btn-mylist" data-typebtn="btn_login"></div>';
-        // $html = file_get_contents($templates_html['btn_login'] . $locale);
+        $html = '<div clas="js-item-mylist" data-typebtn="btn_login"></div>';
     }
 
     if ($echo == true) {
@@ -281,29 +278,40 @@ function gd_show_gd_mylist_list($atts) {
 
     if ($posts != null) {
         if ($share_list === 'yes') {
+            $type = 'share_list';
             $html = '';
-            $html = file_get_contents($templates_html['box_list_share'] . $locale);
+            // $html = file_get_contents($templates_html['box_list_share'] . $locale);
             $permalink = get_permalink();
             if (strpos($permalink, '?') !== false) {
-                $html = str_replace('##pageID##', $permalink . '&', $html);
+                $pageid = $permalink . '&';
             } else {
-                $html = str_replace('##pageID##', $permalink . '?', $html);
+                $pageid = $permalink . '?';
             }
-            $html = str_replace('##userID##', $user_id, $html);
+            $html = '<div class="js-item-mylist" id="gd-'. $type 
+                . '" data-typebtn="' . $type 
+                . '" data-itemurl="pageid=' . $pageid 
+                . '&userid=' . $user_id 
+                . '"></div>';
 
             echo ($html);
         }
 
         if ($show_count === 'yes') {
+            $type = 'item_count';
             $html = '';
-            $html = file_get_contents($templates_html['box_list_count'] . $locale);
+            // $html = file_get_contents($templates_html['box_list_count'] . $locale);
             $count = $wpdb->num_rows;
-            $html = str_replace('##count##', $count, $html);
+            $html = '<div class="js-item-mylist" id="gd-'. $type 
+                . '" data-typebtn="' . $type 
+                . '" data-itemurl="count=' . $count 
+                . '"></div>';
 
             echo ($html);
         }
 
+        $listAr = [];
         foreach ($posts as $post) {
+            $type = 'post_list';
             $postId = $post->posts_id;
             $postDate = get_the_date('F j, Y', $postId);
             $postAuthorId = $post->authors_id;
@@ -316,21 +324,34 @@ function gd_show_gd_mylist_list($atts) {
                 'styletarget' => 'mylist',
                 'item_id' => $postId,
             );
-            $html = '';
-            $html = file_get_contents($templates_html['box_list'] . $locale);
-            $html = str_replace('##postUrl##', $postUrl, $html);
-            $html = str_replace('##postImage##', $postImage, $html);
-            if (strpos($postTitle, '<!--:') !== false || strpos($postTitle, '[:') !== false) { //means use mqtranlate or qtranlate-x
-                $html = str_replace('##postTitle##', $portTitleLang[$lang], $html);
-            } else {
-                $html = str_replace('##postTitle##', $postTitle, $html);
-            }
-            $html = str_replace('##postDate##', $postDate, $html);
-            $html = str_replace('##postAuthorName##', $postAuthorName, $html);
-            $html = str_replace('##postBtn##', gd_show_mylist_btn($args), $html);
 
+            $html = '';
+            // $html = file_get_contents($templates_html['box_list'] . $locale);
+            // $html = str_replace('##postUrl##', $postUrl, $html);
+            // $html = str_replace('##postImage##', $postImage, $html);
+            if (strpos($postTitle, '<!--:') !== false || strpos($postTitle, '[:') !== false) { //means use mqtranlate or qtranlate-x
+                $posttitle = $portTitleLang[$lang];
+            } else {
+                $posttitle = $postTitle;
+            }
+            // $html = str_replace('##postDate##', $postDate, $html);
+            // $html = str_replace('##postAuthorName##', $postAuthorName, $html);
+            // $html = str_replace('##postBtn##', gd_show_mylist_btn($args), $html);
+
+            $listAr[] = [
+                'posturl' => $postUrl,
+                'postimage' => $postimage,
+                'posttitle' => $posttitle,
+                'postdate' => $postdate,
+                'postAuthorName' => $postAuthorName,
+                'postbtn' => gd_show_mylist_btn($args)
+            ];
             echo ($html);
         }
+        echo('<script type="text/javascript">');
+        echo('var myList = ');
+        echo(json_encode($listAr));
+        echo('</script>');
     } else {
         $html = file_get_contents($templates_html['box_list_empty'] . $locale);
         echo ($html);
