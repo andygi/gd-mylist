@@ -1,41 +1,49 @@
-{{#if share.showShare}}
-<div class="col-sm-12 ml-share-bar">
-    {{share.share_label}}
-    <a href="https://twitter.com/share?url={{share.pageid}}wish={{share.userid}}" target="_blank">
-        <i class="fab fa-twitter-square"></i>
-    </a>
-    <a href="whatsapp://send?text={{share.pageid}}wish_{{share.userid}}" data-action="share/whatsapp/share" class="ml-mobile">
-        <i class="fab fa-whatsapp-square"></i>
-    </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u={{share.pageid}}wish={{share.userid}}" target="_blank">
-        <i class="fab fa-facebook-square"></i>
-    </a>
-    <a href="mailto:?body={{share.pageid}}wish={{share.userid}}" target="_blank">
-        <i class="fas fa-envelope-square"></i>
-    </a>
-    <a href="{{share.pageid}}wish={{share.userid}}" target="_blank">
-        <i class="fas fa-share-square"></i>
-    </a>
-</div>
-{{/if}}
+{{#if showList}}
+    {{#if share.showShare}}
+    <div class="col-sm-12 ml-share-bar">
+        {{share.share_label}}
+        <a href="https://twitter.com/share?url={{share.pageid}}wish={{share.userid}}" target="_blank">
+            <i class="fab fa-twitter-square"></i>
+        </a>
+        <a href="whatsapp://send?text={{share.pageid}}wish_{{share.userid}}" data-action="share/whatsapp/share" class="ml-mobile">
+            <i class="fab fa-whatsapp-square"></i>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{share.pageid}}wish={{share.userid}}" target="_blank">
+            <i class="fab fa-facebook-square"></i>
+        </a>
+        <a href="mailto:?body={{share.pageid}}wish={{share.userid}}" target="_blank">
+            <i class="fas fa-envelope-square"></i>
+        </a>
+        <a href="{{share.pageid}}wish={{share.userid}}" target="_blank">
+            <i class="fas fa-share-square"></i>
+        </a>
+    </div>
+    {{/if}}
 
-{{#if count.showCount}}
-<div class="col-sm-12">
-    {{count.count_label}}: {{count.count}}
-</div>
-{{/if}}
+    {{#if count.showCount}}
+    <div class="col-sm-12">
+        {{count.count_label}}: {{count.count}}
+    </div>
+    {{/if}}
 
-{{#each listitem}}
-<div class="col-sm-12">
-    <div class="thumbnail gd-mylist-box">
-        {{#if postimage}}
-        <a href="{{posturl}}"><img src="{{postimage}}" class="img-book img-responsive"></a>
-        {{/if}}
-        <div class="caption">
-            <h3><a href="{{posturl}}">{{posttitle}}</a></h3>
-            <p><small>{{postdate}} | {{postAuthorName}}</small></p>
-            {{{postbtn}}}
+    {{#each listitem}}
+    <div class="col-sm-12">
+        <div class="thumbnail gd-mylist-box">
+            {{#if postimage}}
+            <a href="{{posturl}}"><img src="{{postimage}}" class="img-book img-responsive"></a>
+            {{/if}}
+            <div class="caption">
+                <h3><a href="{{posturl}}">{{posttitle}}</a></h3>
+                <p><small>{{postdate}} | {{postAuthorName}}</small></p>
+                {{{postbtn}}}
+            </div>
         </div>
     </div>
-</div>
-{{/each}}
+    {{/each}}
+{{/if}}
+
+{{#if showEmpty}}
+    <div class="alert alert-dismissable alert-info">
+        {{showEmpty.empty_label}}
+    </div>
+{{/if}}

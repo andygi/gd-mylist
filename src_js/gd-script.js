@@ -9,8 +9,6 @@ jQuery(document).ready(function ($) {
     var BtnAdd = (gdMyListAjax.BtnAdd);
     var BtnRemove = (gdMyListAjax.BtnRemove);
     var BtnLogin = (gdMyListAjax.BtnLogin);
-    var boxListShare = (gdMyListAjax.boxListShare);
-    var boxListCount = (gdMyListAjax.boxListCount);
     var boxList = (gdMyListAjax.boxList);
     var nonce = (gdMyListAjax.nonce);
     // var myListData;
@@ -97,15 +95,6 @@ jQuery(document).ready(function ($) {
                         break;
                     case 'btn_add':
                         $(btnId).load(BtnAdd + '&' + itemurl);
-                        break;
-                    case 'share_list':
-                        $(btnId).load(boxListShare + '&' + itemurl, { "test": "ecco il test", "secondo": "c'è" });
-                        break;
-                    case 'item_count':
-                        $(btnId).load(boxListCount + '&' + itemurl);
-                        break;
-                    case 'post_list':
-                        $(btnId).load(boxList, itemurl);
                         break;
                     case 'btn_login':
                         $(btnId).load(BtnLogin);

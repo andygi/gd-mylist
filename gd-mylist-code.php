@@ -31,9 +31,6 @@ $templates_html = array(
     'btn_remove' => $template_path . 'btn-remove.php' . $locale_chunck,
     'btn_login' => $template_path . 'btn-login.php' . $locale_chunck,
     'box_list' => $template_path . 'box-list.html',
-    'box_list_empty' => $template_path . 'box-list-empty.php' . $locale_chunck,
-    'box_list_share' => $template_path . 'box-list-share.php' . $locale_chunck,
-    'box_list_count' => $template_path . 'box-list-count.php' . $locale_chunck,
     'chunck_loading' => $template_path . 'chunck-loading.php' . $locale_chunck,
     'chunck_add' => $template_path . 'chunck-add.php' . $locale_chunck,
     'chunck_remove' => $template_path . 'chunck-remove.php' . $locale_chunck,
@@ -73,8 +70,6 @@ function gd_mylist_asset() {
             'BtnAdd' => $templates_html['btn_add'] . $locale,
             'BtnRemove' => $templates_html['btn_remove'] . $locale,
             'BtnLogin' => $templates_html['btn_login'] . $locale,
-            'boxListShare' => $templates_html['box_list_share'] . $locale,
-            'boxListCount' => $templates_html['box_list_count'] . $locale,
             'boxList' => $templates_html['box_list'],
             'nonce' => wp_create_nonce('gd_mylist'),
         )
@@ -280,6 +275,7 @@ function gd_show_gd_mylist_list($atts) {
     );
 
     if ($posts != null) {
+        $listAr['showList'] = true;
         if ($share_list === 'yes') {
             $type = 'share_list';
             $html = '';
@@ -334,8 +330,7 @@ function gd_show_gd_mylist_list($atts) {
                 'posttitle' => $posttitle,
                 'postdate' => get_the_date('F j, Y', $postId),
                 'postAuthorName' => $postAuthorName,
-                'postbtn' => gd_show_mylist_btn($args),
-                'label' => __( 'Total items')
+                'postbtn' => gd_show_mylist_btn($args)
             ];
         }
 
@@ -343,17 +338,16 @@ function gd_show_gd_mylist_list($atts) {
         echo('var myListData = ');
         echo(json_encode($listAr));
         echo('</script>');
-        echo('<div id="myList_list"></div>');
     } else {
+        $listAr['showEmpty'] = [
+            'empty_label' => __( "Sorry! Your don't have documents.")
+        ];
         echo('<script type="text/javascript">');
-        echo('var myListData = { listitem:');
+        echo('var myListData = ');
         echo(json_encode($listAr));
-        echo('}');
         echo('</script>');
-        echo('<div id="myList_list"></div>');
-        $html = file_get_contents($templates_html['box_list_empty'] . $locale);
-        echo ($html);
     }
+    echo('<div id="myList_list"></div>');
 }
 
 function extract_title($postTitle) {
