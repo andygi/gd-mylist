@@ -1,0 +1,27 @@
+{{#if showAdd}}
+<a href="javascript:void();" 
+    class="btn btn-default js-gd-add-mylist" 
+    id="mylist-{{showAdd.itemid}}" 
+    data-postid="{{showAdd.itemid}}" 
+    data-styletarget="{{showAdd.styletarget}}" 
+    data-userid="{{showAdd.userid}}" >
+    <i class="far fa-heart"></i> {{showAdd.label}}
+</a>
+{{/if}}
+
+{{#if showRemove}}
+<a href="javascript:void();" 
+        class="btn btn-default js-gd-remove-mylist" 
+        id="mylist-{{showRemove.itemid}}" 
+        data-postid="{{showRemove.itemid}}" 
+        data-styletarget="{{showRemove.styletarget}}" 
+        data-userid="{{showRemove.userid}}" >
+        <i class="fas fa-heart"></i> {{showRemove.label}}
+</a>
+{{/if}}
+
+{{#if showLogin}}
+<a href="javascript:void();" class="btn btn-default" onclick="javascritp:alert('{{showLogin.message}}')">
+    <i class="far fa-heart"></i> {{showLogin.label}}
+</a>
+{{/if}}

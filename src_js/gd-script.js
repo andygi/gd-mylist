@@ -84,6 +84,10 @@ jQuery(document).ready(function ($) {
     function createBtn() {
         if ($('.js-item-mylist').length > 0) {
             $('.js-item-mylist').each(function () {
+                console.log($(this).data('id'));
+                var nameVar = 'myListButton' + $(this).data('id');
+                console.log(eval(nameVar));
+
                 var btnId = '#' + $(this).attr('id');
                 var typebtn = $(this).data('typebtn');
                 var itemurl = $(this).data('itemurl');

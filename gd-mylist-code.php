@@ -162,6 +162,7 @@ add_shortcode('show_gd_mylist_btn', 'gd_show_mylist_btn'); /* eg shortcode call:
 function gd_show_mylist_btn($atts) {
     global $wpdb, $var_setting, $templates_html;
     $locale = get_locale();
+    $buttonData = [];
 
     extract(shortcode_atts(array(
         'styletarget' => null, //default
@@ -191,27 +192,52 @@ function gd_show_mylist_btn($atts) {
     if ($user_id > 0) {
         if ($gd_query != null) {
             //in mylist
-            $type = 'btn_remove';
+            // $type = 'btn_remove';
+            $buttonData ['showRemove'] = [
+                'itemid' => $item_id,
+                'styletarget' => $styletarget,
+                'userid' => $user_id,
+                'label' => __('remove My List')
+            ];
         } else {
-            $type = 'btn_add';
+            $buttonData ['showAdd'] = [
+                'itemid' => $item_id,
+                'styletarget' => $styletarget,
+                'userid' => $user_id,
+                'label' => __( 'add My List')
+            ];
+            // $type = 'btn_add';
         }
-        $html = '<div class="js-item-mylist" id="btn-gd-'. $item_id 
-                . '" data-typebtn="' . $type 
-                . '" data-itemurl="itemid=' . $item_id 
-                . '&styletarget=' . $styletarget 
-                . '&userid=' . $user_id 
-                . '"></div>';
+        // $html = '<div class="js-item-mylist" id="btn-gd-'. $item_id 
+        //         . '" data-typebtn="' . $type 
+        //         . '" data-itemurl="itemid=' . $item_id 
+        //         . '&styletarget=' . $styletarget 
+        //         . '&userid=' . $user_id 
+        //         . '"></div>';
     } else {
         //chek if allow use in no login case
         //must to be login
-        $html = '<div clas="js-item-mylist" data-typebtn="btn_login"></div>';
+        $buttonData ['showLogin'] = [
+            'message' => __( 'Please login first'),
+            'label' => __( 'add My List')
+        ];
+        // $html = '<div class="js-item-mylist" data-typebtn="btn_login"></div>';
     }
 
-    if ($echo == true) {
-        echo $html;
-    } else {
-        return $html;
-    }
+    // if ($echo == true) {
+    //     echo $html;
+        
+    // } else {
+    //     return $html;
+    // }
+    // print_r($buttonData);
+    echo('<div class="js-item-mylist" data-id="'.$item_id.'">');
+    echo('<script type="text/javascript">');
+    echo('var myListButton'.$item_id.' = ');
+    echo(json_encode($buttonData));
+    echo('</script>');
+    echo('</div>');
+    echo('<div id="mylist_btn_'.$item_id.'"></div>');
 }
 
 //show my list in page
