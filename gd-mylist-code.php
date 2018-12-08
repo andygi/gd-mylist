@@ -356,7 +356,12 @@ function gd_show_gd_mylist_list($atts) {
                 'posttitle' => $posttitle,
                 'postdate' => get_the_date('F j, Y', $postId),
                 'postAuthorName' => $postAuthorName,
-                'postbtn' => gd_show_mylist_btn($args)
+                'showRemove' => [
+                    'itemid' => $postId,
+                    'styletarget' => 'mylist',
+                    'userid' => $user_id,
+                    'label' => __('remove My List'),
+                ]
             ];
         }
 

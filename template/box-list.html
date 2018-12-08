@@ -35,7 +35,16 @@
             <div class="caption">
                 <h3><a href="{{posturl}}">{{posttitle}}</a></h3>
                 <p><small>{{postdate}} | {{postAuthorName}}</small></p>
-                {{{postbtn}}}
+                <p>
+                    <a href="javascript:void();" 
+                            class="btn btn-default js-gd-remove-mylist" 
+                            id="mylist-{{showRemove.itemid}}" 
+                            data-postid="{{showRemove.itemid}}" 
+                            data-styletarget="{{showRemove.styletarget}}" 
+                            data-userid="{{showRemove.userid}}" >
+                            <i class="fas fa-heart"></i> {{showRemove.label}}
+                    </a>
+                </p>
             </div>
         </div>
     </div>
