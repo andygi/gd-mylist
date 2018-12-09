@@ -27,15 +27,13 @@ $locale_chunck = '?locale=';
 $isShowListPage = false;
 
 $templates_html = array(
-    'btn_add' => $template_path . 'btn-add.php' . $locale_chunck,
-    'btn_remove' => $template_path . 'btn-remove.php' . $locale_chunck,
-    'btn_login' => $template_path . 'btn-login.php' . $locale_chunck,
     'box_list' => $template_path . 'box-list.html',
     'chunck_loading' => $template_path . 'chunck-loading.php' . $locale_chunck,
     'chunck_add' => $template_path . 'chunck-add.php' . $locale_chunck,
     'chunck_remove' => $template_path . 'chunck-remove.php' . $locale_chunck,
     'btn_view_wishlist' => $template_path . 'btn-view-wishlist.php' . $locale_chunck,
     'chunck_view_wishlist' => $template_path . 'chunck-view-wishlist.php' . $locale_chunck,
+    'button' => $template_path . 'button.html',
 );
 
 if ($var_setting['login_request'] === 'no') {
@@ -64,13 +62,10 @@ function gd_mylist_asset() {
         array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'chunckLoading' => $templates_html['chunck_loading'] . $locale,
-            'chunckBtnLogin' => $templates_html['btn_login'] . $locale,
             'chunckBtnAdd' => $templates_html['chunck_add'] . $locale,
             'chunckBtnRemove' => $templates_html['chunck_remove'] . $locale,
-            'BtnAdd' => $templates_html['btn_add'] . $locale,
-            'BtnRemove' => $templates_html['btn_remove'] . $locale,
-            'BtnLogin' => $templates_html['btn_login'] . $locale,
             'boxList' => $templates_html['box_list'],
+            'button' => $templates_html['button'],
             'nonce' => wp_create_nonce('gd_mylist'),
         )
     );
@@ -82,7 +77,6 @@ function gd_mylist_asset() {
 }
 
 //add mylist function
-
 add_action('wp_ajax_gd_add_mylist', 'gd_add_mylist');
 add_action('wp_ajax_nopriv_gd_add_mylist', 'gd_add_mylist'); //login check
 
@@ -123,7 +117,6 @@ function gd_add_mylist() {
 }
 
 //remove from mylist function
-
 add_action('wp_ajax_gd_remove_mylist', 'gd_remove_mylist');
 add_action('wp_ajax_nopriv_gd_remove_mylist', 'gd_remove_mylist'); //login check
 
@@ -155,7 +148,6 @@ function gd_remove_mylist() {
 }
 
 //show button add/remove
-
 add_action('gd_mylist_btn', 'gd_show_mylist_btn', 10, 2); /* eg code call into theme: <?php do_action('gd_mylist_btn', 'mylist'); ?> */
 add_shortcode('show_gd_mylist_btn', 'gd_show_mylist_btn'); /* eg shortcode call: [show_gd_mylist_btn] */
 
@@ -206,14 +198,8 @@ function gd_show_mylist_btn($atts) {
                 'userid' => $user_id,
                 'label' => __( 'add My List')
             ];
-            // $type = 'btn_add';
         }
-        // $html = '<div class="js-item-mylist" id="btn-gd-'. $item_id 
-        //         . '" data-typebtn="' . $type 
-        //         . '" data-itemurl="itemid=' . $item_id 
-        //         . '&styletarget=' . $styletarget 
-        //         . '&userid=' . $user_id 
-        //         . '"></div>';
+
     } else {
         //chek if allow use in no login case
         //must to be login
@@ -221,16 +207,8 @@ function gd_show_mylist_btn($atts) {
             'message' => __( 'Please login first'),
             'label' => __( 'add My List')
         ];
-        // $html = '<div class="js-item-mylist" data-typebtn="btn_login"></div>';
     }
 
-    // if ($echo == true) {
-    //     echo $html;
-        
-    // } else {
-    //     return $html;
-    // }
-    // print_r($buttonData);
     echo('<div class="js-item-mylist" data-id="'.$item_id.'">');
     echo('<script type="text/javascript">');
     echo('var myListButton'.$item_id.' = ');
@@ -241,7 +219,6 @@ function gd_show_mylist_btn($atts) {
 }
 
 //show my list in page
-
 add_action('gd_mylist_list', 'gd_show_gd_mylist_list');
 add_shortcode('show_gd_mylist_list', 'gd_show_gd_mylist_list', 10, 2); //shortcode call [show_gd_mylist_list]
 
@@ -402,7 +379,6 @@ function extract_title($postTitle) {
 }
 
 // add HOOK function to title and/or content
-
 function wpdev_before_after($content) {
     if (is_page() != 1) {
         $atts = array(
