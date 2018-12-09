@@ -28,11 +28,6 @@ $isShowListPage = false;
 
 $templates_html = array(
     'box_list' => $template_path . 'box-list.html',
-    'chunck_loading' => $template_path . 'chunck-loading.php' . $locale_chunck,
-    'chunck_add' => $template_path . 'chunck-add.php' . $locale_chunck,
-    'chunck_remove' => $template_path . 'chunck-remove.php' . $locale_chunck,
-    'btn_view_wishlist' => $template_path . 'btn-view-wishlist.php' . $locale_chunck,
-    'chunck_view_wishlist' => $template_path . 'chunck-view-wishlist.php' . $locale_chunck,
     'button' => $template_path . 'button.html',
 );
 
@@ -61,9 +56,6 @@ function gd_mylist_asset() {
         'gdMyListAjax',
         array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'chunckLoading' => $templates_html['chunck_loading'] . $locale,
-            'chunckBtnAdd' => $templates_html['chunck_add'] . $locale,
-            'chunckBtnRemove' => $templates_html['chunck_remove'] . $locale,
             'boxList' => $templates_html['box_list'],
             'button' => $templates_html['button'],
             'nonce' => wp_create_nonce('gd_mylist'),
@@ -107,11 +99,14 @@ function gd_add_mylist() {
         )
     );
 
-    $result['type'] = 'success';
+    $result ['showRemove'] = [
+        'itemid' => $item_id,
+        'styletarget' => null,
+        'userid' => $user_id,
+        'label' => __( 'add My List')
+    ];
 
-    //$result = json_encode($result);
-    $result = 'ok';
-    echo $result;
+    print(json_encode($result));
 
     die();
 }
@@ -139,10 +134,15 @@ function gd_remove_mylist() {
         )
     );
 
-    $result['type'] = 'success';
+    $result ['showAdd'] = [
+        'itemid' => $item_id,
+        'styletarget' => null,
+        'userid' => $user_id,
+        'label' => __( 'add My List')
+    ];
 
-    //$result = json_encode($result);
-    $result = 'ok';
+    print(json_encode($result));
+    // $result = 'ok';
 
     die();
 }
@@ -386,7 +386,8 @@ function wpdev_before_after($content) {
             'item_id' => null,
             'echo' => false,
         );
-        $fullcontent = gd_show_mylist_btn($atts) . $content;
+        // $fullcontent = gd_show_mylist_btn($atts) . $content;
+        $fullcontent = $content . gd_show_mylist_btn($atts);
     } else {
         $fullcontent = $content;
     }

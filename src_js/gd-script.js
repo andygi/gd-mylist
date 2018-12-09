@@ -1,20 +1,16 @@
 jQuery(document).ready(function ($) {
     //mylist
     //setup variable
-    var uriAjax = (gdMyListAjax.ajaxurl);
-    var chunckLoading = (gdMyListAjax.chunckLoading);
-    var chunckBtnAdd = (gdMyListAjax.chunckBtnAdd);
-    var chunckBtnRemove = (gdMyListAjax.chunckBtnRemove);
-    var boxList = (gdMyListAjax.boxList);
-    var button = (gdMyListAjax.button);
-    var nonce = (gdMyListAjax.nonce);
-    // var myListData;
+    var BUTTON = '#mylist_btn_',
+        uriAjax = (gdMyListAjax.ajaxurl),
+        boxList = (gdMyListAjax.boxList),
+        button = (gdMyListAjax.button),
+        nonce = (gdMyListAjax.nonce),
+        buttonHtml = '';
 
     if (typeof myListData !== "undefined") {
         $.get(boxList, function(source){
-            var template = Handlebars.compile(source);
-            var theCompiledHtml = template(myListData);
-            $('#myList_list').html(theCompiledHtml);
+            renderTemplate('#myList_list',source,myListData);
         });
     }
 
@@ -24,13 +20,13 @@ jQuery(document).ready(function ($) {
     $('body').on('click', '.js-gd-add-mylist', function () {
         var postid = $(this).data("postid");
         var userid = $(this).data("userid");
-        var styletarget = $(this).data("styletarget");
+        var itemId = BUTTON + postid;
 
-        $("#mylist-" + postid).load(chunckLoading);
+        showLoading(itemId);
 
         $.ajax({
             type: "POST",
-            dataType: "html",
+            dataType: "json",
             url: uriAjax,
             data: {
                 action: "gd_add_mylist",
@@ -39,10 +35,7 @@ jQuery(document).ready(function ($) {
                 nonce: nonce
             }
         }).done(function (result) {
-            $("#mylist-" + postid)
-                .addClass('js-gd-remove-mylist')
-                .removeClass('js-gd-add-mylist');
-            $("#mylist-" + postid).load(chunckBtnRemove);
+            renderTemplate(itemId,buttonHtml,result);
         });
 
     });
@@ -52,12 +45,13 @@ jQuery(document).ready(function ($) {
         var postid = $(this).data("postid");
         var userid = $(this).data("userid");
         var styletarget = $(this).data("styletarget");
+        var itemId = BUTTON + postid;
 
-        $("#mylist-" + postid).load(chunckLoading);
+        showLoading(itemId);
 
         $.ajax({
             type: "POST",
-            dataType: "html",
+            dataType: "json",
             url: uriAjax,
             data: {
                 action: "gd_remove_mylist",
@@ -69,10 +63,7 @@ jQuery(document).ready(function ($) {
             if (styletarget == 'mylist') {
                 $("#mylist-" + postid).closest('.gd-mylist-box').fadeOut(500);
             } else {
-                $("#mylist-" + postid)
-                    .addClass('js-gd-add-mylist')
-                    .removeClass('js-gd-remove-mylist');
-                $("#mylist-" + postid).load(chunckBtnAdd);
+                renderTemplate(itemId,buttonHtml,result);
             }
         });
 
@@ -82,19 +73,28 @@ jQuery(document).ready(function ($) {
         if ($('.js-item-mylist').length > 0) {
             //get template from file
             $.get(button, function(source){
+                buttonHtml = source;
                 $('.js-item-mylist').each(function () {
                     // get data
-                    var itemId = '#mylist_btn_' + $(this).data('id');
+                    var itemId = BUTTON + $(this).data('id');
                     var nameVar = 'myListButton' + $(this).data('id');
                     var data = eval(nameVar);
-
-                    // Handlebars loading template and add data
-                    var template = Handlebars.compile(source);
-                    var theCompiledHtml = template(data);
-                    $(itemId).html(theCompiledHtml);
+                    renderTemplate(itemId,source,data);
                 });
             });
         }
+    }
+
+    function showLoading(itemId) {
+        data = $.parseJSON('{"showLoading": "true"}');
+        renderTemplate(itemId,buttonHtml,data);
+    }
+
+    function renderTemplate(itemId,source,data) {
+        // render Handlebars template
+        var template = Handlebars.compile(source);
+        var theCompiledHtml = template(data);
+        $(itemId).html(theCompiledHtml);
     }
 
 });
