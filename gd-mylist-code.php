@@ -142,7 +142,6 @@ function gd_remove_mylist() {
     ];
 
     print(json_encode($result));
-    // $result = 'ok';
 
     die();
 }
