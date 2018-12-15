@@ -17,8 +17,9 @@ $var_setting = array(
     'table' => $db_prefix . 'gd_mylist',
     'table_posts' => $db_prefix . 'posts',
     'table_users' => $db_prefix . 'users',
-    'login_request' => 'no', //change 'yes' if you want registration is required
     'guest_user' => rand(100000000000, 999999999999) . '001',
+    'login_request' => false, //change 'true' if you want registration is required
+    'add_to_content' => true,
 );
 
 //template variable
@@ -31,7 +32,7 @@ $templates_html = array(
     'button' => $template_path . 'button.html',
 );
 
-if ($var_setting['login_request'] === 'no') {
+if ($var_setting['login_request'] === false) {
     add_action('init', 'gd_setcookie');
     function gd_setcookie()
     {
@@ -163,7 +164,7 @@ function gd_show_mylist_btn($atts) {
 
     $gd_query = null;
     $user_id = get_current_user_id();
-    if ($user_id === 0 && $var_setting['login_request'] === 'no') {
+    if ($user_id === 0 && $var_setting['login_request'] === false) {
         if (!isset($_COOKIE['gb_mylist_guest'])) {
             $user_id = $var_setting['guest_user'];
         } else {
@@ -247,7 +248,7 @@ function gd_show_gd_mylist_list($atts) {
         'show_count' => 'yes',
     ), $atts));
 
-    if ($user_id === 0 && $var_setting['login_request'] === 'no') {
+    if ($user_id === 0 && $var_setting['login_request'] === false) {
         $user_id = $_COOKIE['gb_mylist_guest'];
     }
 
@@ -378,22 +379,23 @@ function extract_title($postTitle) {
 }
 
 // add HOOK function to title and/or content
-function wpdev_before_after($content) {
-    if (is_page() != 1) {
-        $atts = array(
-            'styletarget' => null, //default
-            'item_id' => null,
-            'echo' => false,
-        );
-        // $fullcontent = gd_show_mylist_btn($atts) . $content;
-        $fullcontent = $content . gd_show_mylist_btn($atts);
-    } else {
-        $fullcontent = $content;
+if ($var_setting['add_to_content'] === true) {
+    function wpdev_before_after($content) {
+        if (is_page() != 1) {
+            $atts = array(
+                'styletarget' => null, //default
+                'item_id' => null,
+                'echo' => false,
+            );
+            $fullcontent = gd_show_mylist_btn($atts) . $content;
+        } else {
+            $fullcontent = $content;
+        }
+    
+        return $fullcontent;
     }
-
-    return $fullcontent;
+    add_filter('the_content', 'wpdev_before_after');
 }
-add_filter('the_content', 'wpdev_before_after');
 
 // add_filter('the_title', 'new_title', 10, 2);
 // function new_title($title, $id) {
