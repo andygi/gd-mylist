@@ -35,13 +35,13 @@ class gd_mylist_plugin
         //add mylist function
         add_action('wp_ajax_gd_add_mylist', array($this, 'gd_add_mylist'));
         add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'gd_add_mylist')); //login check
-        // //remove from mylist function
+        //remove from mylist function
         add_action('wp_ajax_gd_remove_mylist', array($this, 'gd_remove_mylist'));
         add_action('wp_ajax_nopriv_gd_remove_mylist', array($this, 'gd_remove_mylist')); //login check
-        // //show button add/remove
+        //show button add/remove
         add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'));
         add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn'));
-        // //show my list in page
+        //show my list in page
         add_action('gd_mylist_list', array($this, 'gd_show_gd_mylist_list'));
         add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list'));
 
@@ -58,9 +58,7 @@ class gd_mylist_plugin
 
     public function gd_mylist_asset()
     {
-        // global $templates_html;
         $template_path = plugins_url() . '/gd-mylist/template/';
-        // $locale = get_locale();
 
         wp_register_script('gd_mylist_handelbar', plugins_url() . '/gd-mylist/lib/handlebars.min.js', array('jquery'));
         wp_register_script('gd_mylist_script', plugins_url() . '/gd-mylist/js/gd-script.js', array('jquery'));
