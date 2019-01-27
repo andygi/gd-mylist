@@ -11,9 +11,6 @@ License: GPL
 
 class gd_mylist_plugin
 {
-    //setup general variables
-    private $wpdb, $templates_html, $template_path;
-
     private $config = [
         'login_request' => false, //change 'true' if you want registration is required
         'add_to_content' => true,
@@ -38,17 +35,17 @@ class gd_mylist_plugin
         //add mylist function
         add_action('wp_ajax_gd_add_mylist', array($this, 'gd_add_mylist'));
         add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'gd_add_mylist')); //login check
-        //remove from mylist function
+        // //remove from mylist function
         add_action('wp_ajax_gd_remove_mylist', array($this, 'gd_remove_mylist'));
         add_action('wp_ajax_nopriv_gd_remove_mylist', array($this, 'gd_remove_mylist')); //login check
-        //show button add/remove
-        add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn', 10, 2)); /* eg code call into theme: <?php do_action('gd_mylist_btn', 'mylist'); ?> */
-        add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn')); /* eg shortcode call: [show_gd_mylist_btn] */
-        //show my list in page
+        // //show button add/remove
+        add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'));
+        add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn'));
+        // //show my list in page
         add_action('gd_mylist_list', array($this, 'gd_show_gd_mylist_list'));
-        add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list', 10, 2)); //shortcode call [show_gd_mylist_list]
+        add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list'));
 
-        add_filter('the_content', array($this, 'wpdev_before_after'));
+        add_filter('the_content', array($this, 'hook_button'));
     }
 
     public function gd_setcookie()
@@ -61,8 +58,9 @@ class gd_mylist_plugin
 
     public function gd_mylist_asset()
     {
-        global $template_path, $templates_html;
-        $locale = get_locale();
+        // global $templates_html;
+        $template_path = plugins_url() . '/gd-mylist/template/';
+        // $locale = get_locale();
 
         wp_register_script('gd_mylist_handelbar', plugins_url() . '/gd-mylist/lib/handlebars.min.js', array('jquery'));
         wp_register_script('gd_mylist_script', plugins_url() . '/gd-mylist/js/gd-script.js', array('jquery'));
@@ -71,8 +69,8 @@ class gd_mylist_plugin
             'gdMyListAjax',
             array(
                 'ajaxurl' => admin_url('admin-ajax.php'),
-                'boxList' => $templates_html['box_list'],
-                'button' => $templates_html['button'],
+                'boxList' => $template_path . 'box-list.html',
+                'button' => $template_path . 'button.html',
                 'nonce' => wp_create_nonce('gd_mylist'),
             )
         );
@@ -83,26 +81,19 @@ class gd_mylist_plugin
         wp_enqueue_style('gd_mylist_asset', plugins_url() . '/gd-mylist/css/app.css');
     }
 
-    public function gd_mylist_login()
-    {
-        echo 'Please login before';
-        die();
-    }
-
     public function gd_add_mylist()
     {
         if (!wp_verify_nonce($_REQUEST['nonce'], 'gd_mylist')) {
             !exit('No naughty business please');
         }
-
-        global $wpdb, $var_setting;
+        global $wpdb;
         $item_id = $_POST['itemId'];
         $user_id = $_POST['userId'];
         $result = array();
 
         $wpdb->query(
             $wpdb->prepare('
-                    INSERT INTO ' . $var_setting['table'] . "
+                    INSERT INTO ' . $this->var_setting['table'] . "
                         (`item_id`, `user_id`)
                     VALUES
                         ('%d', '%s');
@@ -129,15 +120,14 @@ class gd_mylist_plugin
         if (!wp_verify_nonce($_REQUEST['nonce'], 'gd_mylist')) {
             !exit('No naughty business please');
         }
-
-        global $wpdb, $var_setting;
+        global $wpdb;
         $item_id = $_POST['itemId'];
         $user_id = $_POST['userId'];
         $result = array();
 
         $wpdb->query(
             $wpdb->prepare(
-                'DELETE FROM ' . $var_setting['table'] . '
+                'DELETE FROM ' . $this->var_setting['table'] . '
                     WHERE item_id = %d AND user_id = %s',
                 $item_id,
                 $user_id
@@ -158,7 +148,7 @@ class gd_mylist_plugin
 
     public function gd_show_mylist_btn($atts)
     {
-        global $wpdb, $var_setting, $templates_html;
+        global $wpdb, $templates_html;
         $locale = get_locale();
         $buttonData = [];
 
@@ -170,9 +160,9 @@ class gd_mylist_plugin
 
         $gd_query = null;
         $user_id = get_current_user_id();
-        if ($user_id === 0 && $var_setting['login_request'] === false) {
+        if ($user_id === 0 && $this->config['login_request'] === false) {
             if (!isset($_COOKIE['gb_mylist_guest'])) {
-                $user_id = $var_setting['guest_user'];
+                $user_id = $this->var_setting['guest_user'];
             } else {
                 $user_id = $_COOKIE['gb_mylist_guest'];
             }
@@ -182,7 +172,7 @@ class gd_mylist_plugin
         }
 
         //check if item is in mylist
-        $gd_sql = 'SELECT id FROM ' . $var_setting['table'] . '
+        $gd_sql = 'SELECT id FROM ' . $this->var_setting['table'] . '
                     WHERE item_id = ' . $item_id . ' AND user_id = ' . $user_id;
 
         $gd_query = $wpdb->get_results($gd_sql);
@@ -226,7 +216,7 @@ class gd_mylist_plugin
 
     public function gd_show_gd_mylist_list($atts)
     {
-        global $wpdb, $var_setting, $templates_html;
+        global $wpdb;
         $posts = null;
         $user_id = get_current_user_id();
         $locale = get_locale();
@@ -251,7 +241,7 @@ class gd_mylist_plugin
             'show_count' => 'yes',
         ), $atts));
 
-        if ($user_id === 0 && $var_setting['login_request'] === false) {
+        if ($user_id === 0 && $this->config['login_request'] === false) {
             $user_id = $_COOKIE['gb_mylist_guest'];
         }
 
@@ -259,26 +249,7 @@ class gd_mylist_plugin
             $user_id = $user_id_share;
         }
 
-        $posts = $wpdb->get_results(
-            $wpdb->prepare(
-                'SELECT
-                        b.ID AS posts_id,
-                        b.post_title AS posts_title,
-                        b.post_date AS posts_date,
-                        c.ID AS authors_id,
-                        c.display_name AS authors_name
-                    FROM ' . $var_setting['table'] . ' a
-                    INNER JOIN ' . $var_setting['table_posts'] . ' b
-                    ON a.item_id = b.ID
-                    INNER JOIN ' . $var_setting['table_users'] . " c
-                    ON c.ID = b.post_author
-                    WHERE
-                        b.post_status = 'publish'
-                        AND a.user_id = %s
-                    ORDER BY b.post_title DESC",
-                $user_id
-            )
-        );
+        $posts = $this->post_query($user_id);
 
         if ($posts != null) {
             $listAr['showList'] = true;
@@ -311,38 +282,7 @@ class gd_mylist_plugin
             }
 
             foreach ($posts as $post) {
-                $type = 'post_list';
-                $postId = $post->posts_id;
-                $postAuthorId = $post->authors_id;
-                $postAuthorName = $post->authors_name;
-                $postTitle = $post->posts_title;
-                $portTitleLang = extract_title($postTitle);
-                $postUrl = get_permalink($postId);
-                $args = array(
-                    'styletarget' => 'mylist',
-                    'item_id' => $postId,
-                );
-
-                if (strpos($postTitle, '<!--:') !== false || strpos($postTitle, '[:') !== false) { //means use mqtranlate or qtranlate-x
-                    $posttitle = $portTitleLang[$lang];
-                } else {
-                    $posttitle = $postTitle;
-                }
-
-                $listAr['listitem'][] = [
-                    'postId' => $postId,
-                    'posturl' => $postUrl,
-                    'postimage' => wp_get_attachment_url(get_post_thumbnail_id($postId)),
-                    'posttitle' => $posttitle,
-                    'postdate' => get_the_date('F j, Y', $postId),
-                    'postAuthorName' => $postAuthorName,
-                    'showRemove' => [
-                        'itemid' => $postId,
-                        'styletarget' => 'mylist',
-                        'userid' => $user_id,
-                        'label' => __('remove My List'),
-                    ],
-                ];
+                $listAr['listitem'][] = $this->list_item($post);
             }
 
             echo ('<script type="text/javascript">');
@@ -361,7 +301,75 @@ class gd_mylist_plugin
         echo ('<div id="myList_list"></div>');
     }
 
-    public function extract_title($postTitle)
+    private function list_item($post)
+    {
+        $output = [];
+        $type = 'post_list';
+        $postId = $post->posts_id;
+        $postAuthorId = $post->authors_id;
+        $postAuthorName = $post->authors_name;
+        $postTitle = $post->posts_title;
+        $portTitleLang = $this->extract_title($postTitle);
+        $postUrl = get_permalink($postId);
+        $args = array(
+            'styletarget' => 'mylist',
+            'item_id' => $postId,
+        );
+
+        if (strpos($postTitle, '<!--:') !== false || strpos($postTitle, '[:') !== false) { //means use mqtranlate or qtranlate-x
+            $posttitle = $portTitleLang[$lang];
+        } else {
+            $posttitle = $postTitle;
+        }
+
+        $output = [
+            'postId' => $postId,
+            'posturl' => $postUrl,
+            'postimage' => wp_get_attachment_url(get_post_thumbnail_id($postId)),
+            'posttitle' => $postTitle,
+            'postdate' => get_the_date('F j, Y', $postId),
+            'postAuthorName' => $postAuthorName,
+            'showRemove' => [
+                'itemid' => $postId,
+                'styletarget' => 'mylist',
+                'userid' => $user_id,
+                'label' => __('remove My List'),
+            ],
+        ];
+
+        return $output;
+    }
+
+    private function post_query($user_id)
+    {
+        global $wpdb;
+        $posts = [];
+
+        $posts = $wpdb->get_results(
+            $wpdb->prepare(
+                'SELECT
+                        b.ID AS posts_id,
+                        b.post_title AS posts_title,
+                        b.post_date AS posts_date,
+                        c.ID AS authors_id,
+                        c.display_name AS authors_name
+                    FROM ' . $this->var_setting['table'] . ' a
+                    INNER JOIN ' . $this->var_setting['table_posts'] . ' b
+                    ON a.item_id = b.ID
+                    INNER JOIN ' . $this->var_setting['table_users'] . " c
+                    ON c.ID = b.post_author
+                    WHERE
+                        b.post_status = 'publish'
+                        AND a.user_id = %s
+                    ORDER BY b.post_title DESC",
+                $user_id
+            )
+        );
+
+        return $posts;
+    }
+
+    private function extract_title($postTitle)
     {
         $titles = null;
 
@@ -382,7 +390,7 @@ class gd_mylist_plugin
         return $titles;
     }
 
-    public function wpdev_before_after($content)
+    public function hook_button($content)
     {
         if (is_page() != 1) {
             $atts = array(
@@ -390,7 +398,7 @@ class gd_mylist_plugin
                 'item_id' => null,
                 'echo' => false,
             );
-            $fullcontent = $object->gd_show_mylist_btn($atts) . $content;
+            $fullcontent = $this->gd_show_mylist_btn($atts) . $content;
         } else {
             $fullcontent = $content;
         }
