@@ -8,6 +8,30 @@
  *      mylist //cancel div with class: gd-mylist-box
  */
 
+//setup general variables
+global $wpdb, $var_setting, $templates_html, $template_path;
+
+//db variables and settings
+$db_prefix = $wpdb->prefix;
+$var_setting = array(
+    'table' => $db_prefix . 'gd_mylist',
+    'table_posts' => $db_prefix . 'posts',
+    'table_users' => $db_prefix . 'users',
+    'guest_user' => rand(100000000000, 999999999999) . '001',
+    'login_request' => false, //change 'true' if you want registration is required
+    'add_to_content' => true,
+);
+
+//template variable
+$template_path = plugins_url() . '/gd-mylist/template/'; //change this path to use a different template remember to replay all files with all require varibales and syntax
+$locale_chunck = '?locale=';
+$isShowListPage = false;
+
+$templates_html = array(
+    'box_list' => $template_path . 'box-list.html',
+    'button' => $template_path . 'button.html',
+);
+
 if ($var_setting['login_request'] === false) {
     add_action('init', 'gd_setcookie');
     function gd_setcookie()
@@ -355,7 +379,7 @@ function extract_title($postTitle) {
 }
 
 // add HOOK function to title and/or content
-// if ($var_setting['add_to_content'] === true) {
+if ($var_setting['add_to_content'] === true) {
     function wpdev_before_after($content) {
         if (is_page() != 1) {
             $atts = array(
@@ -363,15 +387,15 @@ function extract_title($postTitle) {
                 'item_id' => null,
                 'echo' => false,
             );
-            // $fullcontent = gd_show_mylist_btn($atts) . $content;
-            $fullcontent = 'test---' . $content;
+            $fullcontent = gd_show_mylist_btn($atts) . $content;
         } else {
             $fullcontent = $content;
         }
     
         return $fullcontent;
     }
-// }
+    add_filter('the_content', 'wpdev_before_after');
+}
 
 // add_filter('the_title', 'new_title', 10, 2);
 // function new_title($title, $id) {
