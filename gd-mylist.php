@@ -27,6 +27,9 @@ class gd_mylist_plugin
             'guest_user' => rand(100000000000, 999999999999) . '001',
         ];
 
+        register_activation_hook( __FILE__, array($this, 'populate_db') );
+        register_deactivation_hook( __FILE__, array($this, 'depopulate_db') );
+
         if ($this->config['login_request'] === false) {
             add_action('init', array($this, 'gd_setcookie'));
         }
@@ -46,6 +49,24 @@ class gd_mylist_plugin
         add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list'));
 
         add_filter('the_content', array($this, 'hook_button'));
+    }
+
+    public function populate_db() {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        ob_start();
+        require_once "lib/install-data.php";
+        $sql = ob_get_clean();
+        dbDelta( $sql );
+    }
+
+    public function depopulate_db() {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        ob_start();
+        require_once "lib/drop-tables.php";
+        $sql = ob_get_clean();
+        dbDelta( $sql );
     }
 
     public function gd_setcookie()
