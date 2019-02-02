@@ -42,13 +42,13 @@ class gd_mylist_plugin
         add_action('wp_ajax_gd_remove_mylist', array($this, 'gd_remove_mylist'));
         add_action('wp_ajax_nopriv_gd_remove_mylist', array($this, 'gd_remove_mylist')); //login check
         //show button add/remove
-        add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'));
-        add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn'));
+        add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
+        add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
         //show my list in page
-        add_action('gd_mylist_list', array($this, 'gd_show_gd_mylist_list'));
-        add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list'));
+        add_action('gd_mylist_list', array($this, 'gd_show_gd_mylist_list'), 11, 2);
+        add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list'), 11, 2);
 
-        add_filter('the_content', array($this, 'hook_button'));
+        add_filter('the_content', array($this, 'hook_button'), 20);
     }
 
     public function populate_db() {

@@ -4,14 +4,14 @@ Donate link: http://www.gekode.co.uk
 Tags: item lists, wish list, wishlist, posts and pages bookmark
 Requires at least: 3.9.0
 Tested up to: 4.1
-Stable tag: 0.4
+Stable tag: 1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 You can create a favorite list of pages or posts in easy and faster way.
 
 == Description ==
-
+TODO: update the description with v1
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
 It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.
 GD MyList use bootstrap 3 as grid and css class, and fontawesome as icons.
