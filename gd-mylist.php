@@ -12,9 +12,13 @@ License: GPL
 class gd_mylist_plugin
 {
     private $config = [
-        'login_request' => false, //change 'true' if you want registration is required
+        'is_anonymous_allowed' => true,
         'add_button' => true,
-        'use_fontawesome' => true,
+        'is_fontawesome' => true,
+        'fontawesome_btn_add' => 'far fa-heart',
+        'fontawesome_btn_remove' => 'fas fa-heart',
+        'fontawesome_loading' => 'fa fa-spinner fa-pulse',
+        'settings_label' => 'gd_mylist_settings',
     ];
 
     public function __construct()
@@ -31,7 +35,7 @@ class gd_mylist_plugin
         register_activation_hook(__FILE__, array($this, 'populate_db'));
         register_deactivation_hook(__FILE__, array($this, 'depopulate_db'));
 
-        if ($this->config['login_request'] === false) {
+        if ($this->config['is_anonymous_allowed'] === true) {
             add_action('init', array($this, 'gd_setcookie'));
         }
         //setup assets
@@ -185,7 +189,7 @@ class gd_mylist_plugin
 
         $gd_query = null;
         $user_id = get_current_user_id();
-        if ($user_id === 0 && $this->config['login_request'] === false) {
+        if ($user_id === 0 && $this->config['is_anonymous_allowed'] === true) {
             if (!isset($_COOKIE['gb_mylist_guest'])) {
                 $user_id = $this->var_setting['guest_user'];
             } else {
@@ -266,7 +270,7 @@ class gd_mylist_plugin
             'show_count' => 'yes',
         ), $atts));
 
-        if ($user_id === 0 && $this->config['login_request'] === false) {
+        if ($user_id === 0 && $this->config['is_anonymous_allowed'] === true) {
             $user_id = $_COOKIE['gb_mylist_guest'];
         }
 
@@ -446,7 +450,30 @@ class gd_mylist_plugin
     }
 
     public function plugin_settings_page_content()
-    {?>
+    {
+        // Lock out non-admins:
+        if (!current_user_can('manage_options')) {
+            wp_die('You do not have sufficient permission to perform this operation');
+        }
+
+        if (isset($_POST['submit'])) {
+            $setting = array(
+                'is_anonymous_allowed' => field_sanitise($_POST['is_anonymous_allowed'][0]),
+                'is_fontawesome' => $_POST['is_fontawesome'][0],
+                'fontawesome_btn_add' => $_POST['fontawesome_btn_add'],
+                'fontawesome_btn_remove' => $_POST['fontawesome_btn_remove'],
+                'fontawesome_loading' => $_POST['fontawesome_loading'],
+                'add_button' => $_POST['is_add_btn'][0]
+            );
+            update_option($this->config['settings_label'], $setting);
+            echo '<div class="updated"><p><strong>Data Updated</strong></p></div>';
+        }
+
+        // Get options:
+        $stored_options = get_option($this->config['settings_label']);
+        print_r($stored_options);
+
+        ?>
         <div class="wrap">
             <h2>GD Mylist</h2>
             <!-- <form method="post" action="options.php"> -->
@@ -461,124 +488,127 @@ class gd_mylist_plugin
         <?php
     }
 
-    public function setup_sections() {
-        add_settings_section( 'login_request', 'Anonymous user allowed', array( $this, 'setup_fields' ), 'gdmylist_fields' );
-        add_settings_section( 'use_fontawesome', 'Use Fontawesome icon', array( $this, 'setup_fields' ), 'gdmylist_fields' );
-        add_settings_section( 'add_button', 'Add Mylist button', array( $this, 'setup_fields' ), 'gdmylist_fields' );
+    public function setup_sections()
+    {
+        add_settings_section('login_request', '<hr>Anonymous user allowed', array($this, 'setup_fields'), 'gdmylist_fields');
+        add_settings_section('use_fontawesome', '<hr>Use Fontawesome icon', array($this, 'setup_fields'), 'gdmylist_fields');
+        add_settings_section('add_button', '<hr>Add Mylist button', array($this, 'setup_fields'), 'gdmylist_fields');
     }
 
-    public function setup_fields() {
+    public function setup_fields()
+    {
         $fields = array(
             array(
-        		'uid' => 'is_anonymous_allowed',
-        		'label' => 'Allow anonymous use',
-        		'section' => 'login_request',
-        		'type' => 'checkbox',
-        		'options' => array(
-        			'true' => 'Yes'
-        		),
+                'uid' => 'is_anonymous_allowed',
+                'label' => 'Allow anonymous use',
+                'section' => 'login_request',
+                'type' => 'checkbox',
+                'options' => array(
+                    'true' => 'Yes',
+                ),
                 'default' => array('true'),
-        		'supplimental' => 'Availability to choose if no logger user can use it or not, Mylist cookie will be expired after 30 days',
+                'supplimental' => 'Availability to choose if no logger user can use it or not, Mylist cookie will be expired after 30 days',
             ),
             array(
-        		'uid' => 'is_fontawesome',
-        		'label' => 'Use Fontawesome icon',
-        		'section' => 'use_fontawesome',
-        		'type' => 'checkbox',
-        		'options' => array(
-        			'true' => 'Yes'
-        		),
+                'uid' => 'is_fontawesome',
+                'label' => 'Use Fontawesome icon',
+                'section' => 'use_fontawesome',
+                'type' => 'checkbox',
+                'options' => array(
+                    'true' => 'Yes',
+                ),
                 'default' => array('true'),
-        		'supplimental' => 'Fontawesome icon class name <a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank">(complete icon’s list)</a>:',
+                'supplimental' => 'Fontawesome icon class name <a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank">(complete icon’s list)</a>',
             ),
             array(
-        		'uid' => 'fontawesome_btn_add',
-        		'label' => 'Add to mylist icon',
-        		'section' => 'use_fontawesome',
-        		'type' => 'text',
+                'uid' => 'fontawesome_btn_add',
+                'label' => 'Add to mylist icon',
+                'section' => 'use_fontawesome',
+                'type' => 'text',
                 'placeholder' => 'far fa-heart',
                 'supplimental' => 'default: <code>far fa-heart</code>',
-        	),
-            array(
-        		'uid' => 'fontawesome_btn_remove',
-        		'label' => 'Remove to mylist icon',
-        		'section' => 'use_fontawesome',
-        		'type' => 'text',
-        		'placeholder' => 'fas fa-heart',
-        		'supplimental' => 'default: <code>fas fa-heart</code>',
-        	),
-            array(
-        		'uid' => 'fontawesome_loading',
-        		'label' => 'Loading icon',
-        		'section' => 'use_fontawesome',
-        		'type' => 'text',
-        		'placeholder' => 'fa fa-spinner fa-pulse',
-        		'supplimental' => 'default: <code>fa fa-spinner fa-pulse</code>',
             ),
             array(
-        		'uid' => 'is_add_btn',
-        		'label' => 'Add GD Mylist button',
-        		'section' => 'add_button',
-        		'type' => 'checkbox',
-        		'options' => array(
-        			'true' => 'Yes'
-        		),
+                'uid' => 'fontawesome_btn_remove',
+                'label' => 'Remove to mylist icon',
+                'section' => 'use_fontawesome',
+                'type' => 'text',
+                'placeholder' => 'fas fa-heart',
+                'supplimental' => 'default: <code>fas fa-heart</code>',
+            ),
+            array(
+                'uid' => 'fontawesome_loading',
+                'label' => 'Loading icon',
+                'section' => 'use_fontawesome',
+                'type' => 'text',
+                'placeholder' => 'fa fa-spinner fa-pulse',
+                'supplimental' => 'default: <code>fa fa-spinner fa-pulse</code>',
+            ),
+            array(
+                'uid' => 'is_add_btn',
+                'label' => 'Add GD Mylist button',
+                'section' => 'add_button',
+                'type' => 'checkbox',
+                'options' => array(
+                    'true' => 'Yes',
+                ),
                 'default' => array('true'),
-        		'supplimental' => 'Add GD Mylist button directly to the post/article list and detail page. <br><strong>Please note:</strong> the button position, and present depends which theme you use.',
+                'supplimental' => 'Add GD Mylist button directly to the post/article list and detail page. <br><strong>Please note:</strong> the button position and your presence in the posts/articles abstract list it depends on themes you use. In that case you can considering to add it by short code: <a href="https://wordpress.org/plugins/gd-mylist/" target="_blank">more information in the FAQ section</a>',
             ),
         );
-    	foreach( $fields as $field ){
-        	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'gdmylist_fields', $field['section'], $field );
-            register_setting( 'gdmylist_fields', $field['uid'] );
-    	}
+        foreach ($fields as $field) {
+            add_settings_field($field['uid'], $field['label'], array($this, 'field_callback'), 'gdmylist_fields', $field['section'], $field);
+            register_setting('gdmylist_fields', $field['uid']);
+        }
     }
 
-    public function field_callback( $arguments ) {
-        $value = get_option( $arguments['uid'] );
-        if( ! $value ) {
+    public function field_callback($arguments)
+    {
+        $value = get_option($arguments['uid']);
+        if (!$value) {
             $value = $arguments['default'];
         }
-        switch( $arguments['type'] ){
+        switch ($arguments['type']) {
             case 'text':
             case 'password':
             case 'number':
-                printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
+                printf('<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value);
                 break;
             case 'textarea':
-                printf( '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], $value );
+                printf('<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], $value);
                 break;
             case 'select':
             case 'multiselect':
-                if( ! empty ( $arguments['options'] ) && is_array( $arguments['options'] ) ){
+                if (!empty($arguments['options']) && is_array($arguments['options'])) {
                     $attributes = '';
                     $options_markup = '';
-                    foreach( $arguments['options'] as $key => $label ){
-                        $options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
+                    foreach ($arguments['options'] as $key => $label) {
+                        $options_markup .= sprintf('<option value="%s" %s>%s</option>', $key, selected($value[array_search($key, $value, true)], $key, false), $label);
                     }
-                    if( $arguments['type'] === 'multiselect' ){
+                    if ($arguments['type'] === 'multiselect') {
                         $attributes = ' multiple="multiple" ';
                     }
-                    printf( '<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup );
+                    printf('<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup);
                 }
                 break;
             case 'radio':
             case 'checkbox':
-                if( ! empty ( $arguments['options'] ) && is_array( $arguments['options'] ) ){
+                if (!empty($arguments['options']) && is_array($arguments['options'])) {
                     $options_markup = '';
                     $iterator = 0;
-                    foreach( $arguments['options'] as $key => $label ){
+                    foreach ($arguments['options'] as $key => $label) {
                         $iterator++;
-                        $options_markup .= sprintf( '<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s[]" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>', $arguments['uid'], $arguments['type'], $key, checked( $value[ array_search( $key, $value, true ) ], $key, false ), $label, $iterator );
+                        $options_markup .= sprintf('<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s[]" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>', $arguments['uid'], $arguments['type'], $key, checked($value[array_search($key, $value, true)], $key, false), $label, $iterator);
                     }
-                    printf( '<fieldset>%s</fieldset>', $options_markup );
+                    printf('<fieldset>%s</fieldset>', $options_markup);
                 }
                 break;
         }
-        if( $helper = $arguments['helper'] ){
-            printf( '<span class="helper"> %s</span>', $helper );
+        if ($helper = $arguments['helper']) {
+            printf('<span class="helper"> %s</span>', $helper);
         }
-        if( $supplimental = $arguments['supplimental'] ){
-            printf( '<p class="description">%s</p>', $supplimental );
+        if ($supplimental = $arguments['supplimental']) {
+            printf('<p class="description">%s</p>', $supplimental);
         }
     }
 
