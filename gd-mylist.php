@@ -442,7 +442,6 @@ class gd_mylist_plugin
         $icon = 'dashicons-admin-plugins';
         $position = 100;
 
-        // add_menu_page($page_title, $menu_title, $capability, $slug, $callback, $icon, $position);
         add_submenu_page('options-general.php', $page_title, $menu_title, $capability, $slug, $callback);
     }
 
@@ -466,7 +465,6 @@ class gd_mylist_plugin
         add_settings_section( 'login_request', 'Anonymous user allowed', array( $this, 'setup_fields' ), 'gdmylist_fields' );
         add_settings_section( 'use_fontawesome', 'Use Fontawesome icon', array( $this, 'setup_fields' ), 'gdmylist_fields' );
         add_settings_section( 'add_button', 'Add Mylist button', array( $this, 'setup_fields' ), 'gdmylist_fields' );
-        add_settings_section( 'our_first_section', 'Examples', array( $this, 'setup_fields' ), 'gdmylist_fields' );
     }
 
     public function setup_fields() {
@@ -528,91 +526,6 @@ class gd_mylist_plugin
                 'default' => array('true'),
         		'supplimental' => 'Add GD Mylist button directly to the post/article list and detail page. <br><strong>Please note:</strong> the button position, and present depends which theme you use.',
             ),
-
-// examples
-        	array(
-        		'uid' => 'awesome_text_field',
-        		'label' => 'Sample Text Field',
-        		'section' => 'our_first_section',
-        		'type' => 'text',
-        		'placeholder' => 'Some text',
-        		'helper' => 'Does this help?',
-        		'supplimental' => 'I am underneath!',
-        	),
-        	array(
-        		'uid' => 'awesome_password_field',
-        		'label' => 'Sample Password Field',
-        		'section' => 'our_first_section',
-        		'type' => 'password',
-        	),
-        	array(
-        		'uid' => 'awesome_number_field',
-        		'label' => 'Sample Number Field',
-        		'section' => 'our_first_section',
-        		'type' => 'number',
-        	),
-        	array(
-        		'uid' => 'awesome_textarea',
-        		'label' => 'Sample Text Area',
-        		'section' => 'our_first_section',
-        		'type' => 'textarea',
-        	),
-        	array(
-        		'uid' => 'awesome_select',
-        		'label' => 'Sample Select Dropdown',
-        		'section' => 'our_first_section',
-        		'type' => 'select',
-        		'options' => array(
-        			'option1' => 'Option 1',
-        			'option2' => 'Option 2',
-        			'option3' => 'Option 3',
-        			'option4' => 'Option 4',
-        			'option5' => 'Option 5',
-        		),
-                'default' => array()
-        	),
-        	array(
-        		'uid' => 'awesome_multiselect',
-        		'label' => 'Sample Multi Select',
-        		'section' => 'our_first_section',
-        		'type' => 'multiselect',
-        		'options' => array(
-        			'option1' => 'Option 1',
-        			'option2' => 'Option 2',
-        			'option3' => 'Option 3',
-        			'option4' => 'Option 4',
-        			'option5' => 'Option 5',
-        		),
-                'default' => array()
-        	),
-        	array(
-        		'uid' => 'awesome_radio',
-        		'label' => 'Sample Radio Buttons',
-        		'section' => 'our_first_section',
-        		'type' => 'radio',
-        		'options' => array(
-        			'option1' => 'Option 1',
-        			'option2' => 'Option 2',
-        			'option3' => 'Option 3',
-        			'option4' => 'Option 4',
-        			'option5' => 'Option 5',
-        		),
-                'default' => array()
-        	),
-        	array(
-        		'uid' => 'awesome_checkboxes',
-        		'label' => 'Sample Checkboxes',
-        		'section' => 'our_first_section',
-        		'type' => 'checkbox',
-        		'options' => array(
-        			'option1' => 'Option 1',
-        			'option2' => 'Option 2',
-        			'option3' => 'Option 3',
-        			'option4' => 'Option 4',
-        			'option5' => 'Option 5',
-        		),
-                'default' => array('option1')
-        	)
         );
     	foreach( $fields as $field ){
         	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'gdmylist_fields', $field['section'], $field );
