@@ -12,9 +12,9 @@ License: GPL
 class gd_mylist_plugin
 {
     private $config = [
-        'is_anonymous_allowed' => true,
-        'add_button' => true,
-        'is_fontawesome' => true,
+        'is_anonymous_allowed' => 'true',
+        'is_add_btn' => 'true',
+        'is_fontawesome' => 'true',
         'fontawesome_btn_add' => 'far fa-heart',
         'fontawesome_btn_remove' => 'fas fa-heart',
         'fontawesome_loading' => 'fa fa-spinner fa-pulse',
@@ -35,9 +35,7 @@ class gd_mylist_plugin
         register_activation_hook(__FILE__, array($this, 'populate_db'));
         register_deactivation_hook(__FILE__, array($this, 'depopulate_db'));
 
-        if ($this->config['is_anonymous_allowed'] === true) {
-            add_action('init', array($this, 'gd_setcookie'));
-        }
+        add_action('init', array($this, 'gd_setcookie'));
         //setup assets
         add_action('init', array($this, 'gd_mylist_asset'));
         //add mylist function
@@ -81,9 +79,13 @@ class gd_mylist_plugin
 
     public function gd_setcookie()
     {
-        if (!isset($_COOKIE['gb_mylist_guest'])) {
-            $id_guest = $this->var_setting['guest_user'];
-            setcookie('gb_mylist_guest', $id_guest, time() + (86400 * 30), COOKIEPATH, COOKIE_DOMAIN);
+        if ($this->stored_setting()['is_anonymous_allowed'] == 'true') {
+            if (!isset($_COOKIE['gb_mylist_guest'])) {
+                $id_guest = $this->var_setting['guest_user'];
+                setcookie('gb_mylist_guest', $id_guest, time() + (86400 * 30), COOKIEPATH, COOKIE_DOMAIN);
+            }
+        } else {
+            setcookie('gb_mylist_guest', '', time() - 3600);
         }
     }
 
@@ -189,7 +191,7 @@ class gd_mylist_plugin
 
         $gd_query = null;
         $user_id = get_current_user_id();
-        if ($user_id === 0 && $this->config['is_anonymous_allowed'] === true) {
+        if ($user_id === 0 && $this->config['is_anonymous_allowed'] == 'true') {
             if (!isset($_COOKIE['gb_mylist_guest'])) {
                 $user_id = $this->var_setting['guest_user'];
             } else {
@@ -206,7 +208,7 @@ class gd_mylist_plugin
 
         $gd_query = $wpdb->get_results($gd_sql);
 
-        if ($user_id > 0) {
+        if ($this->config['is_anonymous_allowed'] == 'true') {
             if ($gd_query != null) {
                 //in mylist
                 // $type = 'btn_remove';
@@ -270,7 +272,7 @@ class gd_mylist_plugin
             'show_count' => 'yes',
         ), $atts));
 
-        if ($user_id === 0 && $this->config['is_anonymous_allowed'] === true) {
+        if ($user_id === 0 && $this->config['is_anonymous_allowed'] == 'true') {
             $user_id = $_COOKIE['gb_mylist_guest'];
         }
 
@@ -421,7 +423,7 @@ class gd_mylist_plugin
 
     public function hook_button($content)
     {
-        if (is_page() != 1) {
+        if (is_page() != 1 && $this->stored_setting()['is_add_btn'] == 'true') {
             $atts = array(
                 'styletarget' => null, //default
                 'item_id' => null,
@@ -433,6 +435,12 @@ class gd_mylist_plugin
         }
 
         return $fullcontent;
+    }
+
+    public function stored_setting() {
+        $stored_options = get_option($this->config['settings_label']);
+
+        return $stored_options;
     }
 
     // admin area
@@ -458,21 +466,18 @@ class gd_mylist_plugin
 
         if (isset($_POST['submit'])) {
             $setting = array(
-                'is_anonymous_allowed' => field_sanitise($_POST['is_anonymous_allowed'][0]),
+                'is_anonymous_allowed' => $_POST['is_anonymous_allowed'][0],
                 'is_fontawesome' => $_POST['is_fontawesome'][0],
                 'fontawesome_btn_add' => $_POST['fontawesome_btn_add'],
                 'fontawesome_btn_remove' => $_POST['fontawesome_btn_remove'],
                 'fontawesome_loading' => $_POST['fontawesome_loading'],
-                'add_button' => $_POST['is_add_btn'][0]
+                'is_add_btn' => $_POST['is_add_btn'][0]
             );
             update_option($this->config['settings_label'], $setting);
             echo '<div class="updated"><p><strong>Data Updated</strong></p></div>';
         }
-
-        // Get options:
-        $stored_options = get_option($this->config['settings_label']);
-        print_r($stored_options);
-
+        print_r($this->stored_setting());
+        print $this->stored_setting()['is_add_btn'];
         ?>
         <div class="wrap">
             <h2>GD Mylist</h2>
@@ -502,22 +507,24 @@ class gd_mylist_plugin
                 'uid' => 'is_anonymous_allowed',
                 'label' => 'Allow anonymous use',
                 'section' => 'login_request',
-                'type' => 'checkbox',
+                'type' => 'radio',
                 'options' => array(
                     'true' => 'Yes',
+                    'false' => 'No',
                 ),
-                'default' => array('true'),
+                'default' => array($this->stored_setting()['is_anonymous_allowed']),
                 'supplimental' => 'Availability to choose if no logger user can use it or not, Mylist cookie will be expired after 30 days',
             ),
             array(
                 'uid' => 'is_fontawesome',
                 'label' => 'Use Fontawesome icon',
                 'section' => 'use_fontawesome',
-                'type' => 'checkbox',
+                'type' => 'radio',
                 'options' => array(
                     'true' => 'Yes',
+                    'false' => 'No',
                 ),
-                'default' => array('true'),
+                'default' => array($this->stored_setting()['is_fontawesome']),
                 'supplimental' => 'Fontawesome icon class name <a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank">(complete icon’s list)</a>',
             ),
             array(
@@ -548,11 +555,12 @@ class gd_mylist_plugin
                 'uid' => 'is_add_btn',
                 'label' => 'Add GD Mylist button',
                 'section' => 'add_button',
-                'type' => 'checkbox',
+                'type' => 'radio',
                 'options' => array(
                     'true' => 'Yes',
+                    'false' => 'No',
                 ),
-                'default' => array('true'),
+                'default' => array($this->stored_setting()['is_add_btn']),
                 'supplimental' => 'Add GD Mylist button directly to the post/article list and detail page. <br><strong>Please note:</strong> the button position and your presence in the posts/articles abstract list it depends on themes you use. In that case you can considering to add it by short code: <a href="https://wordpress.org/plugins/gd-mylist/" target="_blank">more information in the FAQ section</a>',
             ),
         );
