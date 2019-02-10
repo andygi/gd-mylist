@@ -4,6 +4,7 @@ jQuery(document).ready(function ($) {
     var BUTTON = '#mylist_btn_',
         uriAjax = (gdMyListAjax.ajaxurl),
         boxList = (gdMyListAjax.boxList),
+        loading_icon = (gdMyListAjax.loading_icon),
         button = (gdMyListAjax.button),
         nonce = (gdMyListAjax.nonce),
         buttonHtml = '';
@@ -86,7 +87,7 @@ jQuery(document).ready(function ($) {
     }
 
     function showLoading(itemId) {
-        data = $.parseJSON('{"showLoading": "true"}');
+        data = $.parseJSON('{"showLoading": {"icon": "'+loading_icon+'"}}');
         renderTemplate(itemId,buttonHtml,data);
     }
 

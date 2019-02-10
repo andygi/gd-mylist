@@ -17,7 +17,7 @@ class gd_mylist_plugin
         'is_fontawesome' => 'true',
         'fontawesome_btn_add' => 'far fa-heart',
         'fontawesome_btn_remove' => 'fas fa-heart',
-        'fontawesome_loading' => 'fa fa-spinner fa-pulse',
+        'fontawesome_loading' => 'fas fa-spinner fa-pulse',
         'settings_label' => 'gd_mylist_settings',
     ];
 
@@ -129,6 +129,7 @@ class gd_mylist_plugin
                 'boxList' => $template_path . 'box-list.html',
                 'button' => $template_path . 'button.html',
                 'nonce' => wp_create_nonce('gd_mylist'),
+                'loading_icon' => $this->stored_setting()['fontawesome_loading'],
             )
         );
         wp_enqueue_script('jquery');
@@ -168,6 +169,7 @@ class gd_mylist_plugin
             'styletarget' => null,
             'userid' => $user_id,
             'label' => __('add My List'),
+            'icon' => $this->stored_setting()['fontawesome_btn_remove']
         ];
 
         print(json_encode($result));
@@ -199,6 +201,7 @@ class gd_mylist_plugin
             'styletarget' => null,
             'userid' => $user_id,
             'label' => __('add My List'),
+            'icon' => $this->stored_setting()['fontawesome_btn_add']
         ];
 
         print(json_encode($result));
@@ -246,6 +249,7 @@ class gd_mylist_plugin
                     'styletarget' => $styletarget,
                     'userid' => $user_id,
                     'label' => __('remove My List'),
+                    'icon' => $this->stored_setting()['fontawesome_btn_remove']
                 ];
             } else {
                 $buttonData['showAdd'] = [
@@ -253,6 +257,7 @@ class gd_mylist_plugin
                     'styletarget' => $styletarget,
                     'userid' => $user_id,
                     'label' => __('add My List'),
+                    'icon' => $this->stored_setting()['fontawesome_btn_add']
                 ];
             }
 
@@ -262,6 +267,7 @@ class gd_mylist_plugin
             $buttonData['showLogin'] = [
                 'message' => __('Please login first'),
                 'label' => __('add My List'),
+                'icon' => $this->stored_setting()['fontawesome_btn_add']
             ];
         }
 
@@ -394,6 +400,7 @@ class gd_mylist_plugin
                 'styletarget' => 'mylist',
                 'userid' => $user_id,
                 'label' => __('remove My List'),
+                'icon' => $this->stored_setting()['fontawesome_btn_add']
             ],
         ];
 
@@ -551,14 +558,14 @@ class gd_mylist_plugin
             <h2>GD Mylist</h2>
             <form method="post">
                 <?php
-settings_fields('gdmylist_fields');
-        do_settings_sections('gdmylist_fields');
-        submit_button();
-        ?>
+                settings_fields('gdmylist_fields');
+                do_settings_sections('gdmylist_fields');
+                submit_button();
+                ?>
             </form>
         </div>
         <?php
-}
+    }
 
     public function setup_sections()
     {
@@ -599,7 +606,7 @@ settings_fields('gdmylist_fields');
                 'type' => 'text',
                 'placeholder' => 'css class name',
                 'default' => $this->stored_setting()['fontawesome_btn_add'],
-                'supplimental' => 'default: <code>far fa-heart</code>',
+                'supplimental' => 'default: <code>'.$this->config['fontawesome_btn_add'].'</code> | Preview current: <i class="'.$this->stored_setting()['fontawesome_btn_add'].'"></i>',
             ),
             array(
                 'uid' => 'fontawesome_btn_remove',
@@ -608,7 +615,7 @@ settings_fields('gdmylist_fields');
                 'type' => 'text',
                 'placeholder' => 'css class name',
                 'default' => $this->stored_setting()['fontawesome_btn_remove'],
-                'supplimental' => 'default: <code>fas fa-heart</code>',
+                'supplimental' => 'default: <code>'.$this->config['fontawesome_btn_remove'].'</code> | Preview current: <i class="'.$this->stored_setting()['fontawesome_btn_remove'].'"></i>',
             ),
             array(
                 'uid' => 'fontawesome_loading',
@@ -617,7 +624,7 @@ settings_fields('gdmylist_fields');
                 'type' => 'text',
                 'placeholder' => 'css class name',
                 'default' => $this->stored_setting()['fontawesome_loading'],
-                'supplimental' => 'default: <code>fa fa-spinner fa-pulse</code>',
+                'supplimental' => 'default: <code>'.$this->config['fontawesome_loading'].'</code> | Preview current: <i class="'.$this->stored_setting()['fontawesome_loading'].'"></i> <br>more info <a href="https://origin.fontawesome.com/how-to-use/on-the-web/styling/animating-icons" target="_blank">here</a>',
             ),
             array(
                 'uid' => 'is_add_btn',

@@ -5,7 +5,7 @@
     data-postid="{{showAdd.itemid}}" 
     data-styletarget="{{showAdd.styletarget}}" 
     data-userid="{{showAdd.userid}}" >
-    <i class="far fa-heart"></i> {{showAdd.label}}
+    <i class="{{showAdd.icon}}"></i> {{showAdd.label}}
 </a>
 {{/if}}
 
@@ -16,16 +16,16 @@
         data-postid="{{showRemove.itemid}}" 
         data-styletarget="{{showRemove.styletarget}}" 
         data-userid="{{showRemove.userid}}" >
-        <i class="fas fa-heart"></i> {{showRemove.label}}
+        <i class="{{showRemove.icon}}"></i> {{showRemove.label}}
 </a>
 {{/if}}
 
 {{#if showLogin}}
 <a href="javascript:void();" class="btn btn-default" onclick="javascritp:alert('{{showLogin.message}}')">
-    <i class="far fa-heart"></i> {{showLogin.label}}
+    <i class="{{showLogin.icon}}"></i> {{showLogin.label}}
 </a>
 {{/if}}
 
 {{#if showLoading}}
-<i class="fa fa-spinner fa-pulse"></i>
+<i class="{{showLoading.icon}}"></i>
 {{/if}}
