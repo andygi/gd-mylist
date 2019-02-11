@@ -1,22 +1,13 @@
-=== My Wish List ===
-Contributors: AndyGi
-Donate link: http://www.gekode.co.uk
-Tags: item lists, wish list, wishlist, posts and pages bookmark
-Requires at least: 3.9.0
-Tested up to: 5.0.3
-Requires PHP: 5.6.32
-Stable tag: 1.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+# My Wish List #
 
 You can create a favorite list of pages or posts in easy and faster way.
 
-== Description ==
+## Description ##
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
 It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.
 GD MyList use Handlebars Js as template framework, and Fontawesome (v5.0 free) as icons.
 
-= Features =
+### Features ###
 
 * [new] create setting control panel (find it in Settings/GD Mylist) with the cabality to control: user login, use font awesome icon, hook button to content directly
 * [new] refactoring template files with Handlebars Js. Now are only two files
@@ -34,19 +25,19 @@ GD MyList use Handlebars Js as template framework, and Fontawesome (v5.0 free) a
 * It's tested on posts, pages and woocommerce products's pages
 
 
-= Development =
+### Development ###
 * [https://github.com/andygi/gd-mylist](https://github.com/andygi/gd-mylist "https://github.com/andygi/gd-mylist")
 
-== Installation ==
+## Installation ##
 
 1. Upload plugin .zip file to the `/wp-content/plugins/` directory and unzip
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Use the shortcode in your posts and pages to display your **button** or **MyList** (more info in FAQ)
 4. You can chouse if the user have to login or not, **the plugin not request to be login by default**
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions ##
 
-= How call myList's button? =
+### How call myList's button? ###
 
 There are three ways by your needs:
 
@@ -75,7 +66,7 @@ do_action('gd_mylist_btn',$arg);
 
 where do you want that button will show it
 
-= How call myList's list? =
+### How call myList's list? ###
 
 yuo can show MyList list by shortcode, just create a page (eg: myList) and put into the content the shortcode
 
@@ -93,7 +84,7 @@ to disable **count items**
 [show_gd_mylist_list show_count='no']
 `
 
-= How change login permission? =
+### How change login permission? ###
 
 Go to the setting panel (Settings/GD Mylist) and check Yes in case you whant allow the anonimous user.
 
@@ -103,7 +94,7 @@ Go to the setting panel (Settings/GD Mylist) and check Yes in case you whant all
 In case has anonimous user, the user's id data will be storage in a cookie by GD-Mylist.
 Cookie name is: `gb_mylist_guest`, the expiration date is 30 days, and store only the Guest ID in order the create the list.
 
-= Can I Template customization? =
+### Can I Template customization? ###
 
 Yes, I use Handlebars Js as template.
 Here you can find the [official documentation](https://handlebarsjs.com/).
@@ -112,64 +103,64 @@ The files are in *template* folder:
 - box-list.html
 - button.html
 
-= Icon customization =
+### Icon customization ###
 
 I use **Font Awesome** as icon framework [Font Awesome](https://fontawesome.com/icons).
 You can change the class name from Control Panel (Settings/GD Mylist).
 
-== Screenshots ==
+## Screenshots ##
 
 1. Frontend - MyList Log Bottom Add MyList
 2. Frontend - MyList Log Bottom Remove MyList
 3. Frontend - MyList show MyList
 3. Control Panel
 
-== Changelog ==
+## Changelog ##
 
-= 1.0 =
+### 1.0 ###
 * create setting control panel (find it in Settings/GD Mylist) with the cabality to control: user login, fontawesome icon, hook button to content
 * refactoring template files with Handlebars Js
 * add the GD MyList button directly to content
 * update Fontawesome library with v5.0 free
 * performing improvement
 
-= 0.4 =
+### 0.4 ###
 * add wish items counter
 * add Twitter, Whatsapp and Email as share method
 * fix share link
 
-= 0.3.2 =
+### 0.3.2 ###
 * fix post title not appare on the list on not Multilingual sites (thank’s ‘svenol’)
 
-= 0.3.2 beta =
+### 0.3.2 beta ###
 * Multilingual support (English, Italian) with template .pot file
 * Support **mqtranslate** and **qtranslate-x**
 * You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
 * Fix call code into template (thank’s ‘nabjoern’)
 
-= 0.2.1 =
+### 0.2.1 ###
 * Fix view problems on wishlist’s list page
 
-= 0.2 =
+### 0.2 ###
 * Add login/no login case
 * Now you can put the button into the content
 
-= 0.1 =
+### 0.1 ###
 * Initial release
 
-== Upgrade Notice ==
+## Upgrade Notice ##
 
-= 1.0 = 
+### 1.0 ### 
 new functions and fix
 
-= 0.4 =
+### 0.4 ###
 new functions and fix
 
-= 0.3 =
+### 0.3 ###
 new functions
 
-= 0.2 =
+### 0.2 ###
 second release
 
-= 0.1 =
+### 0.1 ###
 first release
