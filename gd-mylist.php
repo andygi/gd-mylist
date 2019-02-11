@@ -160,7 +160,7 @@ class gd_mylist_plugin
             'itemid' => $item_id,
             'styletarget' => null,
             'userid' => $user_id,
-            'label' => __('add My List'),
+            'label' => __('remove My List'),
             'icon' => $this->stored_setting()['fontawesome_btn_remove']
         ];
 
