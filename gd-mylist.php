@@ -12,8 +12,13 @@ License: GPL
 class gd_mylist_plugin
 {
     private $config = [
-        'login_request' => false, //change 'true' if you want registration is required
-        'add_to_content' => true,
+        'is_anonymous_allowed' => 'true',
+        'is_add_btn' => 'true',
+        'is_fontawesome' => 'true',
+        'fontawesome_btn_add' => 'far fa-heart',
+        'fontawesome_btn_remove' => 'fas fa-heart',
+        'fontawesome_loading' => 'fas fa-spinner fa-pulse',
+        'settings_label' => 'gd_mylist_settings',
     ];
 
     public function __construct()
@@ -27,14 +32,14 @@ class gd_mylist_plugin
             'guest_user' => rand(100000000000, 999999999999) . '001',
         ];
 
-        register_activation_hook( __FILE__, array($this, 'populate_db') );
-        register_deactivation_hook( __FILE__, array($this, 'depopulate_db') );
+        register_activation_hook(__FILE__, array($this, 'populate_db'));
+        register_activation_hook(__FILE__, array($this, 'activate'));
+        register_deactivation_hook(__FILE__, array($this, 'depopulate_db'));
 
-        if ($this->config['login_request'] === false) {
-            add_action('init', array($this, 'gd_setcookie'));
-        }
         //setup assets
         add_action('init', array($this, 'gd_mylist_asset'));
+        
+        add_action('init', array($this, 'gd_setcookie'));
         //add mylist function
         add_action('wp_ajax_gd_add_mylist', array($this, 'gd_add_mylist'));
         add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'gd_add_mylist')); //login check
@@ -47,33 +52,58 @@ class gd_mylist_plugin
         //show my list in page
         add_action('gd_mylist_list', array($this, 'gd_show_gd_mylist_list'), 11, 2);
         add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list'), 11, 2);
-
+        // Hook button to the content
         add_filter('the_content', array($this, 'hook_button'), 20);
+        // Hook into the admin menu
+        if (is_admin()) {
+            add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'settings_link'));
+            add_action('admin_menu', array($this, 'gd_admin_panel'));
+            add_action('admin_init', array($this, 'setup_sections'));
+        }
     }
 
-    public function populate_db() {
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    public function populate_db()
+    {
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
         ob_start();
         require_once "lib/install-data.php";
         $sql = ob_get_clean();
-        dbDelta( $sql );
+        dbDelta($sql);
     }
 
-    public function depopulate_db() {
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    public function activate()
+    {
+        $this->update_settings('setup');
+    }
+
+    public function depopulate_db()
+    {
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
         ob_start();
         require_once "lib/drop-tables.php";
         $sql = ob_get_clean();
-        dbDelta( $sql );
+        dbDelta($sql);
+    }
+
+    public function settings_link($links)
+    {
+        $links = array_merge( array(
+            '<a href="' . esc_url( admin_url( '/options-general.php?page=gdmylist_fields' ) ) . '">' . __( 'Settings', 'textdomain' ) . '</a>'
+        ), $links );
+        return $links;
     }
 
     public function gd_setcookie()
     {
-        if (!isset($_COOKIE['gb_mylist_guest'])) {
-            $id_guest = $this->var_setting['guest_user'];
-            setcookie('gb_mylist_guest', $id_guest, time() + (86400 * 30), COOKIEPATH, COOKIE_DOMAIN);
+        if ($this->stored_setting()['is_anonymous_allowed'] === 'true') {
+            if (!isset($_COOKIE['gb_mylist_guest'])) {
+                $id_guest = $this->var_setting['guest_user'];
+                setcookie('gb_mylist_guest', $id_guest, time() + (86400 * 30), COOKIEPATH, COOKIE_DOMAIN);
+            }
+        } else {
+            setcookie('gb_mylist_guest', '', time() - 3600);
         }
     }
 
@@ -91,12 +121,16 @@ class gd_mylist_plugin
                 'boxList' => $template_path . 'box-list.html',
                 'button' => $template_path . 'button.html',
                 'nonce' => wp_create_nonce('gd_mylist'),
+                'loading_icon' => $this->stored_setting()['fontawesome_loading'],
             )
         );
         wp_enqueue_script('jquery');
         wp_enqueue_script('gd_mylist_script');
         wp_enqueue_script('gd_mylist_handelbar');
-        wp_enqueue_style('all.min', plugins_url() . '/gd-mylist/css/all.min.css');
+        if ($this->stored_setting()['is_fontawesome'] === 'true') {
+            // font awesone
+            wp_enqueue_style('all.min', plugins_url() . '/gd-mylist/css/all.min.css');
+        }
         wp_enqueue_style('gd_mylist_asset', plugins_url() . '/gd-mylist/css/app.css');
     }
 
@@ -126,7 +160,8 @@ class gd_mylist_plugin
             'itemid' => $item_id,
             'styletarget' => null,
             'userid' => $user_id,
-            'label' => __('add My List'),
+            'label' => __('remove My List'),
+            'icon' => $this->stored_setting()['fontawesome_btn_remove']
         ];
 
         print(json_encode($result));
@@ -158,6 +193,7 @@ class gd_mylist_plugin
             'styletarget' => null,
             'userid' => $user_id,
             'label' => __('add My List'),
+            'icon' => $this->stored_setting()['fontawesome_btn_add']
         ];
 
         print(json_encode($result));
@@ -178,14 +214,7 @@ class gd_mylist_plugin
         ), $atts));
 
         $gd_query = null;
-        $user_id = get_current_user_id();
-        if ($user_id === 0 && $this->config['login_request'] === false) {
-            if (!isset($_COOKIE['gb_mylist_guest'])) {
-                $user_id = $this->var_setting['guest_user'];
-            } else {
-                $user_id = $_COOKIE['gb_mylist_guest'];
-            }
-        }
+        $user_id = $this->current_user_id();
         if ($item_id == null) {
             $item_id = get_the_id();
         }
@@ -196,7 +225,7 @@ class gd_mylist_plugin
 
         $gd_query = $wpdb->get_results($gd_sql);
 
-        if ($user_id > 0) {
+        if ($this->stored_setting()['is_anonymous_allowed'] === 'true') {
             if ($gd_query != null) {
                 //in mylist
                 // $type = 'btn_remove';
@@ -205,6 +234,7 @@ class gd_mylist_plugin
                     'styletarget' => $styletarget,
                     'userid' => $user_id,
                     'label' => __('remove My List'),
+                    'icon' => $this->stored_setting()['fontawesome_btn_remove']
                 ];
             } else {
                 $buttonData['showAdd'] = [
@@ -212,6 +242,7 @@ class gd_mylist_plugin
                     'styletarget' => $styletarget,
                     'userid' => $user_id,
                     'label' => __('add My List'),
+                    'icon' => $this->stored_setting()['fontawesome_btn_add']
                 ];
             }
 
@@ -221,6 +252,7 @@ class gd_mylist_plugin
             $buttonData['showLogin'] = [
                 'message' => __('Please login first'),
                 'label' => __('add My List'),
+                'icon' => $this->stored_setting()['fontawesome_btn_add']
             ];
         }
 
@@ -233,11 +265,20 @@ class gd_mylist_plugin
         echo ('<div id="mylist_btn_' . $item_id . '"></div>');
     }
 
+    public function current_user_id() 
+    {
+        $user_id = get_current_user_id();
+        if ($user_id === 0 && $this->stored_setting()['is_anonymous_allowed'] === 'true') {
+            $user_id = (!isset($_COOKIE['gb_mylist_guest'])) ? $this->var_setting['guest_user'] : $user_id = $_COOKIE['gb_mylist_guest'];
+        }
+        return $user_id;
+    }
+
     public function gd_show_gd_mylist_list($atts)
     {
         global $wpdb;
         $posts = null;
-        $user_id = get_current_user_id();
+        $user_id = $this->current_user_id();
         $locale = get_locale();
         $lang = substr($locale, 0, 2);
         $isShowListPage = true;
@@ -259,10 +300,6 @@ class gd_mylist_plugin
             'share_list' => 'yes',
             'show_count' => 'yes',
         ), $atts));
-
-        if ($user_id === 0 && $this->config['login_request'] === false) {
-            $user_id = $_COOKIE['gb_mylist_guest'];
-        }
 
         if ($user_id_share) {
             $user_id = $user_id_share;
@@ -330,6 +367,7 @@ class gd_mylist_plugin
         $postTitle = $post->posts_title;
         $portTitleLang = $this->extract_title($postTitle);
         $postUrl = get_permalink($postId);
+        $user_id = $this->current_user_id();
         $args = array(
             'styletarget' => 'mylist',
             'item_id' => $postId,
@@ -353,6 +391,7 @@ class gd_mylist_plugin
                 'styletarget' => 'mylist',
                 'userid' => $user_id,
                 'label' => __('remove My List'),
+                'icon' => $this->stored_setting()['fontawesome_btn_remove']
             ],
         ];
 
@@ -411,7 +450,7 @@ class gd_mylist_plugin
 
     public function hook_button($content)
     {
-        if (is_page() != 1) {
+        if (is_page() != 1 && $this->stored_setting()['is_add_btn'] === 'true') {
             $atts = array(
                 'styletarget' => null, //default
                 'item_id' => null,
@@ -424,6 +463,229 @@ class gd_mylist_plugin
 
         return $fullcontent;
     }
+
+    public function stored_setting()
+    {
+        $stored_options = get_option($this->config['settings_label']);
+
+        return $stored_options;
+    }
+
+    // admin area
+    public function gd_admin_panel()
+    {
+        $page_title = 'GD Mylist Settings';
+        $menu_title = 'GD Mylist';
+        $capability = 'manage_options';
+        $slug = 'gdmylist_fields';
+        $callback = array($this, 'plugin_settings_page_content');
+        $icon = 'dashicons-admin-plugins';
+        $position = 100;
+
+        add_submenu_page('options-general.php', $page_title, $menu_title, $capability, $slug, $callback);
+    }
+
+    public function update_settings($status)
+    {
+        $message = '';
+
+        switch ($status) {
+            case 'check':
+                if (empty($this->stored_setting())) {
+                    $message = '<div class="notice error"><p><strong>GD Mylist Plugin:</strong> in order to use correctly the plugin Deactivate and Activate it again.</p></div>';
+                }
+                break;
+            case 'setup':
+                $setting = array(
+                    'is_anonymous_allowed' => $this->config['is_anonymous_allowed'],
+                    'is_fontawesome' => $this->config['is_fontawesome'],
+                    'fontawesome_btn_add' => $this->config['fontawesome_btn_add'],
+                    'fontawesome_btn_remove' => $this->config['fontawesome_btn_remove'],
+                    'fontawesome_loading' => $this->config['fontawesome_loading'],
+                    'is_add_btn' => $this->config['is_add_btn'],
+                );
+                $message = '';
+                update_option($this->config['settings_label'], $setting);
+                break;
+            case 'update':
+                $setting = array(
+                    'is_anonymous_allowed' => @$_POST['is_anonymous_allowed'][0],
+                    'is_fontawesome' => @$_POST['is_fontawesome'][0],
+                    'fontawesome_btn_add' => @$_POST['fontawesome_btn_add'],
+                    'fontawesome_btn_remove' => @$_POST['fontawesome_btn_remove'],
+                    'fontawesome_loading' => @$_POST['fontawesome_loading'],
+                    'is_add_btn' => @$_POST['is_add_btn'][0],
+                );
+                $message = '<div class="updated"><p><strong>Data Updated</strong></p></div>';
+                update_option($this->config['settings_label'], $setting);
+                break;
+            default:
+                $message = '<div class="update-nag error">Something goes wrong</div>';
+                break;
+        }
+
+        echo $message;
+    }
+
+    public function plugin_settings_page_content()
+    {
+        $this->update_settings('check');
+        // Lock out non-admins:
+        if (!current_user_can('manage_options')) {
+            wp_die('You do not have sufficient permission to perform this operation');
+        }
+
+        if (isset($_POST['submit'])) {
+            $this->update_settings('update');
+        }
+
+        ?>
+        <div class="wrap">
+            <h2>GD Mylist</h2>
+            <form method="post">
+                <?php
+                settings_fields('gdmylist_fields');
+                do_settings_sections('gdmylist_fields');
+                submit_button();
+                ?>
+            </form>
+        </div>
+        <?php
+    }
+
+    public function setup_sections()
+    {
+        add_settings_section('login_request', '<hr>Anonymous user allowed', array($this, 'setup_fields'), 'gdmylist_fields');
+        add_settings_section('use_fontawesome', '<hr>Use Fontawesome icon', array($this, 'setup_fields'), 'gdmylist_fields');
+        add_settings_section('add_button', '<hr>Add Mylist button', array($this, 'setup_fields'), 'gdmylist_fields');
+    }
+
+    public function setup_fields()
+    {
+        $fields = array(
+            array(
+                'uid' => 'is_anonymous_allowed',
+                'label' => 'Allow anonymous use',
+                'section' => 'login_request',
+                'type' => 'checkbox',
+                'options' => array(
+                    'true' => 'Yes',
+                ),
+                'default' => array($this->stored_setting()['is_anonymous_allowed']),
+                'helper' => 'Availability to choose if no logger user can use it or not',
+                'supplimental' => 'Mylist cookie will be expired after 30 days',
+            ),
+            array(
+                'uid' => 'is_fontawesome',
+                'label' => 'Use Fontawesome icon',
+                'section' => 'use_fontawesome',
+                'type' => 'checkbox',
+                'options' => array(
+                    'true' => 'Yes',
+                ),
+                'default' => array($this->stored_setting()['is_fontawesome']),
+                'helper' => 'Load Fontawesome CSS in order to use icon class name',
+                'supplimental' => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank">(complete icon’s list)</a>',
+            ),
+            array(
+                'uid' => 'fontawesome_btn_add',
+                'label' => 'Add to mylist icon',
+                'section' => 'use_fontawesome',
+                'type' => 'text',
+                'placeholder' => 'css class name',
+                'default' => $this->stored_setting()['fontawesome_btn_add'],
+                'helper' => 'Preview current: <i class="'.$this->stored_setting()['fontawesome_btn_add'].'"></i>',
+                'supplimental' => 'default: <code>'.$this->config['fontawesome_btn_add'].'</code>',
+            ),
+            array(
+                'uid' => 'fontawesome_btn_remove',
+                'label' => 'Remove to mylist icon',
+                'section' => 'use_fontawesome',
+                'type' => 'text',
+                'placeholder' => 'css class name',
+                'default' => $this->stored_setting()['fontawesome_btn_remove'],
+                'helper' => 'Preview current: <i class="'.$this->stored_setting()['fontawesome_btn_remove'].'"></i>',
+                'supplimental' => 'default: <code>'.$this->config['fontawesome_btn_remove'].'</code>',
+            ),
+            array(
+                'uid' => 'fontawesome_loading',
+                'label' => 'Loading icon',
+                'section' => 'use_fontawesome',
+                'type' => 'text',
+                'placeholder' => 'css class name',
+                'default' => $this->stored_setting()['fontawesome_loading'],
+                'helper' => 'Preview current: <i class="'.$this->stored_setting()['fontawesome_loading'].'"></i>',
+                'supplimental' => 'default: <code>'.$this->config['fontawesome_loading'].'</code> more icons <a href="https://origin.fontawesome.com/how-to-use/on-the-web/styling/animating-icons" target="_blank">here</a>',
+            ),
+            array(
+                'uid' => 'is_add_btn',
+                'label' => 'Add GD Mylist button',
+                'section' => 'add_button',
+                'type' => 'checkbox',
+                'options' => array(
+                    'true' => 'Yes',
+                ),
+                'default' => array($this->stored_setting()['is_add_btn']),
+                'helper' => 'Add GD Mylist button directly to the post/article list and detail page.',
+                'supplimental' => '<strong>Please note:</strong> the button position and your presence in the posts/articles abstract list it depends on themes you use. In that case you can considering to add it by short code: <a href="https://wordpress.org/plugins/gd-mylist/" target="_blank">more information in the FAQ section</a>',
+            ),
+        );
+        foreach ($fields as $field) {
+            add_settings_field($field['uid'], $field['label'], array($this, 'field_callback'), 'gdmylist_fields', $field['section'], $field);
+            register_setting('gdmylist_fields', $field['uid']);
+        }
+    }
+
+    public function field_callback($arguments)
+    {
+        $value = get_option($arguments['uid']);
+        if (!$value) {
+            $value = $arguments['default'];
+        }
+        switch ($arguments['type']) {
+            case 'text':
+            case 'password':
+            case 'number':
+                printf('<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value);
+                break;
+            case 'textarea':
+                printf('<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], $value);
+                break;
+            case 'select':
+            case 'multiselect':
+                if (!empty($arguments['options']) && is_array($arguments['options'])) {
+                    $attributes = '';
+                    $options_markup = '';
+                    foreach ($arguments['options'] as $key => $label) {
+                        $options_markup .= sprintf('<option value="%s" %s>%s</option>', $key, selected($value[array_search($key, $value, true)], $key, false), $label);
+                    }
+                    if ($arguments['type'] === 'multiselect') {
+                        $attributes = ' multiple="multiple" ';
+                    }
+                    printf('<select name="%1$s[]" id="%1$s" %2$s>%3$s</select>', $arguments['uid'], $attributes, $options_markup);
+                }
+                break;
+            case 'radio':
+            case 'checkbox':
+                if (!empty($arguments['options']) && is_array($arguments['options'])) {
+                    $options_markup = '';
+                    $iterator = 0;
+                    foreach ($arguments['options'] as $key => $label) {
+                        $iterator++;
+                        $options_markup .= sprintf('<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s[]" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>', $arguments['uid'], $arguments['type'], $key, checked($value[array_search($key, $value, true)], $key, false), $label, $iterator);
+                    }
+                    printf('<fieldset>%s</fieldset>', $options_markup);
+                }
+                break;
+        }
+        if ($helper = $arguments['helper']) {
+            printf('<span class="helper"> %s</span>', $helper);
+        }
+        if ($supplimental = $arguments['supplimental']) {
+            printf('<p class="description">%s</p>', $supplimental);
+        }
+    }
+
 }
 
 new gd_mylist_plugin();
