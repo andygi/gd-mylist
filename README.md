@@ -57,12 +57,14 @@ in the content
 **3. By code into theme**
 if you needs to put the buttom in themes code, just write
 
-`<?php
+`
+<?php
 $arg = array (
 	'echo' => true
 );
 do_action('gd_mylist_btn',$arg);
-?>`
+?>
+`
 
 where do you want that button will show it
 
