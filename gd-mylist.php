@@ -97,7 +97,7 @@ class gd_mylist_plugin
 
     public function gd_setcookie()
     {
-        if ($this->stored_setting()['is_anonymous_allowed'] === 'true') {
+        if ($this->stored_setting()['is_anonymous_allowed'] === 'true' && !is_user_logged_in()) {
             if (!isset($_COOKIE['gb_mylist_guest'])) {
                 $id_guest = $this->var_setting['guest_user'];
                 setcookie('gb_mylist_guest', $id_guest, time() + (86400 * 30), COOKIEPATH, COOKIE_DOMAIN);
@@ -225,7 +225,7 @@ class gd_mylist_plugin
 
         $gd_query = $wpdb->get_results($gd_sql);
 
-        if ($this->stored_setting()['is_anonymous_allowed'] === 'true') {
+        if (($this->stored_setting()['is_anonymous_allowed'] === 'true') || is_user_logged_in()) {
             if ($gd_query != null) {
                 //in mylist
                 // $type = 'btn_remove';
