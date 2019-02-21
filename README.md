@@ -9,11 +9,11 @@ GD MyList use Handlebars Js as template framework, and Fontawesome (v5.0 free) a
 
 ### Features ###
 
-* [new] create setting control panel (find it in Settings/GD Mylist) with the cabality to control: user login, use font awesome icon, hook button to content directly
-* [new] refactoring template files with Handlebars Js. Now are only two files
-* [new] add the GD MyList button directly
-* [new] update Fontawesome library with v5.0 free
-* [new] performing improvement
+* [v1.0] create setting control panel (find it in Settings/GD Mylist) with the cabality to control: user login, use font awesome icon, hook button to content directly
+* [v1.0] refactoring template files with Handlebars Js. Now are only two files
+* [v1.0] add the GD MyList button directly
+* [v1.0] update Fontawesome library with v5.0 free
+* [v1.0] performing improvement
 * [v0.4] **items counter**, active or not (active by default)
 * [v0.4] improve share component with: **Twitter**, **Email** and **Whatsapp** (please read note)
 * [v0.3] Multilingual support (English, Italian, Nederland [thank you Nick]) with template .pot file
@@ -88,12 +88,12 @@ to disable **count items**
 
 ### How change login permission? ###
 
-Go to the setting panel (Settings/GD Mylist) and check Yes in case you whant allow the anonimous user.
+Go to the setting panel (Settings/GD Mylist) and check Yes in case you whant allow the anonymous user.
 
 
 *Note*
 
-In case has anonimous user, the user's id data will be storage in a cookie by GD-Mylist.
+In case has anonymous user, the user's id data will be storage in a cookie by GD-Mylist.
 Cookie name is: `gb_mylist_guest`, the expiration date is 30 days, and store only the Guest ID in order the create the list.
 
 ### Can I Template customization? ###
@@ -118,6 +118,9 @@ You can change the class name from Control Panel (Settings/GD Mylist).
 3. Control Panel
 
 ## Changelog ##
+
+### 1.0.1 ###
+* bugfix: allways appear login alert in case of anonymous user function is disable
 
 ### 1.0 ###
 * create setting control panel (find it in Settings/GD Mylist) with the cabality to control: user login, fontawesome icon, hook button to content
