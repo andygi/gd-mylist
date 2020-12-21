@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "atoum/atoum": "^4.0"
+    }
+}
