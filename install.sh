@@ -1,4 +1,4 @@
 #!/bin/sh
 
 npm install
-composer require --dev phpunit/phpunit
+composer require phpunit/phpunit:7
