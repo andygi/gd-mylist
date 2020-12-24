@@ -1,3 +1,4 @@
 ### gulp js ###
 node_modules/
-package-lock.json
+vendor/
+bin/
