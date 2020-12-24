@@ -9,6 +9,12 @@ Author URI: http://www.gekode.co.uk
 License: GPL
  */
 
+define( 'GDMYLIST_PLUGIN', __FILE__ );
+define( 'GDMYLIST_PLUGIN_BASENAME', plugin_basename( GDMYLIST_PLUGIN ) );
+define( 'GDMYLIST_PLUGIN_NAME', trim( dirname( GDMYLIST_PLUGIN_BASENAME ), '/' ) );
+define( 'GDMYLIST_PLUGIN_DIR', untrailingslashit( dirname( GDMYLIST_PLUGIN ) ) );
+
+// print('__zero.1');
 class gd_mylist_plugin
 {
     private $config = [
@@ -21,8 +27,21 @@ class gd_mylist_plugin
         'settings_label' => 'gd_mylist_settings',
     ];
 
+    public function var_setting() {
+        global $wpdb;
+        $var_setting = [
+            'template_path' => plugins_url() . '/gd-mylist/template/',
+            'table' => $wpdb->prefix . 'gd_mylist',
+            'table_posts' => $wpdb->prefix . 'posts',
+            'table_users' => $wpdb->prefix . 'users',
+            'guest_user' => rand(100000000000, 999999999999) . '001',
+        ];
+        return $var_setting;
+    }
+
     public function __construct()
     {
+        // print('__zero.1.1');
         global $wpdb;
         $this->var_setting = [
             'template_path' => plugins_url() . '/gd-mylist/template/',
@@ -36,16 +55,17 @@ class gd_mylist_plugin
         register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'depopulate_db'));
 
-        //setup assets
-        add_action('init', array($this, 'gd_mylist_asset'));
-        
-        add_action('init', array($this, 'gd_setcookie'));
+        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_mylist_asset.php');
+        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_setcookie.php');
+        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_add_mylist.php');
+        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_remove_mylist.php');
+
         //add mylist function
-        add_action('wp_ajax_gd_add_mylist', array($this, 'gd_add_mylist'));
-        add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'gd_add_mylist')); //login check
+        // add_action('wp_ajax_gd_add_mylist', array($this, 'gd_add_mylist'));
+        // add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'gd_add_mylist')); //login check
         //remove from mylist function
-        add_action('wp_ajax_gd_remove_mylist', array($this, 'gd_remove_mylist'));
-        add_action('wp_ajax_nopriv_gd_remove_mylist', array($this, 'gd_remove_mylist')); //login check
+        // add_action('wp_ajax_gd_remove_mylist', array($this, 'gd_remove_mylist'));
+        // add_action('wp_ajax_nopriv_gd_remove_mylist', array($this, 'gd_remove_mylist')); //login check
         //show button add/remove
         add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
         add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
@@ -93,112 +113,6 @@ class gd_mylist_plugin
             '<a href="' . esc_url( admin_url( '/options-general.php?page=gdmylist_fields' ) ) . '">' . __( 'Settings', 'textdomain' ) . '</a>'
         ), $links );
         return $links;
-    }
-
-    public function gd_setcookie()
-    {
-        if ($this->stored_setting()['is_anonymous_allowed'] === 'true' && !is_user_logged_in()) {
-            if (!isset($_COOKIE['gb_mylist_guest'])) {
-                $id_guest = $this->var_setting['guest_user'];
-                setcookie('gb_mylist_guest', $id_guest, time() + (86400 * 30), COOKIEPATH, COOKIE_DOMAIN);
-            }
-        } else {
-            setcookie('gb_mylist_guest', '', time() - 3600);
-        }
-    }
-
-    public function gd_mylist_asset()
-    {
-        $template_path = plugins_url() . '/gd-mylist/template/';
-
-        wp_register_script('gd_mylist_handelbar', plugins_url() . '/gd-mylist/lib/handlebars.min.js', array('jquery'));
-        wp_register_script('gd_mylist_script', plugins_url() . '/gd-mylist/js/gd-script.js', array('jquery'));
-        wp_localize_script(
-            'gd_mylist_script',
-            'gdMyListAjax',
-            array(
-                'ajaxurl' => admin_url('admin-ajax.php'),
-                'boxList' => $template_path . 'box-list.html',
-                'button' => $template_path . 'button.html',
-                'nonce' => wp_create_nonce('gd_mylist'),
-                'loading_icon' => $this->stored_setting()['fontawesome_loading'],
-            )
-        );
-        wp_enqueue_script('jquery');
-        wp_enqueue_script('gd_mylist_script');
-        wp_enqueue_script('gd_mylist_handelbar');
-        if ($this->stored_setting()['is_fontawesome'] === 'true') {
-            // font awesone
-            wp_enqueue_style('all.min', plugins_url() . '/gd-mylist/css/all.min.css');
-        }
-        wp_enqueue_style('gd_mylist_asset', plugins_url() . '/gd-mylist/css/app.css');
-    }
-
-    public function gd_add_mylist()
-    {
-        if (!wp_verify_nonce($_REQUEST['nonce'], 'gd_mylist')) {
-            !exit('No naughty business please');
-        }
-        global $wpdb;
-        $item_id = $_POST['itemId'];
-        $user_id = $_POST['userId'];
-        $result = array();
-
-        $wpdb->query(
-            $wpdb->prepare('
-                    INSERT INTO ' . $this->var_setting['table'] . "
-                        (`item_id`, `user_id`)
-                    VALUES
-                        ('%d', '%s');
-                    ",
-                $item_id,
-                $user_id
-            )
-        );
-
-        $result['showRemove'] = [
-            'itemid' => $item_id,
-            'styletarget' => null,
-            'userid' => $user_id,
-            'label' => __('remove My List'),
-            'icon' => $this->stored_setting()['fontawesome_btn_remove']
-        ];
-
-        print(json_encode($result));
-
-        die();
-    }
-
-    public function gd_remove_mylist()
-    {
-        if (!wp_verify_nonce($_REQUEST['nonce'], 'gd_mylist')) {
-            !exit('No naughty business please');
-        }
-        global $wpdb;
-        $item_id = $_POST['itemId'];
-        $user_id = $_POST['userId'];
-        $result = array();
-
-        $wpdb->query(
-            $wpdb->prepare(
-                'DELETE FROM ' . $this->var_setting['table'] . '
-                    WHERE item_id = %d AND user_id = %s',
-                $item_id,
-                $user_id
-            )
-        );
-
-        $result['showAdd'] = [
-            'itemid' => $item_id,
-            'styletarget' => null,
-            'userid' => $user_id,
-            'label' => __('add My List'),
-            'icon' => $this->stored_setting()['fontawesome_btn_add']
-        ];
-
-        print(json_encode($result));
-
-        die();
     }
 
     public function gd_show_mylist_btn($atts)
