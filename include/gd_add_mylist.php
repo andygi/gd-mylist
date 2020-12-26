@@ -1,14 +1,14 @@
 <?php
 
-class gd_add_mylist extends gd_mylist_plugin {
+class gd_add_mylist extends gd_mylist_plugin
+{
 
     public function __construct()
     {
-        // print('__tre.1');
         add_action('wp_ajax_gd_add_mylist', array($this, 'gd_add_mylist'));
         add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'gd_add_mylist')); //login check
     }
-    
+
     public function gd_add_mylist()
     {
         if (!wp_verify_nonce($_REQUEST['nonce'], 'gd_mylist')) {
@@ -36,7 +36,7 @@ class gd_add_mylist extends gd_mylist_plugin {
             'styletarget' => null,
             'userid' => $user_id,
             'label' => __('remove My List'),
-            'icon' => $this->stored_setting()['fontawesome_btn_remove']
+            'icon' => $this->stored_setting()['fontawesome_btn_remove'],
         ];
 
         print(json_encode($result));

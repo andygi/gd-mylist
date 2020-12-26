@@ -1,13 +1,16 @@
 <?php
 
-class gd_remove_mylist extends gd_mylist_plugin {
+class gd_remove_mylist extends gd_mylist_plugin
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         add_action('wp_ajax_gd_remove_mylist', array($this, 'gd_remove_mylist'));
         add_action('wp_ajax_nopriv_gd_remove_mylist', array($this, 'gd_remove_mylist')); //login check
     }
 
-    public function gd_remove_mylist() {
+    public function gd_remove_mylist()
+    {
         if (!wp_verify_nonce($_REQUEST['nonce'], 'gd_mylist')) {
             !exit('No naughty business please');
         }
@@ -30,7 +33,7 @@ class gd_remove_mylist extends gd_mylist_plugin {
             'styletarget' => null,
             'userid' => $user_id,
             'label' => __('add My List'),
-            'icon' => $this->stored_setting()['fontawesome_btn_add']
+            'icon' => $this->stored_setting()['fontawesome_btn_add'],
         ];
 
         print(json_encode($result));

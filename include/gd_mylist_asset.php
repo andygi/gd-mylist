@@ -1,16 +1,16 @@
 <?php
 
-class gd_mylist_asset extends gd_mylist_plugin {
+class gd_mylist_asset extends gd_mylist_plugin
+{
 
     public function __construct()
     {
         //setup assets
-        // print('__uno.1');
         add_action('init', array($this, 'gd_mylist_asset'));
     }
-    
-    public function gd_mylist_asset() {
-        // print('__uno.1.1');
+
+    public function gd_mylist_asset()
+    {
         $template_path = plugins_url() . '/gd-mylist/template/';
 
         wp_register_script('gd_mylist_handelbar', plugins_url() . '/gd-mylist/lib/handlebars.min.js', array('jquery'));
