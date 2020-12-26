@@ -79,19 +79,16 @@ class gd_mylist_admin extends gd_mylist_plugin
             $this->update_settings('update');
         }
 
-        ?>
-        <div class="wrap">
-            <h2>GD Mylist</h2>
-            <form method="post">
-                <?php
-settings_fields('gdmylist_fields');
+        // Setting page structure
+        echo('<div class="wrap">');
+        echo('  <h2>GD Mylist</h2>');
+        echo('  <form method="post">');
+        settings_fields('gdmylist_fields');
         do_settings_sections('gdmylist_fields');
         submit_button();
-        ?>
-            </form>
-        </div>
-        <?php
-}
+        echo('  </form>');
+        echo('</div>');
+    }
 
     public function setup_sections()
     {
