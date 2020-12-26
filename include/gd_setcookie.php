@@ -21,5 +21,3 @@ class gd_setcookie extends gd_mylist_plugin {
         }
     }
 }
-
-new gd_setcookie();

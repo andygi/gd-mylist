@@ -37,5 +37,3 @@ class gd_mylist_asset extends gd_mylist_plugin {
     }
 
 }
-
-new gd_mylist_asset();

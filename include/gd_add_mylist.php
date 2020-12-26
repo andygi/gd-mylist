@@ -45,5 +45,3 @@ class gd_add_mylist extends gd_mylist_plugin {
         parent::gd_add_mylist();
     }
 }
-
-new gd_add_mylist();

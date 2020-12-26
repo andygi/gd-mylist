@@ -183,5 +183,3 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
         return $titles;
     }
 }
-
-new gd_show_gd_mylist_list();

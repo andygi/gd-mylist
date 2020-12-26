@@ -88,5 +88,3 @@ class gd_show_mylist_btn extends gd_mylist_plugin {
     }
 
 }
-
-new gd_show_mylist_btn();

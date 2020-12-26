@@ -38,5 +38,3 @@ class gd_remove_mylist extends gd_mylist_plugin {
         die();
     }
 }
-
-new gd_remove_mylist();

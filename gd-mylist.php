@@ -14,6 +14,13 @@ define( 'GDMYLIST_PLUGIN_BASENAME', plugin_basename( GDMYLIST_PLUGIN ) );
 define( 'GDMYLIST_PLUGIN_NAME', trim( dirname( GDMYLIST_PLUGIN_BASENAME ), '/' ) );
 define( 'GDMYLIST_PLUGIN_DIR', untrailingslashit( dirname( GDMYLIST_PLUGIN ) ) );
 
+include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_mylist_asset.php');
+include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_setcookie.php');
+include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_add_mylist.php');
+include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_remove_mylist.php');
+include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_show_mylist_btn.php');
+include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_show_gd_mylist_list.php');
+
 // print('__zero.1');
 class gd_mylist_plugin
 {
@@ -43,24 +50,17 @@ class gd_mylist_plugin
     {
         // print('__zero.1.1');
         global $wpdb;
-        $this->var_setting = [
-            'template_path' => plugins_url() . '/gd-mylist/template/',
-            'table' => $wpdb->prefix . 'gd_mylist',
-            'table_posts' => $wpdb->prefix . 'posts',
-            'table_users' => $wpdb->prefix . 'users',
-            'guest_user' => rand(100000000000, 999999999999) . '001',
-        ];
 
         register_activation_hook(__FILE__, array($this, 'populate_db'));
         register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'depopulate_db'));
 
-        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_mylist_asset.php');
-        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_setcookie.php');
-        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_add_mylist.php');
-        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_remove_mylist.php');
-        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_show_mylist_btn.php');
-        include_once(GDMYLIST_PLUGIN_DIR . '/include/gd_show_gd_mylist_list.php');
+        new gd_mylist_asset();
+        new gd_setcookie();
+        new gd_add_mylist();
+        new gd_remove_mylist();
+        new gd_show_gd_mylist_list();
+        new gd_show_mylist_btn();
 
         // Hook into the admin menu
         if (is_admin()) {
