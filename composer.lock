@@ -4,9 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6fe3af1fe36f7ca42111f41319336a19",
-    "packages": [],
-    "packages-dev": [
+    "content-hash": "2f658a0db482698d3e689dce62da7408",
+    "packages": [
         {
             "name": "atoum/atoum",
             "version": "4.0.0",
@@ -95,6 +94,7 @@
             "time": "2020-11-21T17:23:11+00:00"
         }
     ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
