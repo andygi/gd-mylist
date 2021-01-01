@@ -106,7 +106,7 @@ class gd_mylist_plugin
     {
         $user_id = get_current_user_id();
         if ($user_id === 0 && $this->stored_setting()['is_anonymous_allowed'] === 'true') {
-            $user_id = (!isset($_COOKIE['gb_mylist_guest'])) ? $this->var_setting['guest_user'] : $user_id = $_COOKIE['gb_mylist_guest'];
+            $user_id = (!isset($_COOKIE['gb_mylist_guest'])) ? $this->var_setting()['guest_user'] : $user_id = $_COOKIE['gb_mylist_guest'];
         }
         return $user_id;
     }
