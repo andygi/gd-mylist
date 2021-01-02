@@ -42,6 +42,5 @@ class gd_add_mylist extends gd_mylist_plugin
         print(json_encode($result));
 
         die();
-        parent::gd_add_mylist();
     }
 }

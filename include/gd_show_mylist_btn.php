@@ -66,13 +66,14 @@ class gd_show_mylist_btn extends gd_mylist_plugin
             ];
         }
 
-        echo ('<div class="js-item-mylist" data-id="' . $item_id . '">');
-        echo ('<script type="text/javascript">');
-        echo ('var myListButton' . $item_id . ' = ');
-        echo (json_encode($buttonData));
-        echo ('</script>');
-        echo ('</div>');
-        echo ('<div id="mylist_btn_' . $item_id . '"></div>');
+        $button = ('<div class="js-item-mylist" data-id="' . $item_id . '">');
+        $button .= ('<script type="text/javascript">');
+        $button .= ('var myListButton' . $item_id . ' = ');
+        $button .= (json_encode($buttonData));
+        $button .= ('</script>');
+        $button .= ('</div>');
+        $button .= ('<div id="mylist_btn_' . $item_id . '"></div>');
+        return $button;
     }
 
     public function hook_button($content)
