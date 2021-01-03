@@ -14,7 +14,7 @@
     "gulp-clean-css": "^4.0.0"
   },
   "scripts": {
-    "test": "./vendor/bin/phpunit tests/test-gd-mylist.php"
+    "test": "./vendor/bin/phpunit tests/test-gd-mylist.php & ./vendor/bin/phpunit tests/test-showBtn.php"
   },
   "repository": {
     "type": "git",

@@ -15,6 +15,7 @@ define('GDMYLIST_PLUGIN_NAME', trim(dirname(GDMYLIST_PLUGIN_BASENAME), '/'));
 define('GDMYLIST_PLUGIN_DIR', untrailingslashit(dirname(GDMYLIST_PLUGIN)));
 
 include_once GDMYLIST_PLUGIN_DIR . '/include/gd_mylist_asset.php';
+include_once GDMYLIST_PLUGIN_DIR . '/include/gd_dbquery.php';
 include_once GDMYLIST_PLUGIN_DIR . '/include/gd_setcookie.php';
 include_once GDMYLIST_PLUGIN_DIR . '/include/gd_add_mylist.php';
 include_once GDMYLIST_PLUGIN_DIR . '/include/gd_remove_mylist.php';
@@ -53,8 +54,6 @@ class gd_mylist_plugin
 
     public function __construct()
     {
-        global $wpdb;
-
         register_activation_hook(__FILE__, array($this, 'populate_db'));
         register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'depopulate_db'));

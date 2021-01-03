@@ -13,7 +13,7 @@ class gd_show_mylist_btn extends gd_mylist_plugin
 
     public function gd_show_mylist_btn($atts)
     {
-        global $wpdb, $templates_html;
+        global $templates_html;
         $locale = get_locale();
         $buttonData = [];
 
@@ -23,20 +23,21 @@ class gd_show_mylist_btn extends gd_mylist_plugin
             'echo' => false,
         ), $atts));
 
-        $gd_query = null;
         $user_id = $this->current_user_id();
         if ($item_id == null) {
             $item_id = get_the_id();
         }
 
-        //check if item is in mylist
-        $gd_sql = 'SELECT id FROM ' . $this->var_setting()['table'] . '
-                    WHERE item_id = ' . $item_id . ' AND user_id = ' . $user_id;
-
-        $gd_query = $wpdb->get_results($gd_sql);
+        $gd_dbQuery = new gd_dbQuery();
+        $obj = [
+            'item_id' => $item_id,
+            'user_id' => $user_id
+        ];
+        $isInMylist = $gd_dbQuery->isInMylist($obj);
+        print('----'.$isInMylist);
 
         if (($this->stored_setting()['is_anonymous_allowed'] === 'true') || is_user_logged_in()) {
-            if ($gd_query != null) {
+            if ($isInMylist === 'true') {
                 //in mylist
                 // $type = 'btn_remove';
                 $buttonData['showRemove'] = [
