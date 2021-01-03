@@ -5,10 +5,15 @@ class gd_show_mylist_btn extends gd_mylist_plugin
 
     public function __construct()
     {
-        add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
+        // add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
         add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
         // Hook button to the content
         add_filter('the_content', array($this, 'hook_button'), 20);
+    }
+
+    public function isInMylist($obj) {
+        $gd_dbQuery = new gd_dbQuery();
+        return $gd_dbQuery->isInMylist($obj);
     }
 
     public function gd_show_mylist_btn($atts)
@@ -28,13 +33,12 @@ class gd_show_mylist_btn extends gd_mylist_plugin
             $item_id = get_the_id();
         }
 
-        $gd_dbQuery = new gd_dbQuery();
         $obj = [
             'item_id' => $item_id,
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'table' => $this->var_setting()['table']
         ];
-        $isInMylist = $gd_dbQuery->isInMylist($obj);
-        print('----'.$isInMylist);
+        $isInMylist = $this->isInMylist($obj);
 
         if (($this->stored_setting()['is_anonymous_allowed'] === 'true') || is_user_logged_in()) {
             if ($isInMylist === 'true') {
@@ -80,11 +84,7 @@ class gd_show_mylist_btn extends gd_mylist_plugin
     public function hook_button($content)
     {
         if (is_page() != 1 && $this->stored_setting()['is_add_btn'] === 'true') {
-            $atts = array(
-                'styletarget' => null, //default
-                'item_id' => null,
-                'echo' => false,
-            );
+            // prepend button before the content
             $fullcontent = $this->gd_show_mylist_btn($atts) . $content;
         } else {
             $fullcontent = $content;
