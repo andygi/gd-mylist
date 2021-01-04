@@ -2,6 +2,7 @@
 
 class gd_show_mylist_btn extends gd_mylist_plugin
 {
+    private static $counter = 0;
 
     public function __construct()
     {
@@ -83,14 +84,23 @@ class gd_show_mylist_btn extends gd_mylist_plugin
 
     public function hook_button($content)
     {
-        if (is_page() != 1 && $this->stored_setting()['is_add_btn'] === 'true') {
-            // prepend button before the content
-            $fullcontent = $this->gd_show_mylist_btn($atts) . $content;
+        if (self::$counter === 0) {
+            self::$counter++;
+            if (is_page() != 1 && $this->stored_setting()['is_add_btn'] === 'true') {
+                // prepend button before the content
+                $atts = array(
+                    'styletarget' => null, //default
+                    'item_id' => null,
+                    'echo' => false,
+                );
+                $fullcontent = $this->gd_show_mylist_btn($atts) . $content;
+            } else {
+                $fullcontent = $content;
+            }
+            return $fullcontent;
         } else {
-            $fullcontent = $content;
+            self::$counter = 0;
         }
-
-        return $fullcontent;
     }
 
 }
