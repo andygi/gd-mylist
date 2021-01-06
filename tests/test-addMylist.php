@@ -18,9 +18,9 @@ class AddMylistTest extends WP_UnitTestCase
             ->getMock();
         $this->class_add->method('addMylist')->willReturn('1');
 
+        $result = $this->class_add->gd_add_mylist();
         $expected = '{"showRemove":{"itemid":"123","styletarget":null,"userid":"999","label":"remove My List","icon":null}}';
-        $this->expectOutputString($expected);
-        $this->class_add->gd_add_mylist();
+        $this->assertEquals($expected, $result);
     }
 
     public function test_add_mylist_failed() {
