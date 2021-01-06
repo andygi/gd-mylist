@@ -1,6 +1,6 @@
 <?php 
 
-class gd_mylist_show_button extends WP_UnitTestCase
+class ShowButtonTest extends WP_UnitTestCase
 {
     public function setUp()
     {

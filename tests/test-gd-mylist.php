@@ -1,6 +1,6 @@
 <?php 
 
-class gd_mylist_user extends WP_UnitTestCase
+class MylistUserTest extends WP_UnitTestCase
 {
     public function setUp()
     {
