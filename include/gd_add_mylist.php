@@ -5,8 +5,8 @@ class gd_add_mylist extends gd_mylist_plugin
 
     public function __construct()
     {
-        add_action('wp_ajax_gd_add_mylist', array($this, 'gd_add_mylist'));
-        add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'gd_add_mylist')); //login check
+        add_action('wp_ajax_gd_add_mylist', array($this, 'print_data'));
+        add_action('wp_ajax_nopriv_gd_add_mylist', array($this, 'print_data')); //login check
     }
 
     public function addMylist($obj)
@@ -25,7 +25,7 @@ class gd_add_mylist extends gd_mylist_plugin
         $obj = [
             'item_id' => $item_id,
             'user_id' => $user_id,
-            'table' => $this->var_setting()['table']
+            'table' => $this->var_setting()['table'],
         ];
         $addMylist = $this->addMylist($obj);
 
@@ -43,7 +43,11 @@ class gd_add_mylist extends gd_mylist_plugin
             ];
         }
         print(json_encode($result));
+    }
 
+    public function print_data()
+    {
+        $this->gd_add_mylist();
         die();
     }
 }
