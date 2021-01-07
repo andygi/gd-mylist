@@ -10,7 +10,7 @@ class AddMylistTest extends WP_UnitTestCase
 
     public function test_add_mylist()
     {
-        $expected = '{"showRemove":{"itemid":"123","styletarget":null,"userid":"999","label":"remove My List","icon":null}}';
+        $expected = '{"showRemove":{"itemid":"123","styletarget":null,"userid":"999","label":"remove My List","icon":"fas fa-heart"}}';
         $this->expectOutputString($expected);
 
         $_POST = array('itemId' => '123', 'userId' => '999');
@@ -18,9 +18,11 @@ class AddMylistTest extends WP_UnitTestCase
             ->getMockBuilder(gd_add_mylist::class)
             ->setMethods([
                 'addMylist',
+                'stored_setting'
             ])
             ->getMock();
         $this->class_add->method('addMylist')->willReturn('1');
+        $this->class_add->method('stored_setting')->willReturn(['fontawesome_btn_remove' => 'fas fa-heart']);
 
         $this->class_add->gd_add_mylist();
     }

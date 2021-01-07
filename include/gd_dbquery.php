@@ -32,4 +32,21 @@ class gd_dbQuery
         return $query;
     }
 
+    public function removeMylist($obj)
+    {
+        if (!wp_verify_nonce($_REQUEST['nonce'], 'gd_mylist')) {
+            !exit('Error');
+        }
+        global $wpdb;
+        $query = $wpdb->query(
+            $wpdb->prepare(
+                'DELETE FROM ' . $obj['table'] . '
+                    WHERE item_id = %d AND user_id = %s',
+                $obj['item_id'],
+                $obj['user_id']
+            )
+        );
+        return $query;
+    }
+
 }
