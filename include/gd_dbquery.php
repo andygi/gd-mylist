@@ -49,4 +49,33 @@ class gd_dbQuery
         return $query;
     }
 
+    public function postsList($obj)
+    {
+        global $wpdb;
+        $posts = [];
+
+        $posts = $wpdb->get_results(
+            $wpdb->prepare(
+                'SELECT
+                        b.ID AS posts_id,
+                        b.post_title AS posts_title,
+                        b.post_date AS posts_date,
+                        c.ID AS authors_id,
+                        c.display_name AS authors_name
+                    FROM ' . $obj['table'] . ' a
+                    INNER JOIN ' . $obj['table_posts'] . ' b
+                    ON a.item_id = b.ID
+                    INNER JOIN ' . $obj['table_users'] . " c
+                    ON c.ID = b.post_author
+                    WHERE
+                        b.post_status = 'publish'
+                        AND a.user_id = %s
+                    ORDER BY b.post_title DESC",
+                $obj['user_id']
+            )
+        );
+
+        return $posts;
+    }
+
 }
