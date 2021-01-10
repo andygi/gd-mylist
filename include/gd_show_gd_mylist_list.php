@@ -9,7 +9,7 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
         add_shortcode('show_gd_mylist_list', array($this, 'gd_show_gd_mylist_list'), 11, 2);
     }
 
-    private function post_query($user_id)
+    public function post_query($user_id)
     {
         $obj = [
             'user_id' => $user_id,
