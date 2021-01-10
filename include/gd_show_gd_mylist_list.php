@@ -21,7 +21,7 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
         return $postsList->postsList($obj);
     }
 
-    private function list_item($post)
+    public function list_item($post)
     {
         $output = [];
         $type = 'post_list';
@@ -62,8 +62,9 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
         return $output;
     }
 
-    private function extract_title($postTitle)
+    public function extract_title($postTitle)
     {
+        // support for mqtranlate and qtranlate-x
         $titles = null;
 
         if (strpos($postTitle, '<!--:') !== false) {
