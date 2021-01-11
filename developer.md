@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/andygi/gd-mylist.svg?branch=master)](https://travis-ci.com/andygi/gd-mylist)
+
 # How to install
 
 For Mac/Unix run install shell: `./install.sh`

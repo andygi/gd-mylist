@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/andygi/gd-mylist.svg?branch=master)](https://travis-ci.com/andygi/gd-mylist)
+
 # My Wish List #
 
 You can create a favorite list of pages or posts in easy and faster way.
@@ -118,6 +120,9 @@ You can change the class name from Control Panel (Settings/GD Mylist).
 3. Control Panel
 
 ## Changelog ##
+
+### 1.0.2 ###
+* refactoring: completly php refactoring with adding unit testing
 
 ### 1.0.1 ###
 * bugfix: allways appear login alert in case of anonymous user function is disable

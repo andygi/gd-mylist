@@ -164,7 +164,7 @@ class gd_mylist_admin extends gd_mylist_plugin
                 ),
                 'default' => array($this->stored_setting()['is_add_btn']),
                 'helper' => 'Add GD Mylist button directly to the post/article list and detail page.',
-                'supplimental' => '<strong>Please note:</strong> the button position and your presence in the posts/articles abstract list it depends on themes you use. In that case you can considering to add it by short code: <a href="https://wordpress.org/plugins/gd-mylist/" target="_blank">more information in the FAQ section</a>',
+                'supplimental' => '<strong>Please note:</strong> this feature is depends on of which template you use, in case of issue you can disable it and use Short Code instead. <a href="https://wordpress.org/plugins/gd-mylist/" target="_blank">More information in the FAQ section</a>',
             ),
         );
         foreach ($fields as $field) {
