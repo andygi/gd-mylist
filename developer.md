@@ -13,6 +13,7 @@ _Note_:
 - Use **Mysql** on host: `127.0.0.1` (*localhost* not works)
 
 run `composer require phpunit/phpunit:7`
+install Docker `docker run -p 3306:3306 --name wp-mysql-5.7 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=root -e MYSQL_PASSWORD=root -d mysql:5.7`
 run `bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1:3306 latest`
 
 ## Use PHPUnit

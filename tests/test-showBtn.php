@@ -8,8 +8,9 @@ class ShowButtonTest extends WP_UnitTestCase
         $_COOKIE['gb_mylist_guest'] = null;
     }
 
-    public function test_show_add_btn() {
+    public function test_show_add_btn_asGuestAlowed() {
         // Guest allowed to use it
+        wp_set_current_user(1);
         $atts = array(
             'styletarget' => null, //default
             'item_id' => 1,
@@ -32,6 +33,34 @@ class ShowButtonTest extends WP_UnitTestCase
 
         $result = $this->class_show_btn->gd_show_mylist_btn($atts);
         $expected = '<div class="js-item-mylist" data-id="1"><script type="text/javascript">var myListButton1 = {"showAdd":{"itemid":1,"styletarget":null,"userid":"590743183073001","label":"add My List","icon":"far fa-heart"}}</script></div><div id="mylist_btn_1"></div>';
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test_show_add_btn_asLogin() {
+        // Guest not allowed to use it and user login
+        wp_set_current_user(1);
+        $atts = array(
+            'styletarget' => null, //default
+            'item_id' => 1,
+            'echo' => false,
+        );
+        $this->class_show_btn = $this
+            ->getMockBuilder(gd_show_mylist_btn::class)
+            ->setMethods([
+                'stored_setting',
+                'current_user_id',
+                'isInMylist'
+            ])
+            ->getMock();
+        $this->class_show_btn->method('stored_setting')->willReturn([
+            'is_anonymous_allowed' => 'false',
+            'fontawesome_btn_add' => 'far fa-heart'
+        ]);
+        $this->class_show_btn->method('current_user_id')->willReturn('999');
+        $this->class_show_btn->method('isInMylist')->willReturn('false');
+
+        $result = $this->class_show_btn->gd_show_mylist_btn($atts);
+        $expected = '<div class="js-item-mylist" data-id="1"><script type="text/javascript">var myListButton1 = {"showAdd":{"itemid":1,"styletarget":null,"userid":"999","label":"add My List","icon":"far fa-heart"}}</script></div><div id="mylist_btn_1"></div>';
         $this->assertEquals($expected, $result);
     }
 
