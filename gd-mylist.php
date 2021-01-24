@@ -7,6 +7,8 @@ Version: 1.1
 Author: Andy Greco
 Author URI: http://www.gekode.co.uk
 License: GPL
+Text Domain: gd-mylist
+Domain Path: /lang
  */
 
 define('GDMYLIST_PLUGIN', __FILE__);

@@ -22,3 +22,12 @@ Apparently we need to declare everytime the testing file :
 `./vendor/bin/phpunit tests/test-gd-mylist.php`
 I have include PHPUnit into npm test script so we can use:
 `npm test`
+
+# Build the project
+
+In root directory run the command 
+```
+gulp buil
+```
+the project will be build in **dist** directory ready to use.
+Check `gulpfile.js` for more information.
