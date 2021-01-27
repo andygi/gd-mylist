@@ -1,0 +1,113 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: gd mylist\n"
+"Language: ja\n"
+
+#: 
+msgid "Done! Your document has been deleted."
+msgstr "完了！ ドキュメントが削除されました。"
+
+#: [count_label] in ../template/box-list.html
+msgid "Total items"
+msgstr "総アイテム数"
+
+#: [empty_label] in ../template/box-list.html
+msgid "Sorry! Your don't have documents."
+msgstr "ごめんなさい！ あなたは書類を持っていません。"
+
+#: [share_label] in ../template/box-list.html
+msgid "Share your list"
+msgstr "リストを共有する"
+
+#: 
+msgid "add My List"
+msgstr "マイリストを追加"
+
+#: 
+msgid "Please login first"
+msgstr "最初にログインしてください"
+
+#: 
+msgid "remove My List"
+msgstr "マイリストを削除する"
+
+#: 
+msgid "view My List"
+msgstr "マイリストを見る"
+
+#: Settings Panel
+msgid "Anonymous user allowed"
+msgstr "匿名ユーザーが許可されました"
+
+#: Settings Panel
+msgid "Use anonymous user"
+msgstr "匿名ユーザーを使用する"
+
+#: Settings Panel
+msgid "Availability to choose if not logged user can use it or not"
+msgstr "ログに記録されていないユーザーが使用できるかどうかを選択できる可用性"
+
+#: Settings Panel
+msgid "Mylist cookie will be expired after 30 days"
+msgstr "マイリストCookieは30日後に期限切れになります"
+
+#: 
+msgid "Yes"
+msgstr "はい"
+
+#: 
+msgid "Preview"
+msgstr "プレビュー"
+
+#: 
+msgid "Use Fontawesome icon"
+msgstr "Fontawesomeアイコンを使用する"
+
+#: 
+msgid "Add Mylist button"
+msgstr "マイリストの追加ボタン"
+
+#: 
+msgid "Add to Mylist icon"
+msgstr "マイリストアイコンに追加"
+
+#: 
+msgid "css class name"
+msgstr "cssクラス名"
+
+#: 
+msgid "Remove to Mylist icon"
+msgstr "マイリストアイコンに削除"
+
+#: 
+msgid "default"
+msgstr "デフォルト"
+
+#: 
+msgid "Loading icon"
+msgstr "アイコンを読み込んでいます"
+
+#: 
+msgid "Add GD Mylist button"
+msgstr "GDマイリストボタンを追加"
+
+#: 
+msgid "Add GD Mylist button directly to the post/article list and detail page."
+msgstr "GDマイリストボタンを投稿/記事リストと詳細ページに直接追加します。"
+
+#: 
+msgid "<strong>Please note:</strong> this feature is depends on of which template you use, in case of issue you can disable it and use Short Code instead. <a href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\">More information in the FAQ section</a>"
+msgstr "<strong>注意：</ strong>この機能は、使用するテンプレートによって異なります。問題が発生した場合は、無効にして代わりにショートコードを使用できます。 <a href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\"> FAQセクションの詳細</a>"
+
+#: 
+msgid "Load Fontawesome CSS in order to use icon class name"
+msgstr "アイコンクラス名を使用するには、FontawesomeCSSをロードします"
+
+#: 
+msgid "complete icon\\'s list"
+msgstr "完全なアイコンのリスト"
+

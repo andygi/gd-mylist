@@ -34,7 +34,7 @@ class gd_remove_mylist extends gd_mylist_plugin
                 'itemid' => $item_id,
                 'styletarget' => null,
                 'userid' => $user_id,
-                'label' => __('add My List'),
+                'label' => __('add My List', 'gd-mylist'),
                 'icon' => $this->stored_setting()['fontawesome_btn_add'],
             ];
         } else {
