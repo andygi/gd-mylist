@@ -9,13 +9,13 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.0.0",
     "gulp-copy": "^4.0.1",
     "gulp-rm": "^2.0.0",
-    "gulp-uglify": "^3.0.1"
+    "gulp-uglify": "^3.0.1",
+    "lodash.template": ">=4.5.0"
   },
-  "devDependencies": {
-    "gulp-clean-css": "^4.0.0"
-  },
+  "devDependencies": {},
   "scripts": {
     "test": "./vendor/bin/phpunit tests/test-showBtn.php"
   },

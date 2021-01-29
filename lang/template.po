@@ -5,87 +5,88 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.6.10\n"
 "Project-Id-Version: gd mylist\n"
-"Language: it\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
 
 msgid "Done! Your document has been deleted."
-msgstr "Documento cancellato"
+msgstr ""
 
 #: [count_label] in ../template/box-list.html
 msgid "Total items"
-msgstr "Numero elementi salvati"
+msgstr ""
 
 #: [empty_label] in ../template/box-list.html
 msgid "Sorry! Your don't have documents."
-msgstr "Non ci sono documenti"
+msgstr ""
 
 #: [share_label] in ../template/box-list.html
 msgid "Share your list"
-msgstr "Condividi"
+msgstr ""
 
 msgid "add My List"
-msgstr "Aggiungi"
+msgstr ""
 
 msgid "Please login first"
-msgstr "È necessario essere registrati"
+msgstr ""
 
 msgid "remove My List"
-msgstr "Rimuovi"
+msgstr ""
 
 msgid "view My List"
-msgstr "Guarda la lista"
+msgstr ""
 
 #: Settings Panel
 msgid "Anonymous user allowed"
-msgstr "Utenti non registrati"
+msgstr ""
 
 #: Settings Panel
 msgid "Use anonymous user"
-msgstr "Consenti l'uso a utenti non registrati"
+msgstr ""
 
 #: Settings Panel
 msgid "Availability to choose if not logged user can use it or not"
-msgstr "Permette di poter usare il plugin anche per utenti non registrati"
+msgstr ""
 
 #: Settings Panel
 msgid "Mylist cookie will be expired after 30 days"
-msgstr "La durata del cookie Mylist è di 30 giorni"
+msgstr ""
 
 msgid "Yes"
-msgstr "Sì"
+msgstr ""
 
 msgid "Preview"
-msgstr "Anteprima"
+msgstr ""
 
 msgid "Use Fontawesome icon"
-msgstr "Usa le icone di Fontawesome"
+msgstr ""
 
 msgid "Add Mylist button"
-msgstr "Aggiungi il bottone Mylist"
+msgstr ""
 
 msgid "Add to Mylist icon"
-msgstr "Icona per il bottone Aggiungi"
+msgstr ""
 
 msgid "css class name"
-msgstr "Nome del CSS"
+msgstr ""
 
 msgid "Remove to Mylist icon"
-msgstr "Icona per il bottone Rimuovi"
+msgstr ""
 
 msgid "default"
-msgstr "Predefinito"
+msgstr ""
 
 msgid "Loading icon"
-msgstr "Icona per la fase di caricamento"
+msgstr ""
 
 msgid "Add GD Mylist button"
-msgstr "Aggiungi il bottone GD Mylist"
+msgstr ""
 
 msgid "Add GD Mylist button directly to the post/article list and detail page."
-msgstr "Il bottone verrà automaticamente aggiunto su tutti i post/pagine"
+msgstr ""
 
 msgid ""
 "<strong>Please note:</strong> this feature is depends on of which template "
@@ -93,13 +94,9 @@ msgid ""
 "href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\">More "
 "information in the FAQ section</a>"
 msgstr ""
-"<strong>Nota:</strong> questa funzione è soggetta al remplate che si sta "
-"usando, in caso di problemi è possibile disabilitare il bottone e inserirlo "
-"direttamente nel codice. <a href=\"https://wordpress.org/plugins/gd-mylist/"
-"\" target=\"_blank\">Maggiori informazioni nella sezione FAQ</a>"
 
 msgid "Load Fontawesome CSS in order to use icon class name"
-msgstr "Per poter usare le icone carica il CSS di Fontawesome"
+msgstr ""
 
 msgid "complete icon\\'s list"
-msgstr "lista del icone"
+msgstr ""

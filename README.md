@@ -4,6 +4,10 @@
 
 You can create a favorite list of pages or posts in easy and faster way.
 
+## Developing ##
+
+For developing please see [related file](developer.md)
+
 ## Description ##
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
 It add items by AJAX system and it's check if user is login or not, you can add or remove list only as login user.

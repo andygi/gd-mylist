@@ -1,4 +1,4 @@
 #!/bin/sh
 
-npm install
+yarn install
 composer require phpunit/phpunit:7
