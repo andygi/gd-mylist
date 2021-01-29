@@ -57,8 +57,8 @@ class gd_mylist_plugin
     public function __construct()
     {
         register_activation_hook(__FILE__, array($this, 'populate_db'));
-        register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'depopulate_db'));
+        add_action( 'plugins_loaded', array($this, 'gd_mylist_load_plugin_textdomain') );
 
         new gd_mylist_asset();
         new gd_setcookie();
@@ -66,8 +66,12 @@ class gd_mylist_plugin
         new gd_remove_mylist();
         new gd_show_gd_mylist_list();
         new gd_show_mylist_btn();
-
+        
         new gd_mylist_admin();
+    }
+
+    function gd_mylist_load_plugin_textdomain() {
+        load_plugin_textdomain( 'gd-mylist', FALSE, basename( dirname( __FILE__ ) ) . '/lang/' );
     }
 
     public function populate_db()
@@ -80,11 +84,6 @@ class gd_mylist_plugin
         dbDelta($sql);
     }
 
-    public function activate()
-    {
-        $this->update_settings('setup');
-    }
-
     public function depopulate_db()
     {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -93,14 +92,6 @@ class gd_mylist_plugin
         require_once "lib/drop-tables.php";
         $sql = ob_get_clean();
         dbDelta($sql);
-    }
-
-    public function settings_link($links)
-    {
-        $links = array_merge(array(
-            '<a href="' . esc_url(admin_url('/options-general.php?page=gdmylist_fields')) . '">' . __('Settings', 'textdomain') . '</a>',
-        ), $links);
-        return $links;
     }
 
     public function current_user_id()

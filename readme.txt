@@ -8,8 +8,10 @@ Requires PHP: 5.6.32
 Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: gd-mylist
+Domain Path: /lang
 
-You can create a favorite list of pages or posts in easy and faster way.
+You can create a favorite list of pages or posts or woocommerce product pgae in easy and faster way.
 
 == Description ==
 This plugin allows you to create wish lists or bookmark for your website pages, posts or product sheet, and display them on any post or page with simple shortcode or code into your theme as well.
@@ -18,20 +20,6 @@ GD MyList use Handlebars Js as template framework, and Fontawesome (v5.0 free) a
 
 = Features =
 
-* [v1.0] create setting control panel (find it in Settings/GD Mylist) with the cabality to control: user login, use font awesome icon, hook button to content directly
-* [v1.0] refactoring template files with Handlebars Js. Now are only two files
-* [v1.0] add the GD MyList button directly
-* [v1.0] update Fontawesome library with v5.0 free
-* [v1.0] performing improvement
-* [v0.4] **items counter**, active or not (active by default)
-* [v0.4] improve share component with: **Twitter**, **Email** and **Whatsapp** (please read note)
-* [v0.3] Multilingual support (English, Italian, Nederland [thank you Nick]) with template .pot file
-* [v0.3] Support **mqtranslate** and **qtranslate-x**
-* [v0.3] You can activate (active by default) **Wishlist share button** on Facebook and as Link with separate template
-* Availability to choose if no logger user can use it or not (it is available by default), the wishlist will be expired after 30 days
-* You can customize every single buttons/lists by templates
-* You can call button and list by shortcode or by php code directly into the template
-* It's tested on posts, pages and woocommerce products's pages
 
 
 = Development =

@@ -49,7 +49,7 @@ class gd_show_mylist_btn extends gd_mylist_plugin
                     'itemid' => $item_id,
                     'styletarget' => $styletarget,
                     'userid' => $user_id,
-                    'label' => __('remove My List'),
+                    'label' => __('remove My List', 'gd-mylist'),
                     'icon' => $this->stored_setting()['fontawesome_btn_remove'],
                 ];
             } else {
@@ -57,7 +57,7 @@ class gd_show_mylist_btn extends gd_mylist_plugin
                     'itemid' => $item_id,
                     'styletarget' => $styletarget,
                     'userid' => $user_id,
-                    'label' => __('add My List'),
+                    'label' => __('add My List', 'gd-mylist'),
                     'icon' => $this->stored_setting()['fontawesome_btn_add'],
                 ];
             }
@@ -66,8 +66,8 @@ class gd_show_mylist_btn extends gd_mylist_plugin
             //chek if allow use in no login case
             //must to be login
             $buttonData['showLogin'] = [
-                'message' => __('Please login first'),
-                'label' => __('add My List'),
+                'message' => __('Please login first', 'gd-mylist'),
+                'label' => __('add My List', 'gd-mylist'),
                 'icon' => $this->stored_setting()['fontawesome_btn_add'],
             ];
         }

@@ -31,3 +31,7 @@ gulp buil
 ```
 the project will be build in **dist** directory ready to use.
 Check `gulpfile.js` for more information.
+
+# Translations
+
+I use PoEditor and this is the repo: https://poeditor.com/projects/view?id=66915

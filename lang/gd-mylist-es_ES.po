@@ -5,119 +5,111 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 "Project-Id-Version: gd mylist\n"
-"Language: it\n"
+"Language: es\n"
 
 #: 
-#, fuzzy
 msgid "Done! Your document has been deleted."
-msgstr "Documento cancellato"
+msgstr "¡Hecho! Su documento ha sido eliminado."
 
 #: [count_label] in ../template/box-list.html
-#, fuzzy
 msgid "Total items"
-msgstr "Numero elementi salvati"
+msgstr "Articulos totales"
 
 #: [empty_label] in ../template/box-list.html
-#, fuzzy
 msgid "Sorry! Your don't have documents."
-msgstr "Non ci sono documenti"
+msgstr "¡Lo siento! No tienes documentos."
 
 #: [share_label] in ../template/box-list.html
-#, fuzzy
 msgid "Share your list"
-msgstr "Condividi"
+msgstr "Comparte tu lista"
 
 #: 
-#, fuzzy
 msgid "add My List"
-msgstr "Aggiungi"
+msgstr "agregar mi lista"
 
 #: 
 msgid "Please login first"
-msgstr "È necessario essere registrati"
+msgstr "Por favor ingresa primero"
 
 #: 
 msgid "remove My List"
-msgstr "Rimuovi"
+msgstr "eliminar mi lista"
 
 #: 
 msgid "view My List"
-msgstr "Guarda la lista"
+msgstr "ver mi lista"
 
 #: Settings Panel
 msgid "Anonymous user allowed"
-msgstr "Utenti non registrati"
+msgstr "Usuario anónimo permitido/a"
 
 #: Settings Panel
 msgid "Use anonymous user"
-msgstr "Consenti l'uso a utenti non registrati"
+msgstr "Usar usuario anónimo/a"
 
 #: Settings Panel
 #, fuzzy
 msgid "Availability to choose if not logged user can use it or not"
-msgstr "Permette di poter usare il plugin anche per utenti non registrati"
+msgstr "Disponibilidad para elegir si el usuario no registrador puede usarlo o no"
 
 #: Settings Panel
 msgid "Mylist cookie will be expired after 30 days"
-msgstr "La durata del cookie Mylist è di 30 giorni"
+msgstr "La cookie Mylist caducará después de 30 días."
 
 #: 
 msgid "Yes"
-msgstr "Sì"
+msgstr "si"
 
 #: 
-#, fuzzy
 msgid "Preview"
-msgstr "Anteprima"
+msgstr "Avance"
 
 #: 
 msgid "Use Fontawesome icon"
-msgstr "Usa le icone di Fontawesome"
+msgstr "Utilice el icono de Fontawesome"
 
 #: 
 msgid "Add Mylist button"
-msgstr "Aggiungi il bottone Mylist"
+msgstr "Botón Agregar Mylist"
 
 #: 
 #, fuzzy
 msgid "Add to Mylist icon"
-msgstr "Icona per il bottone Aggiungi"
+msgstr "Añadir a mi lista icono"
 
 #: 
 msgid "css class name"
-msgstr "Nome del CSS"
+msgstr "nombre de clase css"
 
 #: 
-#, fuzzy
 msgid "Remove to Mylist icon"
-msgstr "Icona per il bottone Rimuovi"
+msgstr "Eliminar a Mylist icono"
 
 #: 
 msgid "default"
-msgstr "Predefinito"
+msgstr "defecto"
 
 #: 
 msgid "Loading icon"
-msgstr "Icona per la fase di caricamento"
+msgstr "Icono de carga"
 
 #: 
 msgid "Add GD Mylist button"
-msgstr "Aggiungi il bottone GD Mylist"
+msgstr "Botón Agregar GD Mylist"
 
 #: 
 msgid "Add GD Mylist button directly to the post/article list and detail page."
-msgstr "Il bottone verrà automaticamente aggiunto su tutti i post/pagine"
+msgstr "Agregue el botón GD Mylist directamente a la lista de publicaciones / artículos y a la página de detalles."
 
 #: 
 msgid "<strong>Please note:</strong> this feature is depends on of which template you use, in case of issue you can disable it and use Short Code instead. <a href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\">More information in the FAQ section</a>"
-msgstr "<strong>Nota:</strong> questa funzione è soggetta al remplate che si sta usando, in caso di problemi è possibile disabilitare il bottone e inserirlo direttamente nel codice. <a href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\">Maggiori informazioni nella sezione FAQ</a>"
+msgstr "<strong> Tenga en cuenta: </strong> esta función depende de la plantilla que utilice; en caso de problemas, puede desactivarla y utilizar un código corto. <a href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\"> Más información en la sección de preguntas frecuentes </a>"
 
 #: 
 msgid "Load Fontawesome CSS in order to use icon class name"
-msgstr "Per poter usare le icone carica il CSS di Fontawesome"
+msgstr "Cargue Fontawesome CSS para usar el nombre de la clase del icono"
 
 #: 
-#, fuzzy
 msgid "complete icon\\'s list"
-msgstr "lista del icone"
+msgstr "lista completa de iconos"
 

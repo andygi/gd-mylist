@@ -27,10 +27,25 @@ gulp.task('copy', function() {
             'template/*',
             'webfonts/*',
             'gd-mylist.php',
-            'readme.txt',
-            'css/all.min.css'
+            'readme.txt'
         ])
         .pipe(gulpCopy('dist/'));
+});
+
+gulp.task('copy_icons', function() {
+    return gulp
+        .src([
+            'node_modules/@fortawesome/fontawesome-free/css/all.min.css'
+        ])
+        .pipe(gulpCopy('dist/css/', { prefix: 4 }));
+});
+
+gulp.task('copy_fonts', function() {
+    return gulp
+        .src([
+            'node_modules/@fortawesome/fontawesome-free/webfonts/*'
+        ])
+        .pipe(gulpCopy('dist/webfonts/', { prefix: 4 }));
 });
 
 gulp.task('remove', function() {
@@ -42,13 +57,19 @@ gulp.task('prod', gulp.series(
         'remove',
         'compress-js',
         'minify-css',
-        'copy'
+        'copy',
+        'copy_icons',
+        'copy_fonts'
     )
 );
 
 gulp.task('default', function() {
-    gulp.watch([
+    return gulp.watch([
         'css/*.css', 
-        'js/*.js'
-    ], ['prod']);
+        'js/*.js',
+        'template/*',
+        'include/*',
+        'lang/*',
+        'gd-mylist.php'
+    ], gulp.series('prod'));
 });

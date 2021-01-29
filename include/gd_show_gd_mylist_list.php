@@ -54,7 +54,7 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
                 'itemid' => $postId,
                 'styletarget' => 'mylist',
                 'userid' => $user_id,
-                'label' => __('remove My List'),
+                'label' => __('remove My List', 'gd-mylist'),
                 'icon' => $this->stored_setting()['fontawesome_btn_remove'],
             ],
         ];
@@ -131,7 +131,7 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
                 }
                 $listAr['share'] = [
                     'showShare' => true,
-                    'share_label' => __('Share your list'),
+                    'share_label' => __('Share your list', 'gd-mylist'),
                     'pageid' => $pageid,
                     'userid' => $user_id,
                 ];
@@ -143,7 +143,7 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
                 $count = $wpdb->num_rows;
                 $listAr['count'] = [
                     'showCount' => true,
-                    'count_label' => __('Total items'),
+                    'count_label' => __('Total items', 'gd-mylist'),
                     'count' => $count,
                 ];
             }
@@ -158,7 +158,7 @@ class gd_show_gd_mylist_list extends gd_mylist_plugin
             $output .= '</script>';
         } else {
             $listAr['showEmpty'] = [
-                'empty_label' => __("Sorry! Your don't have documents."),
+                'empty_label' => __("Sorry! Your don't have documents.", 'gd-mylist'),
             ];
             $output .= '<script type="text/javascript">';
             $output .= 'var myListData = ';

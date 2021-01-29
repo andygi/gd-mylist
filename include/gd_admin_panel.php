@@ -12,6 +12,14 @@ class gd_mylist_admin extends gd_mylist_plugin
         }
     }
 
+    public function settings_link($links)
+    {
+        $links = array_merge(array(
+            '<a href="' . esc_url(admin_url('/options-general.php?page=gdmylist_fields')) . '">' . __('Settings', 'textdomain') . '</a>',
+        ), $links);
+        return $links;
+    }
+
     public function gd_admin_panel()
     {
         $page_title = 'GD Mylist Settings';
@@ -49,12 +57,12 @@ class gd_mylist_admin extends gd_mylist_plugin
                 break;
             case 'update':
                 $setting = array(
-                    'is_anonymous_allowed' => @$_POST['is_anonymous_allowed'][0],
-                    'is_fontawesome' => @$_POST['is_fontawesome'][0],
-                    'fontawesome_btn_add' => @$_POST['fontawesome_btn_add'],
-                    'fontawesome_btn_remove' => @$_POST['fontawesome_btn_remove'],
-                    'fontawesome_loading' => @$_POST['fontawesome_loading'],
-                    'is_add_btn' => @$_POST['is_add_btn'][0],
+                    'is_anonymous_allowed' => isset($_POST['is_anonymous_allowed'][0]) ? $_POST['is_anonymous_allowed'][0] : '',
+                    'is_fontawesome' => isset($_POST['is_fontawesome'][0]) ? $_POST['is_fontawesome'][0] : '',
+                    'fontawesome_btn_add' => isset($_POST['fontawesome_btn_add']) ? $_POST['fontawesome_btn_add'] : '',
+                    'fontawesome_btn_remove' => isset($_POST['fontawesome_btn_remove']) ? $_POST['fontawesome_btn_remove'] : '',
+                    'fontawesome_loading' => isset($_POST['fontawesome_loading']) ? $_POST['fontawesome_loading'] : '',
+                    'is_add_btn' => isset($_POST['is_add_btn'][0]) ? $_POST['is_add_btn'][0] : '',
                 );
                 $message = '<div class="updated"><p><strong>Data Updated</strong></p></div>';
                 update_option($this->config()['settings_label'], $setting);
@@ -92,9 +100,9 @@ class gd_mylist_admin extends gd_mylist_plugin
 
     public function setup_sections()
     {
-        add_settings_section('login_request', '<hr>Anonymous user allowed', array($this, 'setup_fields'), 'gdmylist_fields');
-        add_settings_section('use_fontawesome', '<hr>Use Fontawesome icon', array($this, 'setup_fields'), 'gdmylist_fields');
-        add_settings_section('add_button', '<hr>Add Mylist button', array($this, 'setup_fields'), 'gdmylist_fields');
+        add_settings_section('login_request', '<hr>' . __('Anonymous user allowed', 'gd-mylist'), array($this, 'setup_fields'), 'gdmylist_fields');
+        add_settings_section('use_fontawesome', '<hr>' . __('Use Fontawesome icon', 'gd-mylist'), array($this, 'setup_fields'), 'gdmylist_fields');
+        add_settings_section('add_button', '<hr>' . __('Add Mylist button', 'gd-mylist'), array($this, 'setup_fields'), 'gdmylist_fields');
     }
 
     public function setup_fields()
@@ -102,69 +110,69 @@ class gd_mylist_admin extends gd_mylist_plugin
         $fields = array(
             array(
                 'uid' => 'is_anonymous_allowed',
-                'label' => 'Allow anonymous use',
+                'label' => __('Use anonymous user', 'gd-mylist'),
                 'section' => 'login_request',
                 'type' => 'checkbox',
                 'options' => array(
-                    'true' => 'Yes',
+                    'true' => __('Yes', 'gd-mylist'),
                 ),
                 'default' => array($this->stored_setting()['is_anonymous_allowed']),
-                'helper' => 'Availability to choose if no logger user can use it or not',
-                'supplimental' => 'Mylist cookie will be expired after 30 days',
+                'helper' => __('Availability to choose if not logged user can use it or not', 'gd-mylist'),
+                'supplimental' => __('Mylist cookie will be expired after 30 days', 'gd-mylist'),
             ),
             array(
                 'uid' => 'is_fontawesome',
-                'label' => 'Use Fontawesome icon',
+                'label' => __('Use Fontawesome icon', 'gd-mylist'),
                 'section' => 'use_fontawesome',
                 'type' => 'checkbox',
                 'options' => array(
-                    'true' => 'Yes',
+                    'true' => __('Yes', 'gd-mylist'),
                 ),
                 'default' => array($this->stored_setting()['is_fontawesome']),
-                'helper' => 'Load Fontawesome CSS in order to use icon class name',
-                'supplimental' => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank">(complete icon’s list)</a>',
+                'helper' => __('Load Fontawesome CSS in order to use icon class name', 'gd-mylist'),
+                'supplimental' => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank">(' . __('complete icon\'s list', 'gd-mylist') . ')</a>',
             ),
             array(
                 'uid' => 'fontawesome_btn_add',
-                'label' => 'Add to mylist icon',
+                'label' => __('Add to Mylist icon', 'gd-mylist'),
                 'section' => 'use_fontawesome',
                 'type' => 'text',
-                'placeholder' => 'css class name',
+                'placeholder' => __('css class name', 'gd-mylist'),
                 'default' => $this->stored_setting()['fontawesome_btn_add'],
-                'helper' => 'Preview current: <i class="' . $this->stored_setting()['fontawesome_btn_add'] . '"></i>',
-                'supplimental' => 'default: <code>' . $this->config()['fontawesome_btn_add'] . '</code>',
+                'helper' => __('Preview', 'gd-mylist') . ' <i class="' . $this->stored_setting()['fontawesome_btn_add'] . '"></i>',
+                'supplimental' => __('default', 'gd-mylist') . ': <code>' . $this->config()['fontawesome_btn_add'] . '</code>',
             ),
             array(
                 'uid' => 'fontawesome_btn_remove',
-                'label' => 'Remove to mylist icon',
+                'label' => __('Remove to Mylist icon', 'gd-mylist'),
                 'section' => 'use_fontawesome',
                 'type' => 'text',
-                'placeholder' => 'css class name',
+                'placeholder' => __('css class name', 'gd-mylist'),
                 'default' => $this->stored_setting()['fontawesome_btn_remove'],
-                'helper' => 'Preview current: <i class="' . $this->stored_setting()['fontawesome_btn_remove'] . '"></i>',
-                'supplimental' => 'default: <code>' . $this->config()['fontawesome_btn_remove'] . '</code>',
+                'helper' => __('Preview', 'gd-mylist') . ' <i class="' . $this->stored_setting()['fontawesome_btn_remove'] . '"></i>',
+                'supplimental' => __('default', 'gd-mylist') . ': <code>' . $this->config()['fontawesome_btn_remove'] . '</code>',
             ),
             array(
                 'uid' => 'fontawesome_loading',
-                'label' => 'Loading icon',
+                'label' => __('Loading icon', 'gd-mylist'),
                 'section' => 'use_fontawesome',
                 'type' => 'text',
-                'placeholder' => 'css class name',
+                'placeholder' => __('css class name', 'gd-mylist'),
                 'default' => $this->stored_setting()['fontawesome_loading'],
-                'helper' => 'Preview current: <i class="' . $this->stored_setting()['fontawesome_loading'] . '"></i>',
-                'supplimental' => 'default: <code>' . $this->config()['fontawesome_loading'] . '</code> more icons <a href="https://origin.fontawesome.com/how-to-use/on-the-web/styling/animating-icons" target="_blank">here</a>',
+                'helper' => __('Preview', 'gd-mylist') . ' <i class="' . $this->stored_setting()['fontawesome_loading'] . '"></i>',
+                'supplimental' => __('default', 'gd-mylist') . ': <code>' . $this->config()['fontawesome_loading'] . '</code> <a href="https://origin.fontawesome.com/how-to-use/on-the-web/styling/animating-icons" target="_blank">more icons</a>',
             ),
             array(
                 'uid' => 'is_add_btn',
-                'label' => 'Add GD Mylist button',
+                'label' => __('Add GD Mylist button', 'gd-mylist'),
                 'section' => 'add_button',
                 'type' => 'checkbox',
                 'options' => array(
-                    'true' => 'Yes',
+                    'true' => __('Yes', 'gd-mylist'),
                 ),
                 'default' => array($this->stored_setting()['is_add_btn']),
-                'helper' => 'Add GD Mylist button directly to the post/article list and detail page.',
-                'supplimental' => '<strong>Please note:</strong> this feature is depends on of which template you use, in case of issue you can disable it and use Short Code instead. <a href="https://wordpress.org/plugins/gd-mylist/" target="_blank">More information in the FAQ section</a>',
+                'helper' => __('Add GD Mylist button directly to the post/article list and detail page.', 'gd-mylist'),
+                'supplimental' => __('<strong>Please note:</strong> this feature is depends on of which template you use, in case of issue you can disable it and use Short Code instead. <a href="https://wordpress.org/plugins/gd-mylist/" target="_blank">More information in the FAQ section</a>', 'gd-mylist'),
             ),
         );
         foreach ($fields as $field) {
