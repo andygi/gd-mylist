@@ -1,0 +1,113 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: gd mylist\n"
+"Language: en\n"
+
+#: 
+msgid "Done! Your document has been deleted."
+msgstr "Done! Your document has been deleted."
+
+#: [count_label] in ../template/box-list.html
+msgid "Total items"
+msgstr "Total items"
+
+#: [empty_label] in ../template/box-list.html
+msgid "Sorry! Your don't have documents."
+msgstr "Sorry! Your don't have documents."
+
+#: [share_label] in ../template/box-list.html
+msgid "Share your list"
+msgstr "Share your list"
+
+#: 
+msgid "add My List"
+msgstr "add My List"
+
+#: 
+msgid "Please login first"
+msgstr "Please login first"
+
+#: 
+msgid "remove My List"
+msgstr "remove My List"
+
+#: 
+msgid "view My List"
+msgstr "view My List"
+
+#: Settings Panel
+msgid "Anonymous user allowed"
+msgstr "Anonymous user allowed"
+
+#: Settings Panel
+msgid "Use anonymous user"
+msgstr "Use anonymous user"
+
+#: Settings Panel
+msgid "Availability to choose if not logged user can use it or not"
+msgstr "Availability to choose if not logged user can use it or not"
+
+#: Settings Panel
+msgid "Mylist cookie will be expired after 30 days"
+msgstr "Mylist cookie will be expired after 30 days"
+
+#: 
+msgid "Yes"
+msgstr "yes"
+
+#: 
+msgid "Preview"
+msgstr "Preview"
+
+#: 
+msgid "Use Fontawesome icon"
+msgstr "Use Fontawesome icon"
+
+#: 
+msgid "Add Mylist button"
+msgstr "Add Mylist button"
+
+#: 
+msgid "Add to Mylist icon"
+msgstr "Add to Mylist icon"
+
+#: 
+msgid "css class name"
+msgstr "css class name"
+
+#: 
+msgid "Remove to Mylist icon"
+msgstr "Remove to Mylist icon"
+
+#: 
+msgid "default"
+msgstr "default"
+
+#: 
+msgid "Loading icon"
+msgstr "Loading icon"
+
+#: 
+msgid "Add GD Mylist button"
+msgstr "Add GD Mylist button"
+
+#: 
+msgid "Add GD Mylist button directly to the post/article list and detail page."
+msgstr "Add GD Mylist button directly to the post/article list and detail page."
+
+#: 
+msgid "<strong>Please note:</strong> this feature is depends on of which template you use, in case of issue you can disable it and use Short Code instead. <a href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\">More information in the FAQ section</a>"
+msgstr "<strong>Please note:</strong> this feature is depends on of which template you use, in case of issue you can disable it and use Short Code instead. <a href=\"https://wordpress.org/plugins/gd-mylist/\" target=\"_blank\">More information in the FAQ section</a>"
+
+#: 
+msgid "Load Fontawesome CSS in order to use icon class name"
+msgstr "Load Fontawesome CSS in order to use icon class name"
+
+#: 
+msgid "complete icon\\'s list"
+msgstr "complete icon\\'s list"
+
