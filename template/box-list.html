@@ -2,19 +2,19 @@
     {{#if share.showShare}}
     <div class="col-sm-12 ml-share-bar">
         {{share.share_label}}
-        <a href="https://twitter.com/share?url={{share.pageid}}wish={{share.userid}}" target="_blank">
+        <a href="https://twitter.com/share?url={{share.pageid}}wish={{share.userid}}" aria-label="share with twitter" title="share with twitter" target="_blank">
             <i class="fab fa-twitter-square"></i>
         </a>
-        <a href="whatsapp://send?text={{share.pageid}}wish_{{share.userid}}" data-action="share/whatsapp/share" class="ml-mobile">
+        <a href="whatsapp://send?text={{share.pageid}}wish_{{share.userid}}" data-action="share/whatsapp/share" aria-label="share with whatsapp" title="share with whatsapp" target="_blank">
             <i class="fab fa-whatsapp-square"></i>
         </a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{share.pageid}}wish={{share.userid}}" target="_blank">
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{share.pageid}}wish={{share.userid}}" aria-label="share with facebook" title="share with facebook" target="_blank">
             <i class="fab fa-facebook-square"></i>
         </a>
-        <a href="mailto:?body={{share.pageid}}wish={{share.userid}}" target="_blank">
+        <a href="mailto:?body={{share.pageid}}wish={{share.userid}}" aria-label="share with email" title="share with email" target="_blank">
             <i class="fas fa-envelope-square"></i>
         </a>
-        <a href="{{share.pageid}}wish={{share.userid}}" target="_blank">
+        <a href="{{share.pageid}}wish={{share.userid}}" aria-label="share via link" title="share via link" target="_blank">
             <i class="fas fa-share-square"></i>
         </a>
     </div>
@@ -30,7 +30,9 @@
     <div class="col-sm-12">
         <div class="thumbnail gd-mylist-box">
             {{#if postimage}}
-            <a href="{{posturl}}"><img src="{{postimage}}" class="img-book img-responsive"></a>
+            <a href="{{posturl}}" aria-label="{{posttitle}}" title="{{posttitle}}">
+                <img src="{{postimage}}" class="img-book img-responsive" alt="{{posttitle}}">
+            </a>
             {{/if}}
             <div class="caption">
                 <h3><a href="{{posturl}}">{{posttitle}}</a></h3>
@@ -41,7 +43,8 @@
                             id="mylist-{{showRemove.itemid}}" 
                             data-postid="{{showRemove.itemid}}" 
                             data-styletarget="{{showRemove.styletarget}}" 
-                            data-userid="{{showRemove.userid}}" >
+                            data-userid="{{showRemove.userid}}"
+                            aria-label="{{showRemove.label}}" title="{{showRemove.label}}" >
                             <i class="{{showRemove.icon}}"></i> {{showRemove.label}}
                     </a>
                 </p>

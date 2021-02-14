@@ -4,7 +4,7 @@ Donate link: https://www.gekode.co.uk
 Tags: wish list, wishlist, favorites, posts and pages bookmark, bookmark, woocommerce wish list
 Requires at least: 3.9.0
 Tested up to: 5.6
-Stable tag: 1.1
+Stable tag: 1.1.1
 Requires PHP: 5.6.32
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

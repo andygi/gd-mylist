@@ -6,7 +6,7 @@ class gd_show_mylist_btn extends gd_mylist_plugin
 
     public function __construct()
     {
-        // add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
+        add_action('gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
         add_shortcode('show_gd_mylist_btn', array($this, 'gd_show_mylist_btn'), 11, 2);
         // Hook button to the content
         add_filter('the_content', array($this, 'hook_button'), 20);
@@ -84,23 +84,18 @@ class gd_show_mylist_btn extends gd_mylist_plugin
 
     public function hook_button($content)
     {
-        if (self::$counter === 0) {
-            self::$counter++;
-            if (is_page() != 1 && $this->stored_setting()['is_add_btn'] === 'true') {
-                // prepend button before the content
-                $atts = array(
-                    'styletarget' => null, //default
-                    'item_id' => null,
-                    'echo' => false,
-                );
-                $fullcontent = $this->gd_show_mylist_btn($atts) . $content;
-            } else {
-                $fullcontent = $content;
-            }
-            return $fullcontent;
+        if (is_page() != 1 && $this->stored_setting()['is_add_btn'] === 'true') {
+            // prepend button before the content
+            $atts = array(
+                'styletarget' => null, //default
+                'item_id' => null,
+                'echo' => false,
+            );
+            $fullcontent = $this->gd_show_mylist_btn($atts) . $content;
         } else {
-            self::$counter = 0;
+            $fullcontent = $content;
         }
+        return $fullcontent;
     }
 
 }
