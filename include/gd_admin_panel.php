@@ -6,7 +6,7 @@ class gd_mylist_admin extends gd_mylist_plugin
     public function __construct()
     {
         if (is_admin()) {
-            add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'settings_link'));
+            add_filter('plugin_action_links_' . GDMYLIST_PLUGIN_BASENAME, array($this, 'settings_link'));
             add_action('admin_menu', array($this, 'gd_admin_panel'));
             add_action('admin_init', array($this, 'setup_sections'));
         }

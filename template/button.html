@@ -4,7 +4,8 @@
     id="mylist-{{showAdd.itemid}}" 
     data-postid="{{showAdd.itemid}}" 
     data-styletarget="{{showAdd.styletarget}}" 
-    data-userid="{{showAdd.userid}}" >
+    data-userid="{{showAdd.userid}}" 
+    aria-label="{{showAdd.label}}" title="{{showAdd.label}}" >
     <i class="{{showAdd.icon}}"></i> {{showAdd.label}}
 </a>
 {{/if}}
@@ -15,13 +16,15 @@
         id="mylist-{{showRemove.itemid}}" 
         data-postid="{{showRemove.itemid}}" 
         data-styletarget="{{showRemove.styletarget}}" 
-        data-userid="{{showRemove.userid}}" >
+        data-userid="{{showRemove.userid}}" 
+        aria-label="{{showRemove.label}}" title="{{showRemove.label}}" >
         <i class="{{showRemove.icon}}"></i> {{showRemove.label}}
 </a>
 {{/if}}
 
 {{#if showLogin}}
-<a href="javascript:void();" class="btn btn-default" onclick="javascritp:alert('{{showLogin.message}}')">
+<a href="javascript:void();" class="btn btn-default" onclick="javascritp:alert('{{showLogin.message}}')"
+    aria-label="{{showLogin.label}}" title="{{showLogin.label}}" >
     <i class="{{showLogin.icon}}"></i> {{showLogin.label}}
 </a>
 {{/if}}
