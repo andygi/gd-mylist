@@ -38,7 +38,7 @@ This plugin allows you to create wish lists or bookmark for your website pages, 
 
 1. Upload plugin .zip file to the `/wp-content/plugins/` directory and unzip
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Use the shortcode in your posts and pages to display your **button** or **MyList** (more info in FAQ)
+3. Use the control panel or shortcode in your posts and pages to display your **button** or **MyList** (more info in FAQ)
 4. You can chouse if the user have to login or not, **the plugin not request to be login by default**
 
 == Frequently Asked Questions ==
@@ -129,6 +129,10 @@ Please note: keep a copy of this file because it will be overwritten in case of 
 4. Control Panel
 
 == Changelog ==
+
+= 1.1.1 =
+- extend theme compability
+- add accessibility tag to button and list template
 
 = 1.1 =
 - perfoming improvement
