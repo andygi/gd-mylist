@@ -24,7 +24,9 @@ Manual installation
     ```
 
 2. install Docker 
-    `docker run -p 3306:3306 --name wp-mysql-5.7 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=root -e MYSQL_PASSWORD=root -d mysql:5.7`
+    ```
+    docker run -p 3306:3306 --name wp-mysql-5.7 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=root -e MYSQL_PASSWORD=root -d mysql:5.7
+    ```
 
 3. Change your terminal’s directory to the root of your WordPress installation, and run the command below to generate the plugin test files.
     `wp scaffold plugin-tests PLUGIN_NAME`
@@ -43,6 +45,7 @@ Manual installation
 
 4. run
     `bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1:3306 latest`
+    
     **Note**
     In case of error after `install-wp-tests.sh` run:
     ```
