@@ -8,11 +8,11 @@ For Mac/Unix run install shell: `./install.sh`
 
 Manual installation
 
-####Prerequisite
+#### Prerequisite
 - **WP_UnitTestCase** works with **PHPUnit 7** or below ONLY.
 - Use **Mysql** on host: `127.0.0.1` (*localhost* not works)
 
-####Steps
+#### Steps
 1. run 
     `composer require phpunit/phpunit:7`
     and the will be load new files
