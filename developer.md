@@ -14,17 +14,43 @@ Manual installation
 
 ####Steps
 1. run 
-```
-composer require phpunit/phpunit:7
-```
+    `composer require phpunit/phpunit:7`
+    and the will be load new files
+    ```
+    PLUGIN_NAME
+        |— vendor [dir]
+        |— composer.json
+        `— composer.lock
+    ```
+
 2. install Docker 
-```
-docker run -p 3306:3306 --name wp-mysql-5.7 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=root -e MYSQL_PASSWORD=root -d mysql:5.7
-````
-3. run
-```
-bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1:3306 latest
-```
+    `docker run -p 3306:3306 --name wp-mysql-5.7 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=root -e MYSQL_PASSWORD=root -d mysql:5.7`
+
+3. Change your terminal’s directory to the root of your WordPress installation, and run the command below to generate the plugin test files.
+    `wp scaffold plugin-tests PLUGIN_NAME`
+    and the plugin directory load new files/dir
+    ```
+    PLUGIN_NAME
+    |— bin
+    |    `— install-wp-tests.sh
+    |— tests
+    |    |— boostrap.php
+    |    `— test-sample.php
+    |— .phpcs.xml.dist
+    |— .travis.yml
+    `— phpunit.xml.dist
+    ```
+
+4. run
+    `bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1:3306 latest`
+    **Note**
+    In case of error after `install-wp-tests.sh` run:
+    ```
+    alias mysql=/usr/local/mysql/bin/mysql
+    export PATH=$PATH:/usr/local/mysql/bin/
+    ```
+    then run again
+    `bash bin/install-wp-tests.sh wordpress_test root 'root' 127.0.0.1:3306 latest`
 
 ## Use PHPUnit
 
