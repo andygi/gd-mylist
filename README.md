@@ -71,8 +71,15 @@ $arg = array (
 do_action('gd_mylist_btn',$arg);
 ?>
 ```
-
 where do you want that button will show it
+
+**4. In case you need add it in post list or carousel**
+In case you need add it in post list page or carousel, it means with multiple thumbnails with add-lo-list button.
+You can add it by add the following code in theme code:
+
+```
+<?php echo do_shortcode('[show_gd_mylist_btn item_id= '. $customPost->ID . ']'); ?>
+```
 
 ### How call myList's list? ###
 
